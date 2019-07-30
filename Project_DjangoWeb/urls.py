@@ -1,7 +1,3 @@
-"""
-Definition of urls for Project_DjangoWeb.
-"""
-
 from datetime import datetime
 from django.urls import path
 from django.contrib import admin
@@ -11,6 +7,8 @@ from app import forms, views
 
 urlpatterns = [
     path('', views.home, name='home'),
+    path('json', views.json, name='json'),
+    #path('json_API/send/search', views.search, name='search'),
     path('login/',
          LoginView.as_view
          (

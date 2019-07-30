@@ -29,15 +29,15 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> Pet <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="{% url 'food_eat_page' %}">Food Eat</a></li>
-                            <li><a href="{% url 'water_drink_page' %}">Water Drink</a></li>
+                            <li><a href="{% url 'home' %}">Food Eat</a></li>
+                            <li><a href="{% url 'home' %}">Water Drink</a></li>
                         </ul>
                     </li> 
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> Env <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="{% url 'temperature_page' %}">Temperature</a></li>
-                            <li><a href="{% url 'humidity_page' %}">Humidity</a></li>
+                            <li><a href="{% url 'home' %}">Temperature</a></li>
+                            <li><a href="{% url 'home' %}">Humidity</a></li>
                         </ul>
                     </li>                    
                     <li class="dropdown">
@@ -69,3 +69,4 @@
 {% block scripts %}{% endblock %}
 
 </body>
+</html>
