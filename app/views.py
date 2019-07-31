@@ -7,7 +7,8 @@ from django.http import JsonResponse
 from django.core.serializers.json import DjangoJSONEncoder
 from django.http import JsonResponse
 from app import models
-import json
+from django.views.decorators.csrf import csrf_exempt
+
 
 @login_required(login_url='/login/')
 def home(request):
@@ -27,17 +28,14 @@ def json(request):
     #data=models.env_info.objects.filter(name__contains='home').values()
     data= serializers.serialize('json',models.env_info.objects.filter(name__contains='').order_by('updated_at'))
     return HttpResponse(data)
- 
-def request_name(request, location): 
-    from django.core import serializers
-    data= serializers.serialize('json',models.env_info.objects.filter(name__contains=location).order_by('updated_at'))
-    return HttpResponse(data)
-    #return render(request,'app/index.html',locals())
 
-def ajax_get_test(request): 
+def ajax_get(request):
+    loction_name=request.GET.get('loction_name')
+    request.session['loction_name'] = loction_name
+    return HttpResponse(loction_name)
+
+def env_filter(request):
     from django.core import serializers
-    #location=request.GET.get('temp')
-    location=home
-    data= serializers.serialize('json',models.env_info.objects.filter(name__contains=home).order_by('updated_at'))
-    return HttpResponse(data)
-    #return render(request,'app/index.html',locals())
+    loction_name = request.session['loction_name']
+    data= serializers.serialize('json',models.env_info.objects.filter(name__contains=loction_name).order_by('updated_at'))
+    return HttpResponse(data) 

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import env_info
+from .models import env_info 
 
 
 
@@ -10,3 +10,4 @@ class env_infoAdmin(admin.ModelAdmin):
 
 
 admin.site.register(env_info,env_infoAdmin)        #註冊 env_info 這個 model
+

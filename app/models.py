@@ -11,5 +11,3 @@ class env_info(models.Model):
 
     def __str__(self):
        return self.name
-
-

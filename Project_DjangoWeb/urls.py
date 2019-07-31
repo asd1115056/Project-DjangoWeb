@@ -8,8 +8,10 @@ from app import forms, views
 urlpatterns = [
     path('', views.home, name='home'),
     path('json', views.json, name='json'),
-    path('request/<location>', views.request_name, name='request_name'),
-    path('ajax', views.ajax_get_test, name='ajax_get_test'),
+    path('ajax/env_filter', views.env_filter, name='env_filter'),
+    path('ajax/get', views.ajax_get, name='ajax_get'),
+    #path('request/<location>', views.request_name, name='request_name'),
+
     path('login/',
          LoginView.as_view
          (
