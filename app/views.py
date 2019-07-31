@@ -23,6 +23,21 @@ def home(request):
 
 def json(request):
     from django.core import serializers
-    data=models.env_info.objects.values('name').distinct() 
+    #data=models.env_info.objects.values('name').distinct() 
+    #data=models.env_info.objects.filter(name__contains='home').values()
+    data= serializers.serialize('json',models.env_info.objects.filter(name__contains='').order_by('updated_at'))
     return HttpResponse(data)
  
+def request_name(request, location): 
+    from django.core import serializers
+    data= serializers.serialize('json',models.env_info.objects.filter(name__contains=location).order_by('updated_at'))
+    return HttpResponse(data)
+    #return render(request,'app/index.html',locals())
+
+def ajax_get_test(request): 
+    from django.core import serializers
+    #location=request.GET.get('temp')
+    location=home
+    data= serializers.serialize('json',models.env_info.objects.filter(name__contains=home).order_by('updated_at'))
+    return HttpResponse(data)
+    #return render(request,'app/index.html',locals())

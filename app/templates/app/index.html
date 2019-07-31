@@ -11,7 +11,7 @@
 		<div class="col-md-2 column">
              <ul class="nav nav-pills nav-stacked">
                  {% for app in apps %}
-                 <li><a href='#'>{{app.name}}</a></li>
+                 <li><a href="{% url 'request_name' location=app.name %}" data-toggle="tab">{{app.name}}</a></li>
                  {% endfor %}
              </ul>
 		</div>
@@ -26,7 +26,27 @@
 			</div>
 		</div>
 </div>
-
+<script>
+$(function()
+    $("#home").click(function(){
+        $.ajax({
+            url: "{% url 'ajax_get_test' %}",
+            type: "json",
+            data: {"temp":home},
+            success: function (response) {
+                alert('response received');
+                // ajax success callback
+            },
+            error: function (response) {
+                alert('ajax failed');
+                // ajax error callback
+            },
+        });
+   
+  
+    })
+});
+</script>
 <script>
      $.getJSON('',function(data){
          var g = new JustGage({
@@ -50,37 +70,36 @@
   });
 </script>
 <script>
-Highcharts.chart('container', {
-  chart: {
-    type: 'line'
-  },
-  title: {
-    text: 'Monthly Average Temperature'
-  },
-  subtitle: {
-    text: 'Source: WorldClimate.com'
-  },
-  xAxis: {
-    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-  },
-  yAxis: {
-    title: {
-      text: 'Temperature (°C)'
-    }
-  },
-  plotOptions: {
-    line: {
-      dataLabels: {
-        enabled: true
-      },
-      enableMouseTracking: false
-    }
-  },
-  series: [{
-    name: 'Tokyo',
-    data: [7.0, 6.9, 9.5, 14.5, 18.4, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
-  }]
-});
+$(function () {
+            // first , setting highchart
+var chart = new Highcharts.Chart({
+     chart: { renderTo: 'container', type: 'spline' },
+     title: { text: '溫度' },
+     subtitle: { text: '' },
+     xAxis: { type: 'datetime' },
+     yAxis: { title: { text: '溫度 (°C)'} }
+     });
+
+      // second , get json source
+     $.getJSON("",function(data) {
+            //get series one by one
+        var len = Object.keys(data).length;
+        var seriesData = [];
+        var chartName = data[0].fields.env_location;
+            for (var j = 0; j < len; j++) {
+                var x = new Date(data[j].fields.updated_at).getTime();
+                var y = data[j].fields.env_temperature;  
+                    x = parseFloat(x) 
+                    y = parseFloat(y)
+                    seriesData.push([x, y]);
+                }
+            chart.addSeries({
+                name: chartName,
+                data: seriesData
+            });
+                    
+        });
+  });
 </script>
 
 {% endblock %}
