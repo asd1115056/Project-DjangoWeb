@@ -21,7 +21,16 @@ def home(request):
     year=datetime.now().year
 
     return render(request,'app/index.html',locals())
-
+def temperature(request):
+    apps=models.env_info.objects.values('name').distinct() 
+    title='Env Page'
+    year=datetime.now().year
+    return render(request,'app/temperature.html',locals())
+def humidity(request):
+    apps=models.env_info.objects.values('name').distinct() 
+    title='Env Page'
+    year=datetime.now().year
+    return render(request,'app/humidity.html',locals())
 def json(request):
     from django.core import serializers
     #data=models.env_info.objects.values('name').distinct() 

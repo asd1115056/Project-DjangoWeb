@@ -7,6 +7,8 @@ from app import forms, views
 
 urlpatterns = [
     path('', views.home, name='home'),
+    path('env/temperature', views.temperature, name='env_temperature'),
+    path('env/humidity', views.humidity, name='env_humidity'),
     path('json', views.json, name='json'),
     path('ajax/env_filter', views.env_filter, name='env_filter'),
     path('ajax/get', views.ajax_get, name='ajax_get'),
