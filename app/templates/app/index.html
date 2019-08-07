@@ -1,5 +1,61 @@
 ﻿{% extends "app/base.html" %}
-
 {% block content %}
+<script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="http://code.highcharts.com/modules/exporting.js"></script>
+<script src="http://cdn.jsdelivr.net/raphael/2.1.2/raphael-min.js"></script>
+<script src="http://cdn.jsdelivr.net/justgage/1.0.1/justgage.min.js"></script>
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+
+<div class="row clearfix">
+		<div class="col-md-2 column">
+             <ul class="nav nav-pills nav-stacked">
+                 {% for app in apps %}
+                    <li {% if forloop.first %} class="active" {% endif %} R_id="{{app.R_id}}">
+                        <a data-toggle="tab" href="#{{app.R_id}}"  >{{app.R_id}}</a></li>
+                 {% endfor %}
+             </ul>
+		</div>
+		<div class="col-md-10 column">
+			<div class="row clearfix">
+				<div class="col-md-2 column">
+				</div>
+				<div class="col-md-10 column">
+				</div>
+			</div>
+		</div>
+	</div>
 
 {% endblock %}
+<script>
+var charts = [];
+
+function charts()
+{
+    $(".gauge").each(function(){
+        var entity_id = $(this).attr('id');
+        var gauge_max = $(this).data('max');
+        var gauge_min = $(this).data('min');
+        var title = $(this).data('title');
+        
+        charts.push(
+            new JustGage({
+                id: entity_id,
+                value: 0,
+                min: gauge_min,
+                max: gauge_max,
+                title: title,
+            })
+        );
+    });
+}
+
+function update_charts()
+{
+    $(charts).each(function(){
+        this.refresh(Math.random() * (1000 - 0) + 0);
+    });
+}
+</script>
+
+
+ %}
