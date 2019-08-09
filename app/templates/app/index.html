@@ -2,60 +2,134 @@
 {% block content %}
 <script src="http://code.highcharts.com/highcharts.js"></script>
 <script src="http://code.highcharts.com/modules/exporting.js"></script>
-<script src="http://cdn.jsdelivr.net/raphael/2.1.2/raphael-min.js"></script>
-<script src="http://cdn.jsdelivr.net/justgage/1.0.1/justgage.min.js"></script>
 <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.4/raphael-min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/justgage/1.3.1/justgage.min.js"></script>
 
 <div class="row clearfix">
-		<div class="col-md-2 column">
-             <ul class="nav nav-pills nav-stacked">
-                 {% for app in apps %}
-                    <li {% if forloop.first %} class="active" {% endif %} R_id="{{app.R_id}}">
-                        <a data-toggle="tab" href="#{{app.R_id}}"  >{{app.R_id}}</a></li>
-                 {% endfor %}
-             </ul>
-		</div>
-		<div class="col-md-10 column">
-			<div class="row clearfix">
-				<div class="col-md-2 column">
-				</div>
-				<div class="col-md-10 column">
-				</div>
-			</div>
-		</div>
-	</div>
+    <div class="col-md-2 column">
+        <ul class="nav nav-pills nav-stacked">
+            {% for app in apps %}
+            <li {% if forloop.first %} class="active" {% endif %} R_ID="{{app.R_id}}">
+                <a data-toggle="tab" href="#{{app.R_id}}">{{app.R_id}}</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="col-md-10 column">
+        <div class="row clearfix">
+            <div class="col-md-2 column">
+            </div>
+            <div class="col-md-10 column">
+                <div class="row clearfix">
+                    <div class="col-md-6 column">
+                        <div id="gauge1" style=" height:150px"></div>
+                    </div>
+                    <div class="col-md-6 column">
+                        <div id="gauge2" style=" height:150px"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-{% endblock %}
 <script>
-var charts = [];
-
-function charts()
-{
-    $(".gauge").each(function(){
-        var entity_id = $(this).attr('id');
-        var gauge_max = $(this).data('max');
-        var gauge_min = $(this).data('min');
-        var title = $(this).data('title');
-        
-        charts.push(
-            new JustGage({
-                id: entity_id,
-                value: 0,
-                min: gauge_min,
-                max: gauge_max,
-                title: title,
-            })
-        );
+    $(function () {
+        var i;
+        $("li").click(function () { //點擊事件
+            R_ID = $(this).attr('R_ID'),
+                i = R_ID.localeCompare("undefined") //比較兩字串:相等=0
+            if (i != 0) {//取不相等時的值
+                data = { 'R_ID': R_ID }
+                console.log(data);
+            }
+            $.ajax({
+                url: "{%url 'pet_get_id'%}",
+                type: 'GET',
+                data: data,
+                success: function (response) {
+                    //console.log(response);
+                    ajax_user_data();
+                    refresh();
+                },
+                error: function () {
+                    console.log('click:error!');
+                }
+            });
+        });
     });
-}
 
-function update_charts()
-{
-    $(charts).each(function(){
-        this.refresh(Math.random() * (1000 - 0) + 0);
-    });
-}
+    var max_w;
+    var max_f;
+    function ajax_user_data() {
+        $.ajax({
+            url: "{%url 'pet_filter_user_setting'%}",
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                clear();
+                max_w = data[0].fields.user_water_setting;
+                max_f = data[0].fields.user_food_setting;
+                debug = { 'max_w': max_w, 'max_f': max_f }
+                console.log(debug);
+            },
+            error: function () {
+                clear();
+                console.log('ajax_user_data:error!');
+            }
+        });
+    }
+
+    function clear() {
+        max_f = 0;
+        max_w = 0;
+    }
+
+    var gage1;
+    var gage2;
+    function refresh() {
+        $.ajax({
+            url: "{%url 'pet_filter_info'%}",
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                var len = Object.keys(data).length;
+                var x=0;
+                var y=0;
+                for(var i=0 ; i<len ; i++){
+                    x=x+parseFloat(data[i].fields.food_eat);
+                    y=y+parseFloat(data[i].fields.water_drink);
+                     console.log([x, y]);
+                }
+                console.log('sum'[x, y]);
+                if (!gage1) {
+                    gage1 = new JustGage({
+                        id: "gauge1",
+                        value: 0,
+                        min: 0,
+                        max: 0,
+                        label: "g",
+                    });
+                } else {
+                    gage1.refresh(x,max_f);
+                }
+                if (!gage2) {
+                    gage2 = new JustGage({
+                        id: "gauge2",
+                        value: 0,
+                        min: 0,
+                        max: 0,
+                        label: "mL",
+                    });
+                } else {
+                    gage2.refresh(y,max_w);
+                }
+            }
+        });
+    }
+
+    setTimeout(refresh, 100) //第一次刷新數據
 </script>
 
-
- %}
+{% endblock %}

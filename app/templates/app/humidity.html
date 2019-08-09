@@ -38,7 +38,7 @@
             console.log(data);
         }
         $.ajax({
-                    url:"{% url 'ajax_get' %}",
+                    url:"{% url 'env_get' %}",
                     type:'GET',
                     data: data,
                     success:function(response){
@@ -164,31 +164,32 @@ function requestData() {
     });
 }
 
-  var g = new JustGage({
-    id: "gauge1",
-    value: 0,
-    min: 0,
-    max: 100,
-    title: "即時濕度",
-    label: "°%"
-  });
-$(document).ready(function(){
-});
-
+var gage;
 function refresh(){
      $.ajax({
          url: "{% url 'env_filter' %}",
          type: "GET",
          dataType: "json",
-         success: function (data) {
+            success: function(data) {
             var len = Object.keys(data).length;
             var x = new Date(data[len-1].fields.updated_at).getTime();
-            var y = data[len-1].fields.humidity;  
+            var y = data[len-1].fields.temperature;
+            var max = 300;
             console.log([y,x]);
-         g.refresh(y);
-         }
+
+            if (!gage) {
+                gage = new JustGage({
+                    id: "gauge1",
+                    value: y,
+                    min: 0,
+                    max: 100,
+                    label: "°%",
+                });
+            } else {
+                gage.refresh(y);
+            }
+        }
     });
 }
-    setTimeout(refresh,100) //第一次刷新數據
 </script>
 {% endblock %}

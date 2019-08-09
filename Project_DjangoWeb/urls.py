@@ -11,7 +11,11 @@ urlpatterns = [
     path('env/humidity', views.humidity, name='env_humidity'),
     path('json', views.json, name='json'),
     path('ajax/env_filter', views.env_filter, name='env_filter'),
-    path('ajax/get', views.ajax_get, name='ajax_get'),
+    path('ajax/pet_filter_info', views.pet_filter_info, name='pet_filter_info'),
+    path('ajax/pet_filter_user_setting', views.pet_filter_user_setting, name='pet_filter_user_setting'),
+    path('ajax/env_get', views.env_get, name='env_get'),
+    path('ajax/pet_get_id', views.pet_get_id, name='pet_get_id'),
+    path('ajax/pet_get_form', views.pet_get_form, name='pet_get_form'),
     #path('request/<location>', views.request_name, name='request_name'),
 
     path('login/',
