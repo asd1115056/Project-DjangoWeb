@@ -9,6 +9,7 @@
 
 <div class="row clearfix">
     <div class="col-md-2 column">
+        <div style="text-align:center;"><h3>Location</h3></div>
         <ul class="nav nav-pills nav-stacked">
             {% for app in apps %}
             <li {% if forloop.first %} class="active" {% endif %} loction_name="{{app.name}}">
@@ -20,7 +21,8 @@
     <div class="col-md-10 column">
         <div class="row clearfix">
             <div class="col-md-3 column">
-                <div id="gauge1" style=" height:150px"></div>
+                <div style="text-align:center;"><h3>Temperature</h3></div>
+                <div id="gauge1" style=" height:150px;text-align:center"></div>
             </div>
             <div class="col-md-9 column">
                 <div id="container" style="min-width: 700px; height: 300px; margin: 0 auto"></div>
