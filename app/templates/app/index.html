@@ -8,7 +8,7 @@
 
 <div class="row clearfix">
     <div class="col-md-2 column">
-        <div style="text-align:center;"><h3>Name</h3></div>
+        <div style="text-align:center;"><h3>Name</h3><br></div>
         <ul class="nav nav-pills nav-stacked">
             {% for app in apps %}
             <li {% if forloop.first %} class="active" {% endif %} Tag="{{app.Tag}}">
@@ -20,15 +20,35 @@
     <div class="col-md-10 column">
         <div class="row clearfix">
             <div class="col-md-3 column">
+                <div style="text-align:center;"><h3>Customize</h3><br></div>
+                <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <label for="Nickname" class="col-sm-5 control-label">Nickname</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" id="Nickname:" placeholder="Lucky">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="Weight" class="col-sm-5 control-label">Weight</label>
+                        <div class="col-sm-7">
+                            <input type="number" step="0.01" class="form-control" id="Weight:" placeholder="5.5(kg)">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-5 col-sm-7">
+                            <button type="submit" class="btn btn-default">Save</button>
+                        </div>
+                    </div>
+                </form>
             </div>
             <div class="col-md-9 column">
                 <div class="row clearfix">
                     <div class="col-md-6 column">
-                        <div style="text-align:center;"><h3>Calorie</h3></div>
+                        <div style="text-align:center;"><h3>Calorie</h3><br></div>
                         <div id="gauge1" style=" height:150px;text-align:center"></div>
                     </div>
                     <div class="col-md-6 column">
-                        <div style="text-align:center;"><h3>Water</h3></div>
+                        <div style="text-align:center;"><h3>Water</h3><br></div>
                         <div id="gauge2" style=" height:150px;text-align:center"></div>
                     </div>
                 </div>
@@ -99,12 +119,12 @@
             dataType: "json",
             success: function (data) {
                 var len = Object.keys(data).length;
-                var x=0;
-                var y=0;
-                for(var i=0 ; i<len ; i++){
-                    x+=parseFloat(data[i].fields.food_eat);
-                    y+=parseFloat(data[i].fields.water_drink);
-                     //console.log([x, y]);
+                var x = 0;
+                var y = 0;
+                for (var i = 0; i < len; i++) {
+                    x += parseFloat(data[i].fields.food_eat);
+                    y += parseFloat(data[i].fields.water_drink);
+                    //console.log([x, y]);
                 }
                 //console.log([x, y]);
                 if (!gage1) {
@@ -116,7 +136,7 @@
                         label: "kcal",
                     });
                 } else {
-                    gage1.refresh(x,max_f);
+                    gage1.refresh(x, max_f);
                 }
                 if (!gage2) {
                     gage2 = new JustGage({
@@ -127,7 +147,7 @@
                         label: "mL",
                     });
                 } else {
-                    gage2.refresh(y,max_w);
+                    gage2.refresh(y, max_w);
                 }
             }
         });
