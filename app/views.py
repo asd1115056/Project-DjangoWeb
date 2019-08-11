@@ -9,6 +9,7 @@ from django.http import JsonResponse
 from app import models
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
+import json
 
 
 @login_required(login_url='/login/')
@@ -34,13 +35,15 @@ def humidity(request):
     year=datetime.now().year
     return render(request,'app/humidity.html',locals())
 
-def json(request):
+def json_test(request):
     from django.core import serializers
     #data=models.env_info.objects.values('name').distinct() 
     #data=models.env_info.objects.filter(name__contains='home').values()
-    c=models.Tag_Info.objects.get(Tag='GG45FC')
-    data= serializers.serialize('json',c.user_setting_set.all())
-    return HttpResponse(data)
+    #c=models.Tag_Info.objects.get(Tag='GG45FC')
+    #data= serializers.serialize('json',c.user_setting_set.all())
+    #test = serializers.serialize('json',models.Tag_Info.objects.filter(Tag='GG45FC').values_list('id')).
+    test=models.Tag_Info.objects.filter(Tag='GG45FC').values_list('pk',flat=True)
+    return HttpResponse(test)
 
 def env_get(request):
     loction_name=request.GET.get('loction_name')
@@ -76,9 +79,27 @@ def pet_filter_user_setting(request):
     data= serializers.serialize('json',models.Tag_Info.objects.get(Tag=Tag).user_setting_set.all().order_by('updated_at'))
     return HttpResponse(data) 
 
+
+@csrf_exempt
 def json_upload(request):
-    info = models.pet_info.objects.create(Tag=1)  
-    info.water_drink=request.GET['water_drink']                
-    info.food_eat=request.GET['food_eat']
-    info.save()                                         #後臺資料庫儲存環境數據。
-    return HttpResponse(1) 
+    if request.method=='POST':
+        Data_POST=json.loads(request.body.decode("utf-8"))
+        Tag=Data_POST.get('Tag')
+        temp=models.Tag_Info.objects.filter(Tag=Tag)
+        if temp.exists():
+            text1="Tag Existing"
+            #return JsonResponse({"status": 200, "msg": "Tag Existing" })
+        else:
+            TAG=models.Tag_Info.objects.create(Tag=Tag)
+            TAG.save()
+            text1="Create New Tag"
+            #return JsonResponse({"status": 200, "msg": "Create New Tag" })
+        pk=list(temp.values_list('pk',flat=True)) #實際輸出['1','2',…] 用python List轉換成[1,2,...]
+        info = models.pet_info.objects.create(Tag_id=pk[0])
+        info.water_drink=Data_POST.get('water_drink')
+        info.food_eat=Data_POST.get('food_eat')
+        info.save()
+        text2=" and Save Successfully"
+        return JsonResponse({"status": 200, "msg": text1+text2  })
+    else:
+        return JsonResponse({"status": 400, "msg": "It is GET" })
