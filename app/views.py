@@ -103,3 +103,16 @@ def json_upload(request):
         return JsonResponse({"status": 200, "msg": text1+text2  })
     else:
         return JsonResponse({"status": 400, "msg": "It is GET" })
+@csrf_exempt
+def json_test(request):
+    if request.method=='POST':
+        Data_POST = request.POST
+        Data_POST=json.dumps(Data_POST)
+        Data_POST=json.loads(Data_POST)
+
+        info = models.Tag_Info.objects.get(Tag='GG45FC')
+        info.nickname=Data_POST.get('Nickname')
+        info.weight=Data_POST.get('Weight')
+        info.save()
+        text=" Update Successfully"
+        return JsonResponse({"status": 200, "msg": text  })

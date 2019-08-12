@@ -13,7 +13,7 @@ class user_settingAdmin(admin.ModelAdmin):
     list_display = ('Tag','user_food_setting','user_water_setting','updated_at')
     #後台要顯示的資料表格
 class Tag_InfoAdmin(admin.ModelAdmin):
-    list_display = ('Tag','name')
+    list_display = ('Tag','nickname','weight','updated_at')
     #後台要顯示的資料表格
 
 admin.site.register(env_info,env_infoAdmin)        #註冊 env_info 這個 model
