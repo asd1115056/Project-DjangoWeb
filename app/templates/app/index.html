@@ -12,7 +12,7 @@
         <ul class="nav nav-pills nav-stacked">
             {% for app in apps %}
             <li {% if forloop.first %} class="active" {% endif %} Tag="{{app.Tag}}">
-                <a data-toggle="tab" href="#{{app.Tag}}">{{app.Tag}}</a>
+                <a data-toggle="tab" href="">{% if app.nickname %} {{app.nickname}} {% else %} {{app.Tag}} {% endif %}</a>
             </li>
             {% endfor %}
         </ul>
@@ -20,17 +20,35 @@
     <div class="col-md-10 column">
         <div class="row clearfix">
             <div class="col-md-2 column">
-                <div style="text-align:center;"><h3>Customize</h3><br></div>
+                <div style="text-align:center;"><h3>Pet info</h3><br></div>
                 <form role="form" id="form_test">
-                    <div class="form-group">
-                        <label for="Nickname">Nickname</label>
-                        <input type="text" class="form-control input-sm" name="Nickname" id="Nickname" placeholder="Lucky">
+                    <!-- 按钮触发模态框 -->
+                    <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">Setting</button>
+                    <!-- 模态框（Modal） -->
+                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    <h4 class="modal-title" id="myModalLabel">Customize</h4>
+                                </div>
+
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label for="Nickname">Nickname</label>
+                                        <input type="text" class="form-control" id="Nickname" placeholder="Lucky">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="Weight">Weight</label>
+                                        <input type="number" step="0.01" class="form-control" id="Weight" placeholder="5.5(kg)">
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-default">Save</button>
+                                </div>
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal -->
                     </div>
-                    <div class="form-group">
-                        <label for="Weight">Weight</label>
-                        <input type="number" step="0.01" class="form-control input-sm" name="Weight" id="Weight" placeholder="5.5(kg)">
-                    </div>
-                    <button type="submit" class="btn btn-default">Save</button>
                 </form>
             </div>
             <div class="col-md-10 column">
@@ -50,6 +68,7 @@
 </div>
 
 <script>
+
     $(function () {
         var i;
         $("li").click(function () { //點擊事件
