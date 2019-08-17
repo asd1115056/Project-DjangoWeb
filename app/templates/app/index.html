@@ -7,65 +7,84 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/justgage/1.3.1/justgage.min.js"></script>
 
 <div class="row clearfix">
-    <div class="col-md-2 column">
-        <div style="text-align:center;"><h3>Name</h3><br></div>
-        <ul class="nav nav-pills nav-stacked">
-            {% for app in apps %}
-            <li {% if forloop.first %} class="active" {% endif %} Tag="{{app.Tag}}">
-                <a data-toggle="tab" href="">{% if app.nickname %} {{app.nickname}} {% else %} {{app.Tag}} {% endif %}</a>
-            </li>
-            {% endfor %}
-        </ul>
-    </div>
-    <div class="col-md-10 column">
-        <div class="row clearfix">
-            <div class="col-md-2 column">
-                <div style="text-align:center;"><h3>Pet info</h3><br></div>
-                <form role="form" id="form_test">
-                    <!-- 按钮触发模态框 -->
-                    <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">Setting</button>
-                    <!-- 模态框（Modal） -->
-                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                    <h4 class="modal-title" id="myModalLabel">Customize</h4>
-                                </div>
+  <div class="col-md-2 column">
+    <div style="text-align:center;"><h3>Name</h3><br></div>
+    <ul class="nav nav-pills nav-stacked">
+      {% for app in apps %}
+      <li {% if forloop.first %} class="active" {% endif %} Tag="{{app.Tag}}">
+        <a data-toggle="tab" href="">{% if app.nickname %} {{app.nickname}} {% else %} {{app.Tag}} {% endif %}</a>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+  <div class="col-md-10 column">
+    <div class="row clearfix">
+      <div class="col-md-2 column">
+        <div style="text-align:center;"><h3>Pet info</h3><br></div>
+        <table class="table">
+       <thead>
+       </thead>
+       <tbody>
+        <tr>
+          <td>Nickname</td>
+          <td id="Nickname">1</td>
+        </tr>
+        <tr>
+          <td>Tag</td>
+          <td id="Tag">2</td>
+       </tr>
+       <tr>
+            <td>Weight</td>
+          <td id="Weight">3</td>
+       </tr>
+     </tbody>
+   </table>
+   <form role="form" id="form_test">
+    <!-- 按钮触发模态框 -->
+    <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">Setting</button>
+    <!-- 模态框（Modal） -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">Customize</h4>
+          </div>
 
-                                <div class="modal-body">
-                                    <div class="form-group">
-                                        <label for="Nickname">Nickname</label>
-                                        <input type="text" class="form-control" id="Nickname" placeholder="Lucky">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="Weight">Weight</label>
-                                        <input type="number" step="0.01" class="form-control" id="Weight" placeholder="5.5(kg)">
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="submit" class="btn btn-default">Save</button>
-                                </div>
-                            </div><!-- /.modal-content -->
-                        </div><!-- /.modal -->
-                    </div>
-                </form>
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="Nickname">Nickname</label>
+              <input type="text" class="form-control" id="Nickname" placeholder="Lucky">
             </div>
-            <div class="col-md-10 column">
-                <div class="row clearfix">
-                    <div class="col-md-6 column">
-                        <div style="text-align:center;"><h3>Calorie</h3><br></div>
-                        <div id="gauge1" style=" height:150px;text-align:center"></div>
-                    </div>
-                    <div class="col-md-6 column">
-                        <div style="text-align:center;"><h3>Water</h3><br></div>
-                        <div id="gauge2" style=" height:150px;text-align:center"></div>
-                    </div>
-                </div>
+            <div class="form-group">
+              <label for="Weight">Weight</label>
+              <input type="number" step="0.01" class="form-control" id="Weight" placeholder="5.5(kg)">
             </div>
-        </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-default">Save</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal -->
     </div>
+  </form>
 </div>
+<div class="col-md-10 column">
+  <div class="row clearfix">
+    <div class="col-md-6 column">
+      <div style="text-align:center;"><h3>Calorie</h3><br></div>
+      <div id="gauge1" style=" height:150px;text-align:center"></div>
+    </div>
+    <div class="col-md-6 column">
+      <div style="text-align:center;"><h3>Water</h3><br></div>
+      <div id="gauge2" style=" height:150px;text-align:center"></div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+</div>
+
 
 <script>
 
@@ -85,6 +104,7 @@
                 success: function (response) {
                     //console.log(response);
                     ajax_user_data();
+                    ajax_tag_Info();
                     setTimeout(refresh, 200);
                     //refresh();
                 },
@@ -94,6 +114,24 @@
             });
         });
     });
+
+    function ajax_tag_Info() {
+        $.ajax({
+            url: "{%url 'Tag_Info'%}",
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+             $("#Nickname").text(data[0].fields.nickname);
+             $("#Tag").text(data[0].fields.Tag);
+             $("#Weight").text(data[0].fields.weight);
+             console.log(debug);
+
+            },
+            error: function () {
+            }
+        });
+    }
+
 
     var max_w;
     var max_f;
@@ -108,6 +146,7 @@
                 max_f = data[0].fields.user_food_setting;
                 debug = { 'max_w': max_w, 'max_f': max_f }
                 console.log(debug);
+
             },
             error: function () {
                 clear();

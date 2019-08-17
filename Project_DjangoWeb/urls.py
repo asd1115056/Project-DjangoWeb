@@ -5,12 +5,12 @@ from django.contrib.auth.views import LoginView, LogoutView
 from app import forms, views
 
 
-urlpatterns = [
-    path('', views.home, name='home'),
+urlpatterns = [path('', views.home, name='home'),
     path('env/temperature', views.temperature, name='env_temperature'),
     path('env/humidity', views.humidity, name='env_humidity'),
     path('json', views.json_test, name='json'),
     path('ajax/env_filter', views.env_filter, name='env_filter'),
+    path('ajax/tag_Info', views.Tag_Info, name='Tag_Info'),
     path('ajax/pet_filter_info', views.pet_filter_info, name='pet_filter_info'),
     path('ajax/pet_filter_user_setting', views.pet_filter_user_setting, name='pet_filter_user_setting'),
     path('ajax/env_get', views.env_get, name='env_get'),
@@ -21,17 +21,13 @@ urlpatterns = [
 
 
     path('login/',
-         LoginView.as_view
-         (
-             template_name='app/login.html',
+         LoginView.as_view(template_name='app/login.html',
              authentication_form=forms.BootstrapAuthenticationForm,
              extra_context=
              {
                  'title': 'Log in',
                  'year' : datetime.now().year,
-             }
-         ),
+             }),
          name='login'),
     path('logout/', LogoutView.as_view(next_page='/'), name='logout'),
-    path('admin/', admin.site.urls),
-]
+    path('admin/', admin.site.urls),]

@@ -66,6 +66,13 @@ def pet_get_id(request):
 def pet_get_form(request):
     return HttpResponse(1)
 
+def Tag_Info(request):
+    from django.core import serializers
+    import datetime
+    Tag = request.session['Tag']
+    data = serializers.serialize('json',models.Tag_Info.objects.filter(Tag=Tag))
+    return HttpResponse(data) 
+
 def pet_filter_info(request):
     from django.core import serializers
     import datetime
@@ -104,6 +111,7 @@ def json_upload(request):
         return JsonResponse({"status": 200, "msg": text1 + text2  })
     else:
         return JsonResponse({"status": 400, "msg": "It is GET" })
+
 @csrf_exempt
 def json_test(request):
     Tag = request.session['Tag']
