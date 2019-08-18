@@ -112,6 +112,7 @@ def json_upload(request):
     else:
         return JsonResponse({"status": 400, "msg": "It is GET" })
 
+
 @csrf_exempt
 def json_test(request):
     Tag = request.session['Tag']
@@ -120,8 +121,34 @@ def json_test(request):
         Data_POST = json.dumps(Data_POST)
         Data_POST = json.loads(Data_POST)
         info = models.Tag_Info.objects.get(Tag=Tag)
-        info.nickname = Data_POST.get('Nickname')
-        info.weight = Data_POST.get('Weight')
+        if Data_POST.get('Nickname') != "":
+            info.nickname = Data_POST.get('Nickname')
+        if Data_POST.get('Weight') != "":
+            info.weight = float(Data_POST.get('Weight'))
+        if Data_POST.get('Category') != "":
+            info.category = int(Data_POST.get('Category'))
+            if Data_POST.get('Category') == "1":
+                info.cat_statue = float(Data_POST.get('Status'))
+            if Data_POST.get('Category') == "2":
+                info.dog_statue = float(Data_POST.get('Status'))
         info.save()
+        
+        weight_temp = list(models.Tag_Info.objects.filter(Tag=Tag).values_list('weight',flat=True))
+        category_temp = list(models.Tag_Info.objects.filter(Tag=Tag).values_list('category',flat=True))
+         
+        temp = 0
+        if weight_temp[0] != 0 and category_temp[0] != 0:
+            if category_temp[0] == 1:
+                temp = weight_temp[0] * 50
+            elif category_temp[0] == 2:
+                temp = weight_temp[0] * 60
+        info.nickname = Data_POST.get('Nickname')
+        info.suggest_water_drinking_daily = temp
+        info.save()
+
+
+        #info.suggest_feed_amount_daily =
+        
         text = " Update Successfully"
+
         return JsonResponse({"status": 200, "msg": text  })
