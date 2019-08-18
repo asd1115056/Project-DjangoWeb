@@ -10,6 +10,7 @@ from app import models
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 import json
+import math
 
 
 @login_required(login_url='/login/')
@@ -125,26 +126,39 @@ def json_test(request):
             info.nickname = Data_POST.get('Nickname')
         if Data_POST.get('Weight') != "":
             info.weight = float(Data_POST.get('Weight'))
+            info.per = 70 * round(math.pow(float(Data_POST.get('Weight')),0.75),2)
         if Data_POST.get('Category') != "":
             info.category = int(Data_POST.get('Category'))
             if Data_POST.get('Category') == "1":
                 info.cat_statue = float(Data_POST.get('Status'))
+                info.dog_statue = None
             if Data_POST.get('Category') == "2":
                 info.dog_statue = float(Data_POST.get('Status'))
+                info.cat_statue = None
         info.save()
         
         weight_temp = list(models.Tag_Info.objects.filter(Tag=Tag).values_list('weight',flat=True))
         category_temp = list(models.Tag_Info.objects.filter(Tag=Tag).values_list('category',flat=True))
-         
-        temp = 0
+        per_temp = list(models.Tag_Info.objects.filter(Tag=Tag).values_list('per',flat=True))
+        cat_statue_temp = list(models.Tag_Info.objects.filter(Tag=Tag).values_list('cat_statue',flat=True))
+        dog_statue_temp = list(models.Tag_Info.objects.filter(Tag=Tag).values_list('dog_statue',flat=True))
+
+        temp = None
+        temp_daily = None
         if weight_temp[0] != 0 and category_temp[0] != 0:
             if category_temp[0] == 1:
                 temp = weight_temp[0] * 50
+                if per_temp[0] != 0 and cat_statue_temp[0] != 0:
+                    temp_daily = per_temp[0] * cat_statue_temp[0]
             elif category_temp[0] == 2:
                 temp = weight_temp[0] * 60
-        info.nickname = Data_POST.get('Nickname')
-        info.suggest_water_drinking_daily = temp
-        info.save()
+                if per_temp[0] != 0 and cat_statue_temp[0] != 0:
+                     temp_daily = per_temp[0] * dog_statue_temp[0]
+
+        info1 = models.Tag_Info.objects.get(Tag=Tag)
+        info1.suggest_water_drinking_daily = temp
+        info1.suggest_feed_amount_daily = temp_daily
+        info1.save()
 
 
         #info.suggest_feed_amount_daily =
