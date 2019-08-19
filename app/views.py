@@ -76,10 +76,15 @@ def Tag_Info(request):
 
 def pet_filter_info(request):
     from django.core import serializers
-    import datetime
+    from datetime import datetime, timedelta, time
     Tag = request.session['Tag']
-    date_filter = datetime.datetime.now(tz=timezone.utc) - datetime.timedelta(days=10) #現在時間UTC+8 轉成 UTC+0
-    data = serializers.serialize('json',models.Tag_Info.objects.get(Tag=Tag,updated_at__gte=date_filter).pet_info_set.all().order_by('updated_at'))
+    today = datetime.now().date()
+    tomorrow = today + timedelta(1)
+    today_start = datetime.combine(today, time())
+    today_end = datetime.combine(tomorrow, time())
+    #date_filter = datetime.datetime.now(tz=timezone.utc) -
+    #datetime.timedelta(days=10) #現在時間UTC+8 轉成 UTC+0
+    data = serializers.serialize('json',models.Tag_Info.objects.get(Tag=Tag).pet_info_set.filter(updated_at__lte=today_end,updated_at__gte=today_start).order_by('updated_at'))
     return HttpResponse(data) 
 
 def pet_filter_user_setting(request):
