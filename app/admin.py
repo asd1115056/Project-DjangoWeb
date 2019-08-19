@@ -13,7 +13,7 @@ class user_settingAdmin(admin.ModelAdmin):
     list_display = ('Tag','user_food_setting_daily','user_water_setting_daily','updated_at')
     #後台要顯示的資料表格
 class Tag_InfoAdmin(admin.ModelAdmin):
-    list_display = ('Tag','nickname','category' ,'weight','per','cat_statue','dog_statue','suggest_feed_amount_daily','suggest_water_drinking_daily','updated_at')
+    list_display = ('Tag','nickname','category' ,'weight','per','cat_statue','dog_statue','suggest_feed_amount_daily','suggest_water_drinking_daily','updated_at','created_at')
     #後台要顯示的資料表格
 admin.site.register(env_info,env_infoAdmin)        #註冊 env_info 這個 model
 admin.site.register(pet_info,pet_infoAdmin)        

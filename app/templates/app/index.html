@@ -37,10 +37,7 @@
                             <td>Weight</td>
                             <td id="Weight_table"></td>
                         </tr>
-                        <tr>
-                            <td>Statue</td>
-                            <td id="statue_table"></td>
-                        </tr>
+
                     </tbody>
                 </table>
                 <form role="form" id="form_test">
@@ -116,9 +113,56 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                    <h4 class="modal-title" id="myModal1Label">Customize</h4>
+                                    <h4 class="modal-title" id="myModal1Label">Detail</h4>
                                 </div>
                                 <div class="modal-body">
+                                    <table class="table">
+                                        <thead>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Nickname</td>
+                                                <td id="NICKNAME"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Tag</td>
+                                                <td id="TAG"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Category</td>
+                                                <td id="CATEGORY"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Weight</td>
+                                                <td id="WEIGHT"></td>
+                                            </tr>
+                                             <tr>
+                                                <td>Per</td>
+                                                <td id="PER"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Statue</td>
+                                                <td id="STATUE"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Suggest Water Drinking Daily</td>
+                                                <td id="suggest_water_drinking_daily"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Suggest Feed Amount Daily</td>
+                                                <td id="suggest_feed_amount_daily"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Updated at</td>
+                                                <td id="UPDATED_AT"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Created at</td>
+                                                <td id="CREATED_AT"></td>
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="submit" class="btn btn-default">Save</button>
@@ -150,7 +194,7 @@
                 i = Tag.localeCompare("undefined") //比較兩字串:相等=0
             if (i != 0) {//取不相等時的值
                 data = { 'Tag': Tag }
-                console.log(data);
+                //console.log(data);
             }
             $.ajax({
                 url: "{%url 'pet_get_id'%}",
@@ -160,6 +204,7 @@
                     //console.log(response);
                     ajax_user_data();
                     ajax_tag_Info();
+                    ajax_tag_Info_TABLE();
                     setTimeout(refresh, 200);
                     //refresh();
                 },
@@ -178,28 +223,15 @@
             type: "GET",
             dataType: "json",
             success: function (data) {
-                console.log(data);
+                //console.log(data);
                 $("#Tag_table").text(data[0].fields.Tag);
                 $("#Weight_table").text(data[0].fields.weight);
                 if (data[0].fields.category == 1) {
                     $("#Category_table").text("Cat");
-                    if (data[0].fields.cat_statue == 0.95) { $("#statue_table").text("Weight loss(x0.95)"); }
-                    else if (data[0].fields.cat_statue == 1.0) { $("#statue_table").text("Inactive/obese prone(x1.0)"); }
-                    else if (data[0].fields.cat_statue == 1.2) { $("#statue_table").text("Intact(x1.2)"); }
-                    else if (data[0].fields.cat_statue == 1.4) { $("#statue_table").text("Neutered(x1.4)"); }
-                    else if (data[0].fields.cat_statue == 2.5) { $("#statue_table").text("Kitten(x2.5)"); }
-                    else { $("#statue_table").text("Null"); }
+                   
                 } else if (data[0].fields.category == 2) {
                     $("#Category_table").text("Dog");
-                    if (data[0].fields.dog_statue == 1.0) { $("#statue_table").text("Weight loss(x1.0)"); }
-                    else if (data[0].fields.dog_statue == 1.3) { $("#statue_table").text("Inactive/obese prone(x1.3)"); }
-                    else if (data[0].fields.dog_statue == 1.5) { $("#statue_table").text("Weight gain(x1.5)"); }
-                    else if (data[0].fields.dog_statue == 1.6) { $("#statue_table").text("Neutered(x1.6)"); }
-                    else if (data[0].fields.dog_statue == 1.8) { $("#statue_table").text("Intact(x1.8)"); }
-                    else if (data[0].fields.dog_statue == 2) { $("#statue_table").text("4 months to adult(x2)"); }
-                    else if (data[0].fields.dog_statue == 3) { $("#statue_table").text("0-4 months(x3)"); }
-                    else if (data[0].fields.dog_statue == 3.50) { $("#statue_table").text("Active, working dogs(x3.5)"); }
-                    else { $("#statue_table").text("Null"); }
+                    
                 } else {
                     $("#Category_table").text("Null");
                 }
@@ -339,6 +371,56 @@
         $("#dog1").hide();
         $("#dog2").hide();
     });
-</script>
+</script>  
+<script>
+    function ajax_tag_Info_TABLE() {
+        $.ajax({
+            url: "{%url 'Tag_Info'%}",
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                var d1 = new Date(data[0].fields.updated_at);
+                var d2 = new Date(data[0].fields.created_at);
+                console.log(d1.toString());
+                console.log(d2.toString());
+                console.log(data);
+                $("#NICKNAME").text(data[0].fields.nickname);
+                $("#TAG").text(data[0].fields.Tag);
+                $("#WEIGHT").text(data[0].fields.weight);
+                $("#PER").text(data[0].fields.per);
+                $("#suggest_feed_amount_daily").text(data[0].fields.suggest_feed_amount_daily);
+                $("#suggest_water_drinking_daily").text(data[0].fields.suggest_water_drinking_daily);
+                $("#CREATED_AT").text(d2.toString());
+                $("#UPDATED_AT").text(d1.toString());
 
+                if (data[0].fields.category == 1) {
+                    $("#CATEGORY").text("Cat");
+                    if (data[0].fields.cat_statue == 0.95) { $("#STATUE").text("Weight loss(x0.95)"); }
+                    else if (data[0].fields.cat_statue == 1.0) { $("#STATUE").text("Inactive/obese prone(x1.0)"); }
+                    else if (data[0].fields.cat_statue == 1.2) { $("#STATUE").text("Intact(x1.2)"); }
+                    else if (data[0].fields.cat_statue == 1.4) { $("#STATUE").text("Neutered(x1.4)"); }
+                    else if (data[0].fields.cat_statue == 2.5) { $("#STATUE").text("Kitten(x2.5)"); }
+                    else { $("#STATUE").text("null"); }
+                } else if (data[0].fields.category == 2) {
+                    $("#CATEGORY").text("Dog");
+                    if (data[0].fields.dog_statue == 1.0) { $("#STATUE").text("Weight loss(x1.0)"); }
+                    else if (data[0].fields.dog_statue == 1.3) { $("#STATUE").text("Inactive/obese prone(x1.3)"); }
+                    else if (data[0].fields.dog_statue == 1.5) { $("#STATUE").text("Weight gain(x1.5)"); }
+                    else if (data[0].fields.dog_statue == 1.6) { $("#STATUE").text("Neutered(x1.6)"); }
+                    else if (data[0].fields.dog_statue == 1.8) { $("#STATUE").text("Intact(x1.8)"); }
+                    else if (data[0].fields.dog_statue == 2) { $("#STATUE").text("4 months to adult(x2)"); }
+                    else if (data[0].fields.dog_statue == 3) { $("#").text("0-4 months(x3)"); }
+                    else if (data[0].fields.dog_statue == 3.50) { $("#STATUE").text("Active, working dogs(x3.5)"); }
+                    else { $("#STATUE").text("null"); }
+                } else {
+                    $("#CATEGORY").text("null");
+                    $("#STATUE").text("null");
+                }
+
+            },
+            error: function () {
+            }
+        });
+    }
+</script>
 {% endblock %}
