@@ -77,13 +77,17 @@ def Tag_Info(request):
 def pet_filter_info(request):
     from django.core import serializers
     from datetime import datetime, timedelta, time
+    from django.utils import timezone
     Tag = request.session['Tag']
     today = datetime.now().date()
     tomorrow = today + timedelta(1)
-    today_start = datetime.combine(today, time())
-    today_end = datetime.combine(tomorrow, time())
+    today_start = timezone.make_aware(datetime.combine(today, time()))
+    today_end = timezone.make_aware(datetime.combine(tomorrow, time())) #轉換時區
     #date_filter = datetime.datetime.now(tz=timezone.utc) -
-    #datetime.timedelta(days=10) #現在時間UTC+8 轉成 UTC+0
+                                                                           #datetime.timedelta(days=10)
+                                                                                                                                                  ##現在時間UTC+8
+                                                                                                                                                  #轉成
+                                                                                                                                                                                                                         #UTC+0
     data = serializers.serialize('json',models.Tag_Info.objects.get(Tag=Tag).pet_info_set.filter(updated_at__lte=today_end,updated_at__gte=today_start).order_by('updated_at'))
     return HttpResponse(data) 
 
@@ -132,14 +136,16 @@ def json_test(request):
         if Data_POST.get('Weight') != "":
             info.weight = float(Data_POST.get('Weight'))
             info.per = 70 * round(math.pow(float(Data_POST.get('Weight')),0.75),2)
-        if Data_POST.get('Category') != "":
+        if Data_POST.get('Category') != "0":
             info.category = int(Data_POST.get('Category'))
             if Data_POST.get('Category') == "1":
-                info.cat_statue = float(Data_POST.get('Status'))
-                info.dog_statue = None
+                if Data_POST.get('Status') != "0":
+                    info.cat_statue = float(Data_POST.get('Status'))
+                    info.dog_statue = None
             if Data_POST.get('Category') == "2":
-                info.dog_statue = float(Data_POST.get('Status'))
-                info.cat_statue = None
+                    if Data_POST.get('Status') != "0":
+                        info.dog_statue = float(Data_POST.get('Status'))
+                        info.cat_statue = None
         info.save()
         
         weight_temp = list(models.Tag_Info.objects.filter(Tag=Tag).values_list('weight',flat=True))
