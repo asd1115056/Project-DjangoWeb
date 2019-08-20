@@ -22,29 +22,28 @@
             <div class="col-md-3 column">
                 <div style="        text-align: center;"><h3>Pet info</h3><br></div>
                 <div style="        text-align: center;">
-                <table  class="table">
-                    <thead>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>Tag</strong></td>
-                            <td id="Tag_table"></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Category</strong></td>
-                            <td id="Category_table"></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Weight</strong>(kg)</td>
-                            <td id="Weight_table"></td>
-                        </tr>
-
-                    </tbody>
-                </table>
+                    <table class="table">
+                        <thead>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Tag</strong></td>
+                                <td id="Tag_table"></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Category</strong></td>
+                                <td id="Category_table"></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Weight</strong>(kg)</td>
+                                <td id="Weight_table"></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
                 <div style="        text-align: right;">
-                <button class="btn btn-primary btn-sm " data-toggle="modal" data-target="#myModal1">More</button>
-                <button class="btn btn-primary btn-sm " data-toggle="modal" data-target="#myModal">Setting</button>
+                    <button class="btn btn-primary btn-sm " data-toggle="modal" data-target="#myModal1">More</button>
+                    <button class="btn btn-primary btn-sm " data-toggle="modal" data-target="#myModal">Setting</button>
                 </div>
                 <form role="form" id="form_test">
                     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -55,7 +54,7 @@
                                     <h4 class="modal-title" id="myModalLabel"><strong>Customize</strong></h4>
                                 </div>
 
-                                <div class="modal-body" >
+                                <div class="modal-body">
                                     <div class="form-group">
                                         <label for="Nickname"><strong>Nickname</strong></label>
                                         <input type="text" class="form-control" id="Nickname" placeholder="Lucky">
@@ -97,7 +96,15 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="Weight"><strong>Weight</strong>(kg)</label>
-                                        <input type="number" step="0.01" class="form-control" id="Weight" placeholder="5.5(kg)">
+                                        <input type="number" step="0.01" class="form-control" id="Weight" placeholder="0.0(kg)">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="User_feed_amount_setting_daily"><strong>User feed Amount Setting Daily</strong></label>
+                                        <input type="number" step="0.01" class="form-control" id="User_feed_amount_setting_daily" placeholder="Set 0.0(kCal) to default">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="User_water_drinking_setting_daily"><strong>User Water Drinking Setting Daily</strong></label>
+                                        <input type="number" step="0.01" class="form-control" id="User_water_drinking_setting_daily" placeholder="Set 0.0(mL) to default ">
                                     </div>
                                 </div>
                                 <div class="modal-footer">
@@ -141,17 +148,25 @@
                                                 <td><strong>Weight</strong>(kg)</td>
                                                 <td id="WEIGHT"></td>
                                             </tr>
-                                             <tr>
+                                            <tr>
                                                 <td><strong>Per</strong></td>
                                                 <td id="PER"></td>
                                             </tr>
                                             <tr>
-                                                <td><strong>Suggest Water Drinking Daily</strong>(kCal)</td>
-                                                <td id="suggest_water_drinking_daily"></td>
+                                                <td><strong>User feed Amount Setting Daily</strong>(kCal)</td>
+                                                <td id="user_feed_amount_setting_daily"></td>
                                             </tr>
                                             <tr>
-                                                <td><strong>Suggest Feed Amount Daily</strong>(mL)</td>
+                                                <td><strong>User Water Drinking Setting Daily</strong>(mL)</td>
+                                                <td id="user_water_drinking_setting_daily"></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Suggest Feed Amount Daily</strong>(kCal)</td>
                                                 <td id="suggest_feed_amount_daily"></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Suggest Water Drinking Daily</strong>(mL)</td>
+                                                <td id="suggest_water_drinking_daily"></td>
                                             </tr>
                                             <tr>
                                                 <td><strong>Updated at</strong></td>
@@ -165,7 +180,7 @@
                                     </table>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary btn-danger" onclick="delete_data_post()" >Del</button>
+                                    <button type="button" class="btn btn-primary btn-danger" onclick="delete_data_post()">Del</button>
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                 </div>
                             </div><!-- /.modal-content -->
@@ -237,16 +252,15 @@
                 if (data[0].fields.category == 1) {
                     $("#Category_table").text("Cat");
                     $("#Category_table").removeClass("text-warning");
-                   
+
                 } else if (data[0].fields.category == 2) {
                     $("#Category_table").text("Dog");
                     $("#Category_table").removeClass("text-warning");
-                    
+
                 } else {
                     $("#Category_table").text("null");
                     $("#Category_table").addClass("text-warning");
                 }
-
             },
             error: function () {
             }
@@ -257,16 +271,23 @@
     var max_f;
     function ajax_user_data() {
         $.ajax({
-            url: "{%url 'pet_filter_user_setting'%}",
+            url: "{%url 'Tag_Info'%}",
             type: "GET",
             dataType: "json",
             success: function (data) {
                 clear();
-                max_w = data[0].fields.user_water_setting_daily;
-                max_f = data[0].fields.user_food_setting_daily;
+                if(data[0].fields.user_water_drinking_setting_daily==0){
+                max_w = data[0].fields.suggest_water_drinking_daily;
+                }else{
+                max_w = data[0].fields.user_water_drinking_setting_daily;
+                }
+                if(data[0].fields.user_feed_amount_setting_daily==0){
+                max_f = data[0].fields.suggest_feed_amount_daily;
+                }else{
+                max_f = data[0].fields.user_feed_amount_setting_daily;
+                }
                 debug = { 'max_w': max_w, 'max_f': max_f }
                 //console.log(debug);
-
             },
             error: function () {
                 clear();
@@ -332,8 +353,10 @@
             var Weight = $("#Weight").val();
             var Category = $("#Category").val();
             var Status = $("#Status").val();
+            var User_feed_amount_setting_daily = $("#User_feed_amount_setting_daily").val();
+            var User_water_drinking_setting_daily = $("#User_water_drinking_setting_daily").val();
 
-            data = { 'Nickname': Nickname, 'Weight': Weight,'Category': Category,'Status':Status };
+            data = { 'Nickname': Nickname, 'Weight': Weight,'Category': Category,'Status':Status,'User_feed_amount_setting_daily':User_feed_amount_setting_daily,'User_water_drinking_setting_daily':User_water_drinking_setting_daily };
             //console.log(data);
             $.ajax({
                 type: "POST",
@@ -343,9 +366,6 @@
                     //console.log(response);
                     alert('sucess');
                     window.location.reload();
-                    
-                    
-
                 },
                 error: function () {
                     alert("failure");
@@ -353,7 +373,6 @@
             });
         });
     });
-
 
     function formcontroloption() {
         var Category = $("#Category").val();
@@ -409,11 +428,13 @@
                     $("#WEIGHT").text(data[0].fields.weight);
                     $("#WEIGHT").removeClass("text-warning");
                 }
-                
+
                 $("#TAG").text(data[0].fields.Tag);
                 $("#PER").text(data[0].fields.per);
                 $("#suggest_feed_amount_daily").text(data[0].fields.suggest_feed_amount_daily);
                 $("#suggest_water_drinking_daily").text(data[0].fields.suggest_water_drinking_daily);
+                $("#user_water_drinking_setting_daily").text(data[0].fields.user_water_drinking_setting_daily);
+                $("#user_feed_amount_setting_daily").text(data[0].fields.user_feed_amount_setting_daily);
                 $("#CREATED_AT").text(d2.toString());
                 $("#UPDATED_AT").text(d1.toString());
 

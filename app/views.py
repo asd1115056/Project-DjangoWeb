@@ -147,6 +147,10 @@ def post_form(request):
                     if Data_POST.get('Status') != "0":
                         info.dog_statue = float(Data_POST.get('Status'))
                         info.cat_statue = None
+        if Data_POST.get('User_feed_amount_setting_daily') != "":
+            info.user_feed_amount_setting_daily = int(Data_POST.get('User_feed_amount_setting_daily'))     
+        if Data_POST.get('User_water_drinking_setting_daily') != "":
+            info.user_water_drinking_setting_daily = int(Data_POST.get('User_water_drinking_setting_daily'))        
         info.save()
         
         weight_temp = list(models.Tag_Info.objects.filter(Tag=Tag).values_list('weight',flat=True))
