@@ -17,7 +17,8 @@ urlpatterns = [path('', views.home, name='home'),
     path('ajax/pet_get_id', views.pet_get_id, name='pet_get_id'),
     path('ajax/pet_get_form', views.pet_get_form, name='pet_get_form'),
     path('json_upload', views.json_upload, name='json_upload'),
-    path('json_test', views.json_test, name='json_test'),
+    path('ajax/post_form', views.post_form, name='post_form'),
+    path('ajax/del_data', views.del_data, name='del_data'),
 
 
     path('login/',

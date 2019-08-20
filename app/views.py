@@ -124,7 +124,7 @@ def json_upload(request):
 
 
 @csrf_exempt
-def json_test(request):
+def post_form(request):
     Tag = request.session['Tag']
     if request.method == 'POST':
         Data_POST = request.POST
@@ -159,11 +159,11 @@ def json_test(request):
         if weight_temp[0] != 0 and category_temp[0] != 0:
             if category_temp[0] == 1:
                 temp = weight_temp[0] * 50
-                if per_temp[0] != 0 and cat_statue_temp[0] != 0:
+                if (per_temp[0] != 0 or per_temp[0] != None) and (cat_statue_temp[0] != 0 or cat_statue_temp[0] != None):
                     temp_daily = per_temp[0] * cat_statue_temp[0]
             elif category_temp[0] == 2:
                 temp = weight_temp[0] * 60
-                if per_temp[0] != 0 and cat_statue_temp[0] != 0:
+                if (per_temp[0] != 0 or per_temp[0] != None) and (dog_statue_temp[0] != 0 or dog_statue_temp[0] != None):
                      temp_daily = per_temp[0] * dog_statue_temp[0]
 
         info1 = models.Tag_Info.objects.get(Tag=Tag)
@@ -177,3 +177,14 @@ def json_test(request):
         text = " Update Successfully"
 
         return JsonResponse({"status": 200, "msg": text  })
+
+@csrf_exempt
+def del_data(request):
+    Tag = request.session['Tag']
+    if request.method == 'POST':
+        Data_POST = request.POST
+        Data_POST = json.dumps(Data_POST)
+        Data_POST = json.loads(Data_POST)
+        if Data_POST.get('Delete') == "confrim":
+            models.Tag_Info.objects.get(Tag=Tag).delete()
+            return JsonResponse({"status": 200, "msg": "deleted!"  })

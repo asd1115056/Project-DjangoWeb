@@ -8,7 +8,7 @@
 
 <div class="row clearfix">
     <div class="col-md-2 column">
-        <div style="text-align:center;"><h3>Nickname</h3><br></div>
+        <div style="        text-align: center;"><h3>Nickname</h3><br></div>
         <ul class="nav nav-pills nav-stacked">
             {% for app in apps %}
             <li {% if forloop.first %} class="active" {% endif %} Tag="{{app.Tag}}">
@@ -20,45 +20,48 @@
     <div class="col-md-10 column">
         <div class="row clearfix">
             <div class="col-md-3 column">
-                <div style="text-align:center;"><h3>Pet info</h3><br></div>
-                <table class="table">
+                <div style="        text-align: center;"><h3>Pet info</h3><br></div>
+                <div style="        text-align: center;">
+                <table  class="table">
                     <thead>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>Tag</td>
+                            <td><strong>Tag</strong></td>
                             <td id="Tag_table"></td>
                         </tr>
                         <tr>
-                            <td>Category</td>
+                            <td><strong>Category</strong></td>
                             <td id="Category_table"></td>
                         </tr>
                         <tr>
-                            <td>Weight</td>
+                            <td><strong>Weight</strong>(kg)</td>
                             <td id="Weight_table"></td>
                         </tr>
 
                     </tbody>
                 </table>
+                </div>
+                <div style="        text-align: right;">
+                <button class="btn btn-primary btn-sm " data-toggle="modal" data-target="#myModal1">More</button>
+                <button class="btn btn-primary btn-sm " data-toggle="modal" data-target="#myModal">Setting</button>
+                </div>
                 <form role="form" id="form_test">
-                    <!-- 按钮触发模态框 -->
-                    <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">Setting</button>
-                    <!-- 模态框（Modal） -->
                     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
+                        <div class="modal-dialog" style="        width: 350px">
                             <div class="modal-content">
-                                <div class="modal-header">
+                                <div class="modal-header" style="        text-align: center;">
                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                    <h4 class="modal-title" id="myModalLabel">Customize</h4>
+                                    <h4 class="modal-title" id="myModalLabel"><strong>Customize</strong></h4>
                                 </div>
 
-                                <div class="modal-body">
+                                <div class="modal-body" >
                                     <div class="form-group">
-                                        <label for="Nickname">Nickname</label>
+                                        <label for="Nickname"><strong>Nickname</strong></label>
                                         <input type="text" class="form-control" id="Nickname" placeholder="Lucky">
                                     </div>
                                     <div class="form-group">
-                                        <label>Category</label>
+                                        <label><strong>Category</strong></label>
                                         <select name="Category" id="Category" class="form-control" onChange="formcontroloption(this)">
                                             <option value="0" selected></option>
                                             <option value="1">Cat</option>
@@ -66,7 +69,7 @@
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <label>Status</label>
+                                        <label><strong>Status</strong></label>
                                         <select name="Status" id="Status" class="form-control">
                                             <option value="0" selected></option>
                                             <optgroup id="cat1" label="Kitten">
@@ -93,27 +96,25 @@
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <label for="Weight">Weight</label>
+                                        <label for="Weight"><strong>Weight</strong>(kg)</label>
                                         <input type="number" step="0.01" class="form-control" id="Weight" placeholder="5.5(kg)">
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="submit" class="btn btn-default">Save</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Save</button>
                                 </div>
                             </div><!-- /.modal-content -->
                         </div><!-- /.modal -->
                     </div>
                 </form>
                 <form role="form" id="form_test1">
-                    <!-- 按钮触发模态框 -->
-                    <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal1">More</button>
-                    <!-- 模态框（Modal） -->
                     <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModal1Label" aria-hidden="true">
-                        <div class="modal-dialog">
+                        <div class="modal-dialog" style="        width: 800px">
                             <div class="modal-content">
-                                <div class="modal-header">
+                                <div class="modal-header" style="        text-align: center;">
                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                    <h4 class="modal-title" id="myModal1Label">Detail</h4>
+                                    <h4 class="modal-title" id="myModal1Label"><strong>Detail</strong></h4>
                                 </div>
                                 <div class="modal-body">
                                     <table class="table">
@@ -121,51 +122,51 @@
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td>Nickname</td>
+                                                <td><strong>Nickname</strong></td>
                                                 <td id="NICKNAME"></td>
                                             </tr>
                                             <tr>
-                                                <td>Tag</td>
+                                                <td><strong>Tag</strong></td>
                                                 <td id="TAG"></td>
                                             </tr>
                                             <tr>
-                                                <td>Category</td>
+                                                <td><strong>Category</strong></td>
                                                 <td id="CATEGORY"></td>
                                             </tr>
                                             <tr>
-                                                <td>Weight</td>
-                                                <td id="WEIGHT"></td>
-                                            </tr>
-                                             <tr>
-                                                <td>Per</td>
-                                                <td id="PER"></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Statue</td>
+                                                <td><strong>Statue</strong></td>
                                                 <td id="STATUE"></td>
                                             </tr>
                                             <tr>
-                                                <td>Suggest Water Drinking Daily</td>
+                                                <td><strong>Weight</strong>(kg)</td>
+                                                <td id="WEIGHT"></td>
+                                            </tr>
+                                             <tr>
+                                                <td><strong>Per</strong></td>
+                                                <td id="PER"></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Suggest Water Drinking Daily</strong>(kCal)</td>
                                                 <td id="suggest_water_drinking_daily"></td>
                                             </tr>
                                             <tr>
-                                                <td>Suggest Feed Amount Daily</td>
+                                                <td><strong>Suggest Feed Amount Daily</strong>(mL)</td>
                                                 <td id="suggest_feed_amount_daily"></td>
                                             </tr>
                                             <tr>
-                                                <td>Updated at</td>
+                                                <td><strong>Updated at</strong></td>
                                                 <td id="UPDATED_AT"></td>
                                             </tr>
                                             <tr>
-                                                <td>Created at</td>
+                                                <td><strong>Created at</strong></td>
                                                 <td id="CREATED_AT"></td>
                                             </tr>
-
                                         </tbody>
                                     </table>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="submit" class="btn btn-default">Save</button>
+                                    <button type="button" class="btn btn-primary btn-danger" onclick="delete_data_post()" >Del</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                 </div>
                             </div><!-- /.modal-content -->
                         </div><!-- /.modal -->
@@ -173,12 +174,14 @@
                 </form>
             </div>
             <div class="col-md-4 column">
-                <div style="text-align:center;"><h3>Calorie</h3><br></div>
-                <div id="gauge1" style=" height:150px;text-align:center"></div>
+                <div style="        text-align: center;"><h3>Calorie</h3><br></div>
+                <div id="gauge1" style="        height: 150px;
+        text-align: center"></div>
             </div>
             <div class="col-md-4 column">
-                <div style="text-align:center;"><h3>Water</h3><br></div>
-                <div id="gauge2" style=" height:150px;text-align:center"></div>
+                <div style="        text-align: center;"><h3>Water</h3><br></div>
+                <div id="gauge2" style="        height: 150px;
+        text-align: center"></div>
             </div>
             <div class="clearfix hidden-xs"></div>
         </div>
@@ -214,9 +217,7 @@
             });
         });
     });
-</script>
 
-<script>
     function ajax_tag_Info() {
         $.ajax({
             url: "{%url 'Tag_Info'%}",
@@ -225,15 +226,25 @@
             success: function (data) {
                 //console.log(data);
                 $("#Tag_table").text(data[0].fields.Tag);
-                $("#Weight_table").text(data[0].fields.weight);
+                if (data[0].fields.weight==0) {
+                    $("#Weight_table").text(data[0].fields.weight);
+                    $("#Weight_table").addClass("text-warning");
+                } else {
+                    $("#Weight_table").text(data[0].fields.weight);
+                    $("#Weight_table").removeClass("text-warning");
+                }
+
                 if (data[0].fields.category == 1) {
                     $("#Category_table").text("Cat");
+                    $("#Category_table").removeClass("text-warning");
                    
                 } else if (data[0].fields.category == 2) {
                     $("#Category_table").text("Dog");
+                    $("#Category_table").removeClass("text-warning");
                     
                 } else {
-                    $("#Category_table").text("Null");
+                    $("#Category_table").text("null");
+                    $("#Category_table").addClass("text-warning");
                 }
 
             },
@@ -241,8 +252,7 @@
             }
         });
     }
-</script>
-<script>
+
     var max_w;
     var max_f;
     function ajax_user_data() {
@@ -314,8 +324,7 @@
     }
 
     setTimeout(refresh, 100) //第一次刷新數據
-</script>
-<script>
+
     $(function () {
         $('#form_test').submit(function (e) {
             e.preventDefault();
@@ -325,14 +334,18 @@
             var Status = $("#Status").val();
 
             data = { 'Nickname': Nickname, 'Weight': Weight,'Category': Category,'Status':Status };
-            console.log(data);
+            //console.log(data);
             $.ajax({
                 type: "POST",
-                url: "{% url 'json_test' %}",
+                url: "{% url 'post_form' %}",
                 data: data,
                 success: function (response) {
-                    console.log(response);
+                    //console.log(response);
                     alert('sucess');
+                    window.location.reload();
+                    
+                    
+
                 },
                 error: function () {
                     alert("failure");
@@ -340,8 +353,7 @@
             });
         });
     });
-</script>
-<script>
+
 
     function formcontroloption() {
         var Category = $("#Category").val();
@@ -371,22 +383,34 @@
         $("#dog1").hide();
         $("#dog2").hide();
     });
-</script>  
-<script>
+
     function ajax_tag_Info_TABLE() {
         $.ajax({
-            url: "{%url 'Tag_Info'%}",
+            url: "{%url 'Tag_Info'%} ",
             type: "GET",
             dataType: "json",
             success: function (data) {
                 var d1 = new Date(data[0].fields.updated_at);
                 var d2 = new Date(data[0].fields.created_at);
-                console.log(d1.toString());
-                console.log(d2.toString());
-                console.log(data);
-                $("#NICKNAME").text(data[0].fields.nickname);
+                //console.log(d1.toString());
+                //console.log(d2.toString());
+                //console.log(data);
+                if (!data[0].fields.nickname) {
+                    $("#NICKNAME").text(data[0].fields.nickname);
+                    $("#NICKNAME").addClass("text-warning");
+                } else {
+                    $("#NICKNAME").text(data[0].fields.nickname);
+                    $("#NICKNAME").removeClass("text-warning");
+                }
+                if (data[0].fields.weight==0) {
+                    $("#WEIGHT").text(data[0].fields.weight);
+                    $("#WEIGHT").addClass("text-warning");
+                } else {
+                    $("#WEIGHT").text(data[0].fields.weight);
+                    $("#WEIGHT").removeClass("text-warning");
+                }
+                
                 $("#TAG").text(data[0].fields.Tag);
-                $("#WEIGHT").text(data[0].fields.weight);
                 $("#PER").text(data[0].fields.per);
                 $("#suggest_feed_amount_daily").text(data[0].fields.suggest_feed_amount_daily);
                 $("#suggest_water_drinking_daily").text(data[0].fields.suggest_water_drinking_daily);
@@ -395,26 +419,30 @@
 
                 if (data[0].fields.category == 1) {
                     $("#CATEGORY").text("Cat");
-                    if (data[0].fields.cat_statue == 0.95) { $("#STATUE").text("Weight loss(x0.95)"); }
-                    else if (data[0].fields.cat_statue == 1.0) { $("#STATUE").text("Inactive/obese prone(x1.0)"); }
-                    else if (data[0].fields.cat_statue == 1.2) { $("#STATUE").text("Intact(x1.2)"); }
-                    else if (data[0].fields.cat_statue == 1.4) { $("#STATUE").text("Neutered(x1.4)"); }
-                    else if (data[0].fields.cat_statue == 2.5) { $("#STATUE").text("Kitten(x2.5)"); }
-                    else { $("#STATUE").text("null"); }
+                    $("#CATEGORY").removeClass("text-warning");
+                    if (data[0].fields.cat_statue == 0.95) { $("#STATUE").text("Weight loss(x0.95)"); $("#STATUE").removeClass("text-warning"); }
+                    else if (data[0].fields.cat_statue == 1.0) { $("#STATUE").text("Inactive/obese prone(x1.0)"); $("#STATUE").removeClass("text-warning"); }
+                    else if (data[0].fields.cat_statue == 1.2) { $("#STATUE").text("Intact(x1.2)"); $("#STATUE").removeClass("text-warning"); }
+                    else if (data[0].fields.cat_statue == 1.4) { $("#STATUE").text("Neutered(x1.4)"); $("#STATUE").removeClass("text-warning"); }
+                    else if (data[0].fields.cat_statue == 2.5) { $("#STATUE").text("Kitten(x2.5)"); $("#STATUE").removeClass("text-warning"); }
+                    else { $("#STATUE").text("null"); $("#STATUE").addClass("text-warning"); }
                 } else if (data[0].fields.category == 2) {
                     $("#CATEGORY").text("Dog");
-                    if (data[0].fields.dog_statue == 1.0) { $("#STATUE").text("Weight loss(x1.0)"); }
-                    else if (data[0].fields.dog_statue == 1.3) { $("#STATUE").text("Inactive/obese prone(x1.3)"); }
-                    else if (data[0].fields.dog_statue == 1.5) { $("#STATUE").text("Weight gain(x1.5)"); }
-                    else if (data[0].fields.dog_statue == 1.6) { $("#STATUE").text("Neutered(x1.6)"); }
-                    else if (data[0].fields.dog_statue == 1.8) { $("#STATUE").text("Intact(x1.8)"); }
-                    else if (data[0].fields.dog_statue == 2) { $("#STATUE").text("4 months to adult(x2)"); }
-                    else if (data[0].fields.dog_statue == 3) { $("#").text("0-4 months(x3)"); }
-                    else if (data[0].fields.dog_statue == 3.50) { $("#STATUE").text("Active, working dogs(x3.5)"); }
-                    else { $("#STATUE").text("null"); }
+                    $("#CATEGORY").removeClass("text-warning");
+                    if (data[0].fields.dog_statue == 1.0) { $("#STATUE").text("Weight loss(x1.0)"); $("#STATUE").removeClass("text-warning"); }
+                    else if (data[0].fields.dog_statue == 1.3) { $("#STATUE").text("Inactive/obese prone(x1.3)"); $("#STATUE").removeClass("text-warning"); }
+                    else if (data[0].fields.dog_statue == 1.5) { $("#STATUE").text("Weight gain(x1.5)"); $("#STATUE").removeClass("text-warning"); }
+                    else if (data[0].fields.dog_statue == 1.6) { $("#STATUE").text("Neutered(x1.6)"); $("#STATUE").removeClass("text-warning"); }
+                    else if (data[0].fields.dog_statue == 1.8) { $("#STATUE").text("Intact(x1.8)"); $("#STATUE").removeClass("text-warning"); }
+                    else if (data[0].fields.dog_statue == 2) { $("#STATUE").text("4 months to adult(x2)"); $("#STATUE").removeClass("text-warning"); }
+                    else if (data[0].fields.dog_statue == 3) { $("#").text("0-4 months(x3)"); $("#STATUE").removeClass("text-warning"); }
+                    else if (data[0].fields.dog_statue == 3.50) { $("#STATUE").text("Active, working dogs(x3.5)"); $("#STATUE").removeClass("text-warning"); }
+                    else { $("#STATUE").text("null");$("#STATUE").removeClass("text-warning"); $("#STATUE").addClass("text-warning"); }
                 } else {
                     $("#CATEGORY").text("null");
                     $("#STATUE").text("null");
+                    $("#CATEGORY").addClass("text-warning");
+                    $("#STATUE").addClass("text-warning");
                 }
 
             },
@@ -422,5 +450,23 @@
             }
         });
     }
+
+    function delete_data_post() {
+        data = { "Delete": "confrim" };
+        if (confirm("Are You Sure?")) {
+            $.ajax({
+                type: "POST",
+                url: "{% url 'del_data' %}",
+                data: data,
+                success: function (response) {
+                    //console.log(response);
+                    window.location.reload();
+                },
+                error: function () {
+                    alert("failure");
+                }
+            });
+        }
+}
 </script>
 {% endblock %}
