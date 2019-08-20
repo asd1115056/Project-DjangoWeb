@@ -59,13 +59,14 @@ def env_filter(request):
     return HttpResponse(data) 
 
 def pet_get_id(request):
-    Tag = request.GET.get('Tag')
-    request.session['Tag'] = Tag
+    try:
+        Tag = request.GET.get('Tag')
+    except Tag.DoesNotExist:
+        Tag = None
+    finally:
+        request.session['Tag'] = Tag
     return HttpResponse(Tag)
 
-
-def pet_get_form(request):
-    return HttpResponse(1)
 
 def Tag_Info(request):
     from django.core import serializers
