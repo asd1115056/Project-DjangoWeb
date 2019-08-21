@@ -51,7 +51,7 @@ class pet_info(models.Model):
 
 class user_setting(models.Model):
     Tag = models.ForeignKey(Tag_Info,on_delete=models.CASCADE)
-    user_water_setting_daily = models.DecimalField(max_digits=6,decimal_places=2,default=Decimal('0.00'))
-    user_food_setting_daily = models.DecimalField(max_digits=6,decimal_places=2,default=Decimal('0.00'))
+    user_food_setting = models.DecimalField(max_digits=6,decimal_places=2,default=Decimal('0.00'))
+
     updated_at = models.DateTimeField(auto_now=True)
 
