@@ -51,166 +51,162 @@
                     <button class="btn btn-primary btn-sm " data-toggle="modal" href="#myModal1">More</button>
                     <button class="btn btn-primary btn-sm " data-toggle="modal" href="#myModal">Setting</button>
                     <button class="btn btn-primary btn-sm " data-toggle="modal" href="#myModal11">Schedule</button>
-                </div>     
+                </div>
                 <div id="myModal" class="modal fade" tabindex="-1" data-width="350" style="display: none;">
- 
-                                <div class="modal-header" style="text-align: center;">
-                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                    <h4><strong>Customize</strong></h4>
-                                </div>
-                                <div class="modal-body">
-                                    <form role="form" id="form_test">
-                                    <div class="form-group">
-                                        <label for="Nickname"><strong>Nickname</strong></label>
-                                        <input type="text" class="form-control" id="Nickname" placeholder="Lucky">
-                                    </div>
-                                    <div class="form-group">
-                                        <label><strong>Category</strong></label>
-                                        <select name="Category" id="Category" class="form-control" onChange="formcontroloption(this)">
-                                            <option value="0" selected></option>
-                                            <option value="1">Cat</option>
-                                            <option value="2">Dog</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label><strong>Status</strong></label>
-                                        <select name="Status" id="Status" class="form-control">
-                                            <option value="0" selected></option>
-                                            <optgroup id="cat1" label="Kitten">
-                                                <option value="2.5">Kitten</option>
-                                            </optgroup>
-                                            <optgroup id="dog1" label="Puppy">
-                                                <option value="3">0-4 months</option>
-                                                <option value="2">4 months to adult</option>
-                                            </optgroup>
-                                            <optgroup id="cat2" label="Cat">
-                                                <option value="1.4">Neutered</option>
-                                                <option value="1.2">Intact</option>
-                                                <option value="1.0">Inactive/obese prone</option>
-                                                <option value="0.95">Weight loss</option>
-                                            </optgroup>
-                                            <optgroup id="dog2" label="Dog">
-                                                <option value="1.6">Neutered</option>
-                                                <option value="1.8">Intact</option>
-                                                <option value="1.3">Inactive/obese prone</option>
-                                                <option value="1.0">Weight loss</option>
-                                                <option value="1.5">Weight gain</option>
-                                                <option value="3.5">Active, working dogs</option>
-                                            </optgroup>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="Weight"><strong>Weight</strong>(kg)</label>
-                                        <input type="number" step="0.01" class="form-control" id="Weight" placeholder="0.0(kg)">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="User_feed_amount_setting_daily"><strong>User feed Amount Setting Daily</strong></label>
-                                        <input type="number" step="0.01" class="form-control" id="User_feed_amount_setting_daily" placeholder="Set 0.0(kCal) to default">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="User_water_drinking_setting_daily"><strong>User Water Drinking Setting Daily</strong></label>
-                                        <input type="number" step="0.01" class="form-control" id="User_water_drinking_setting_daily" placeholder="Set 0.0(mL) to default ">
-                                    </div>
-                                         <button type="submit" id="submit21"class="btn btn-primary">Save</button>
-                                        </form>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    
-                                </div>
-  
+
+                    <div class="modal-header" style="text-align: center;">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4><strong>Customize</strong></h4>
                     </div>
+                    <div class="modal-body">
+                        <form role="form" id="form_test">
+                            <div class="form-group">
+                                <label for="Nickname"><strong>Nickname</strong></label>
+                                <input type="text" class="form-control" id="Nickname" placeholder="Lucky">
+                            </div>
+                            <div class="form-group">
+                                <label><strong>Category</strong></label>
+                                <select name="Category" id="Category" class="form-control" onChange="formcontroloption(this)">
+                                    <option value="0" selected></option>
+                                    <option value="1">Cat</option>
+                                    <option value="2">Dog</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label><strong>Status</strong></label>
+                                <select name="Status" id="Status" class="form-control">
+                                    <option value="0" selected></option>
+                                    <optgroup id="cat1" label="Kitten">
+                                        <option value="2.5">Kitten</option>
+                                    </optgroup>
+                                    <optgroup id="dog1" label="Puppy">
+                                        <option value="3">0-4 months</option>
+                                        <option value="2">4 months to adult</option>
+                                    </optgroup>
+                                    <optgroup id="cat2" label="Cat">
+                                        <option value="1.4">Neutered</option>
+                                        <option value="1.2">Intact</option>
+                                        <option value="1.0">Inactive/obese prone</option>
+                                        <option value="0.95">Weight loss</option>
+                                    </optgroup>
+                                    <optgroup id="dog2" label="Dog">
+                                        <option value="1.6">Neutered</option>
+                                        <option value="1.8">Intact</option>
+                                        <option value="1.3">Inactive/obese prone</option>
+                                        <option value="1.0">Weight loss</option>
+                                        <option value="1.5">Weight gain</option>
+                                        <option value="3.5">Active, working dogs</option>
+                                    </optgroup>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="Weight"><strong>Weight</strong>(kg)</label>
+                                <input type="number" step="0.01" class="form-control" id="Weight" placeholder="0.0(kg)">
+                            </div>
+                            <div class="form-group">
+                                <label for="User_feed_amount_setting_daily"><strong>User feed Amount Setting Daily</strong></label>
+                                <input type="number" step="0.01" class="form-control" id="User_feed_amount_setting_daily" placeholder="Set 0.0(kCal) to default">
+                            </div>
+                            <div class="form-group">
+                                <label for="User_water_drinking_setting_daily"><strong>User Water Drinking Setting Daily</strong></label>
+                                <input type="number" step="0.01" class="form-control" id="User_water_drinking_setting_daily" placeholder="Set 0.0(mL) to default ">
+                            </div>
+                            <button type="submit" id="submit21" class="btn btn-primary">Save</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
                 <form role="form" id="form_test1">
-                <div id="myModal1" class="modal fade" tabindex="-1" data-width="760" style="display: none;">
+                    <div id="myModal1" class="modal fade" tabindex="-1" data-width="760" style="display: none;">
                         <div class="modal-header" style="text-align: center;">
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                             <h4><strong>Detail</strong></h4>
                         </div>
-                                <div class="modal-body">
-                                    <table class="table">
-                                        <thead>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td><strong>Nickname</strong></td>
-                                                <td id="NICKNAME"></td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Tag</strong></td>
-                                                <td id="TAG"></td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Category</strong></td>
-                                                <td id="CATEGORY"></td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Statue</strong></td>
-                                                <td id="STATUE"></td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Weight</strong>(kg)</td>
-                                                <td id="WEIGHT"></td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Per</strong></td>
-                                                <td id="PER"></td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>User feed Amount Setting Daily</strong>(kCal)</td>
-                                                <td id="user_feed_amount_setting_daily"></td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>User Water Drinking Setting Daily</strong>(mL)</td>
-                                                <td id="user_water_drinking_setting_daily"></td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Suggest Feed Amount Daily</strong>(kCal)</td>
-                                                <td id="suggest_feed_amount_daily"></td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Suggest Water Drinking Daily</strong>(mL)</td>
-                                                <td id="suggest_water_drinking_daily"></td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Updated at</strong></td>
-                                                <td id="UPDATED_AT"></td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Created at</strong></td>
-                                                <td id="CREATED_AT"></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                        <div class="modal-body">
+                            <table class="table">
+                                <thead>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Nickname</strong></td>
+                                        <td id="NICKNAME"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Tag</strong></td>
+                                        <td id="TAG"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Category</strong></td>
+                                        <td id="CATEGORY"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Statue</strong></td>
+                                        <td id="STATUE"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Weight</strong>(kg)</td>
+                                        <td id="WEIGHT"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Per</strong></td>
+                                        <td id="PER"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>User feed Amount Setting Daily</strong>(kCal)</td>
+                                        <td id="user_feed_amount_setting_daily"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>User Water Drinking Setting Daily</strong>(mL)</td>
+                                        <td id="user_water_drinking_setting_daily"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Suggest Feed Amount Daily</strong>(kCal)</td>
+                                        <td id="suggest_feed_amount_daily"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Suggest Water Drinking Daily</strong>(mL)</td>
+                                        <td id="suggest_water_drinking_daily"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Updated at</strong></td>
+                                        <td id="UPDATED_AT"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Created at</strong></td>
+                                        <td id="CREATED_AT"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                         <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary btn-danger" onclick="delete_data_post()">Del</button>
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                </div>
+                            <button type="button" class="btn btn-primary btn-danger" onclick="delete_data_post()">Del</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
                     </div>
                 </form>
                 <div id="myModal11" class="modal fade" tabindex="-1" data-width="760" style="display: none;">
-
-                            <div class="modal-header" style="text-align: center;">
-                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                <h4><strong>Customize</strong></h4>
-                            </div>
-                            <div class="modal-body">
-                                <div class="form-group">
-                                    <form role="form" id="form_test22" name="form_test22">
-                                        <table class="table" id="dynamic_field">
-                                            <tr>
-                                                <td><input type="text" name="name[]" id="name" class="form-control name_list Timer "></td>
-                                                <td><button type="button" name="add" class="btn btn-success " id="add">Add More</button></td>
-                                            </tr>
-                                        </table>
-                                        <input type="button" name="submit" id="submit" value="Submit" />
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            </div>
-
+                    <div class="modal-header" style="text-align: center;">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4><strong>Customize</strong></h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <form role="form" id="form_test22" name="form_test22">
+                                <table class="table" id="dynamic_field">
+                                    <tr>
+                                        <td><input type="text" name="name[]" id="name" class="form-control name_list Timer "></td>
+                                        <td><button type="button" name="add" class="btn btn-success " id="add">Add More</button></td>
+                                    </tr>
+                                </table>
+                                <input type="button" name="submit" id="submit" value="Submit" />
+                            </form>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
                 </div>
             </div>
             <div class="col-md-4 column">
@@ -241,25 +237,25 @@
         var i = 1;
         $('#add').click(function () {
             i++;
-            $('#dynamic_field').append('<tr id="row' + i + '"><td><input type="text" name="name[]" id="name" class="form-control name_list Timer2"></td><td><button name="remove" class="btn btn-danger btn_remove" id="' + i + '">&times;</button></td></tr>')
-                    document.getElementsByClassName("Timer2").flatpickr({
-            altInput: true,
-            altFormat: "F j, Y",
-            dateFormat: "Y-m-d",
+            $('#dynamic_field').append('<tr id="row' + i + '"><td><input type="text" name="name[]" id="name" class="form-control name_list Timer' + i + '"></td><td><button name="remove" class="btn btn-danger btn_remove" id="' + i + '">&times;</button></td></tr>')
+            document.getElementsByClassName('Timer' + i + '').flatpickr({
+                altInput: true,
+                altFormat: "F j, Y",
+                dateFormat: "Y-m-d",
+            });
         });
-    });
         $(document).on('click', '.btn_remove', function () {
             var button_id = $(this).attr("id");
             $('#row' + button_id + '').remove();
         });
-        $('#submit').click(function(){
-    
-             console.log('hello');
+        $('#submit').click(function () {
 
-            var name = $('#form_test22').serialize() 
+            console.log('hello');
+
+            var name = $('#form_test22').serialize()
             alert(name);
-                
-      });
+
+        });
 
     })
     $(function () {
