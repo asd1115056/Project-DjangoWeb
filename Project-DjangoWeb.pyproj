@@ -61,6 +61,10 @@
     <Folder Include="Project_DjangoWeb\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\static\app\content\bootstrap-modal-bs3patch.css" />
+    <Content Include="app\static\app\content\bootstrap-modal.css" />
+    <Content Include="app\static\app\scripts\bootstrap-modal.js" />
+    <Content Include="app\static\app\scripts\bootstrap-modalmanager.js" />
     <Content Include="app\templates\app\temperature.html" />
     <Content Include="app\templates\app\humidity.html" />
     <Content Include="requirements.txt" />
