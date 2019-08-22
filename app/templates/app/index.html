@@ -196,7 +196,8 @@
                             <form role="form" id="form_test22" name="form_test22">
                                 <table class="table" id="dynamic_field">
                                     <tr>
-                                        <td><input type="text" name="name[]" id="name" class="form-control name_list Timer "></td>
+                                        <td><input type="text" name="time[]" id="time0" class="form-control time11 Timer "></td>
+                                        <td><input type="number" step="0.01" name="amount[]" id="amount0" class="form-control amount11"></td>
                                         <td><button type="button" name="add" class="btn btn-success " id="add">Add More</button></td>
                                     </tr>
                                 </table>
@@ -224,12 +225,49 @@
 
 <script>
     $(function () {
+        $.fn.serializeObject = function () {
+            var o = {};
+            var a = this.serializeArray();
+            $.each(a, function () {
+                if (o[this.name]) {
+                    if (!o[this.name].push) {
+                        o[this.name] = [o[this.name]];
+                    }
+                    o[this.name].push(this.value);
+                } else {
+
+                    o[this.name] = this.value;
+                }
+            });
+            return o;
+        };
+
+        //build the json objects for each set of form fields
+        $.fn.serializeObject111 = function (options) {
+            var data = this.serializeArray(), obj = {}, all = [];
+            $.each(data, function (m, el) {
+                var key = this.name;
+                //remove the brackets from each html name array
+                if (key.slice(-1) == "]") {
+                    key = key.slice(0, -2);
+                }
+                if (el.name in options) {
+                    obj[options[key]] = obj[options[key]] || {};
+                    obj[options[key]][key] = el.value;
+                }
+                else {
+                    obj[key] = el.value;
+                }
+
+                if ((m + 1) % Object.keys(options).length == 0) {
+                    all.push(obj);
+                    obj = {};
+                }
+            });
+            return all;
+        };
+
         document.getElementsByClassName("Timer").flatpickr({
-            altInput: true,
-            altFormat: "F j, Y",
-            dateFormat: "Y-m-d",
-        });
-        document.getElementsByClassName("Timer2").flatpickr({
             altInput: true,
             altFormat: "F j, Y",
             dateFormat: "Y-m-d",
@@ -237,27 +275,26 @@
         var i = 1;
         $('#add').click(function () {
             i++;
-            $('#dynamic_field').append('<tr id="row' + i + '"><td><input type="text" name="name[]" id="name" class="form-control name_list Timer' + i + '"></td><td><button name="remove" class="btn btn-danger btn_remove" id="' + i + '">&times;</button></td></tr>')
+            $('#dynamic_field').append('<tr id="row' + i + '"><td><input type="text" name="time[]" id="time" class="form-control time11 Timer' + i + '"></td><td><input type="number" step="0.01" name="amount[]" id="amount" class="form-control amount11"></td><td><button name="remove" class="btn btn-danger btn_remove" id="' + i + '">&times;</button></td></tr>')
             document.getElementsByClassName('Timer' + i + '').flatpickr({
                 altInput: true,
                 altFormat: "F j, Y",
                 dateFormat: "Y-m-d",
             });
+
         });
         $(document).on('click', '.btn_remove', function () {
             var button_id = $(this).attr("id");
             $('#row' + button_id + '').remove();
         });
+
         $('#submit').click(function () {
-
-            console.log('hello');
-
-            var name = $('#form_test22').serialize()
-            alert(name);
-
+            var formdata = $("#form_test22").serializeObject111();
+            console.log(formdata);
         });
 
     })
+
     $(function () {
         var i;
         $("li").click(function () { //點擊事件
