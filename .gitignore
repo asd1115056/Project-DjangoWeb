@@ -339,3 +339,7 @@ ASALocalRun/
 # BeatPulse healthcheck temp database
 healthchecksdb
 /env
+/static/app/content
+/static/app/fonts
+/static/app/scripts
+/static/admin
