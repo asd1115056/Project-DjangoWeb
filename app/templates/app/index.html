@@ -1,4 +1,5 @@
-﻿{% extends "app/base.html" %}
+﻿
+{% extends "app/base.html" %}
 
 {% block content %}
 
@@ -189,15 +190,15 @@
                 <div id="myModal11" class="modal fade" tabindex="-1" data-width="760" style="display: none;">
                     <div class="modal-header" style="text-align: center;">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4><strong>Customize</strong></h4>
+                        <h4><strong>Schedule</strong></h4>
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <form role="form" id="form_test22" name="form_test22">
+                            <form role="form" id="form_test22" name="form_test22" class="form_test22">
                                 <table class="table" id="dynamic_field">
                                     <tr>
-                                        <td><input type="text" name="time[]" id="time0" class="form-control time11 Timer "></td>
-                                        <td><input type="number" step="0.01" name="amount[]" id="amount0" class="form-control amount11"></td>
+                                        <td><input required type="text" name="time[]" id="time0" class="form-control time11 Timer "></td>
+                                        <td><input required type="number" step="0.01" name="amount[]" id="amount0" class="form-control amount11"></td>
                                         <td><button type="button" name="add" class="btn btn-success " id="add">Add More</button></td>
                                     </tr>
                                 </table>
@@ -225,61 +226,48 @@
 
 <script>
     $(function () {
-        $.fn.serializeObject = function () {
-            var o = {};
-            var a = this.serializeArray();
-            $.each(a, function () {
-                if (o[this.name]) {
-                    if (!o[this.name].push) {
-                        o[this.name] = [o[this.name]];
-                    }
-                    o[this.name].push(this.value);
+        jQuery.fn.serializeObject = function () {
+            var arrayData, objectData;
+            arrayData = this.serializeArray();
+            objectData = {};
+
+            $.each(arrayData, function () {
+                var value;
+
+                if (this.value != null) {
+                    value = this.value;
                 } else {
+                    value = '';
+                }
 
-                    o[this.name] = this.value;
+                if (objectData[this.name] != null) {
+                    if (!objectData[this.name].push) {
+                        objectData[this.name] = [objectData[this.name]];
+                    }
+
+                    objectData[this.name].push(value);
+                } else {
+                    objectData[this.name] = value;
                 }
             });
-            return o;
+
+            return objectData;
         };
-
-        //build the json objects for each set of form fields
-        $.fn.serializeObject111 = function (options) {
-            var data = this.serializeArray(), obj = {}, all = [];
-            $.each(data, function (m, el) {
-                var key = this.name;
-                //remove the brackets from each html name array
-                if (key.slice(-1) == "]") {
-                    key = key.slice(0, -2);
-                }
-                if (el.name in options) {
-                    obj[options[key]] = obj[options[key]] || {};
-                    obj[options[key]][key] = el.value;
-                }
-                else {
-                    obj[key] = el.value;
-                }
-
-                if ((m + 1) % Object.keys(options).length == 0) {
-                    all.push(obj);
-                    obj = {};
-                }
-            });
-            return all;
-        };
-
         document.getElementsByClassName("Timer").flatpickr({
-            altInput: true,
-            altFormat: "F j, Y",
-            dateFormat: "Y-m-d",
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",
+            time_24hr: true
         });
         var i = 1;
         $('#add').click(function () {
             i++;
             $('#dynamic_field').append('<tr id="row' + i + '"><td><input type="text" name="time[]" id="time" class="form-control time11 Timer' + i + '"></td><td><input type="number" step="0.01" name="amount[]" id="amount" class="form-control amount11"></td><td><button name="remove" class="btn btn-danger btn_remove" id="' + i + '">&times;</button></td></tr>')
             document.getElementsByClassName('Timer' + i + '').flatpickr({
-                altInput: true,
-                altFormat: "F j, Y",
-                dateFormat: "Y-m-d",
+                enableTime: true,
+                noCalendar: true,
+                dateFormat: "H:i",
+                time_24hr: true,
             });
 
         });
@@ -289,8 +277,23 @@
         });
 
         $('#submit').click(function () {
-            var formdata = $("#form_test22").serializeObject111();
-            console.log(formdata);
+
+            data = $("#form_test22").serializeObject();
+            console.log(data);
+            $.ajax({
+                type: "POST",
+                url: "{% url 'schedule' %}",
+                data: data,
+                success: function (response) {
+                    //console.log(response);
+                    //alert('sucess');
+                    // window.location.reload();
+                },
+                error: function () {
+                    alert("failure");
+                }
+            });
+
         });
 
     })

@@ -18,6 +18,7 @@ urlpatterns = [path('', views.home, name='home'),
     path('json_upload', views.json_upload, name='json_upload'),
     path('ajax/post_form', views.post_form, name='post_form'),
     path('ajax/del_data', views.del_data, name='del_data'),
+    path('ajax/schedule', views.schedule, name='schedule'),
 
 
     path('login/',

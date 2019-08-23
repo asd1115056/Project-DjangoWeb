@@ -44,14 +44,20 @@ class Tag_Info(models.Model):
 
 class pet_info(models.Model):
     Tag = models.ForeignKey(Tag_Info,on_delete=models.CASCADE)
-    water_drink = models.DecimalField(max_digits=6,decimal_places=2,default=Decimal('0.00'))
-    food_eat = models.DecimalField(max_digits=6,decimal_places=2,default=Decimal('0.00'))
+    water_drink = models.DecimalField(max_digits=6,decimal_places=2,default=Decimal('0.00'),null=True, blank=True)
+    food_eat = models.DecimalField(max_digits=6,decimal_places=2,default=Decimal('0.00'),null=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+class food_type(models.Model):
+    Name = models.CharField(max_length = 20)
+    kCal = models.DecimalField(max_digits=6,decimal_places=2,default=Decimal('0.00'),null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now = True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
 class user_setting(models.Model):
     Tag = models.ForeignKey(Tag_Info,on_delete=models.CASCADE)
-    user_food_setting = models.DecimalField(max_digits=6,decimal_places=2,default=Decimal('0.00'))
-
-    updated_at = models.DateTimeField(auto_now=True)
+    #food_Name = models.ForeignKey(food_type,on_delete=models.CASCADE)
+    schedule_time = models.TimeField(null=True, blank=True)
+    food_ammount = models.DecimalField(max_digits=6,decimal_places=2,default=Decimal('0.00'),null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 

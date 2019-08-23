@@ -101,9 +101,9 @@ def pet_filter_user_setting(request):
 
 @csrf_exempt
 def json_upload(request):
+    Tag = request.session['Tag']
     if request.method == 'POST':
         Data_POST = json.loads(request.body.decode("utf-8"))
-        Tag = Data_POST.get('Tag')
         temp = models.Tag_Info.objects.filter(Tag=Tag)
         if temp.exists():
             text1 = "Tag Existing"
@@ -193,3 +193,28 @@ def del_data(request):
         if Data_POST.get('Delete') == "confrim":
             models.Tag_Info.objects.get(Tag=Tag).delete()
             return JsonResponse({"status": 200, "msg": "deleted!"  })
+@csrf_exempt
+def schedule(request):
+    Tag = request.session['Tag']
+    temp = models.Tag_Info.objects.filter(Tag=Tag)
+    pk = list(temp.values_list('pk',flat=True)) #實際輸出['1','2',…] 用python List轉換成[1,2,...]
+    info = models.pet_info.objects.create(Tag_id=pk[0])
+    if request.method == 'POST':
+        Data_POST1 = request.POST.getlist('time[]')
+        Data_POST2 = request.POST.getlist('amount[]')
+        if len(Data_POST1) == len(Data_POST2):
+            for i in range(len(Data_POST2)):
+                if Data_POST1[i] != "" and Data_POST2[i] != "":
+                    info = models.user_setting.objects.create(Tag_id=pk[0])
+                    info.schedule_time = datetime.strptime(Data_POST1[i], '%H:%M').time()
+                    info.food_ammount = Data_POST2[i]
+                    info.save()
+                    statue = "200"
+                    text1 = "Save Successfully"
+                else:
+                    statue = "skip"
+        else:
+            statue = "500"
+        return JsonResponse({"statue": statue, "msg1": Data_POST1 ,"msg2": Data_POST2 })
+    else:
+        return JsonResponse({"status": 400, "msg": "It is GET" })
