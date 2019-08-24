@@ -18,7 +18,11 @@ urlpatterns = [path('', views.home, name='home'),
     path('json_upload', views.json_upload, name='json_upload'),
     path('ajax/post_form', views.post_form, name='post_form'),
     path('ajax/del_data', views.del_data, name='del_data'),
-    path('ajax/schedule', views.schedule, name='schedule'),
+    path('ajax/add_Schedule', views.add_Schedule, name='add_Schedule'),
+    path('ajax/tab_Schedule', views.tab_Schedule, name='tab_Schedule'),
+    path('ajax/search_foodName', views.search_foodName, name='search_foodName'),
+    path('ajax/list_foodType', views.list_foodType, name='list_foodType'),
+    path('ajax/add_FoodType', views.add_FoodType, name='add_FoodType'),
 
 
     path('login/',

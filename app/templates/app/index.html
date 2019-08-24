@@ -58,10 +58,11 @@
                     <div class="modal-body">
                         <ul class="nav nav-tabs">
                             <li class="active"><a href="#tab1" data-toggle="tab">PetInfo</a></li>
-                            <li class=""><a href="#tab2" data-toggle="tab">Schedule</a></li>
-                            <li class=""><a href="#tab3" data-toggle="tab">PetInfo-Setting</a></li>
-                            <li class=""><a href="#tab4" data-toggle="tab">Schedule-Setting</a></li>
-                            <li class=""><a href="#tab5" data-toggle="tab">FoodType-Setting</a></li>
+                            <li class=""><a href="#tab2" data-toggle="tab" onclick="tab_Schedule()">Schedule</a></li>
+                            <li class=""><a href="#tab3" data-toggle="tab" onclick="tab_FoodType()">FoodType</a></li>
+                            <li class=""><a href="#tab4" data-toggle="tab">PetInfo-Setting</a></li>
+                            <li class=""><a href="#tab5" data-toggle="tab">Schedule-Setting</a></li>
+                            <li class=""><a href="#tab6" data-toggle="tab">FoodType-Setting</a></li>
                         </ul>
                         <div class="tab-content">
                             <div class="tab-pane active" id="tab1">
@@ -119,7 +120,33 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="tab-pane" id="tab3">
+                            <div id="tab2" class="tab-pane">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <td>Time</td>
+                                            <td>Food Type</td>
+                                            <td>Amount</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="Schedule_table">
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div id="tab3" class="tab-pane">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                            <td>kCal</td>
+                                            <td>Created at</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="FoodType_table">
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="tab-pane" id="tab4">
                                 <form role="form" id="form_test">
                                     <div class="form-group row-margin-top">
                                         <label for="Nickname"><strong>Nickname</strong></label>
@@ -175,20 +202,34 @@
                                     <button type="submit" id="submit21" class="btn btn-primary">Save</button>
                                 </form>
                             </div>
-                            <div id="tab4" class="tab-pane">
-                                                    <div class="form-group">
-                            <form role="form" id="form_test22" name="form_test22" class="form_test22">
-                                <table class="table" id="dynamic_field">
-                                    <tr>
-                                        <td><input required type="text" name="time[]" id="time0" class="form-control time11 Timer "></td>
-                                        <td><input required type="number" step="0.01" name="amount[]" id="amount0" class="form-control amount11"></td>
-                                        <td><button type="button" name="add" class="btn btn-success " id="add">Add More</button></td>
-                                    </tr>
-                                </table>
-                                <input type="button" name="submit" id="submit" value="Submit" />
-                            </form>
-                        </div>
-                            </div>    
+                            <div id="tab5" class="tab-pane">
+                                <div class="form-group">
+                                    <form role="form" id="form1">
+                                        <table class="table" id="dynamic_field1">
+                                            <tr>
+                                                <td><input required type="text" name="time[]" class="form-control time11 Timer "></td>
+                                                <td><input required type="number" step="0.01" name="amount[]" id="amount0" class="form-control amount11"></td>
+                                                <td><button type="button" name="add" class="btn btn-success " id="add1">Add More</button></td>
+                                            </tr>
+                                        </table>
+                                        <input type="button" id="submit1" value="Submit" />
+                                    </form>
+                                </div>
+                            </div>
+                            <div id="tab6" class="tab-pane">
+                                <div class="form-group">
+                                    <form role="form" id="form2">
+                                        <table class="table" id="dynamic_field2">
+                                            <tr>
+                                                <td><input required type="text" name="Name[]" class="form-control"></td>
+                                                <td><input required type="number" step="0.01" name="kCal[]" id="amount0" class="form-control"></td>
+                                                <td><button type="button" name="add" class="btn btn-success " id="add2">Add More</button></td>
+                                            </tr>
+                                        </table>
+                                        <input type="button" id="submit2" value="Submit" />
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -211,7 +252,6 @@
 </div>
 
 <script>
-
     $(function () {
         jQuery.fn.serializeObject = function () {
             var arrayData, objectData;
@@ -247,29 +287,55 @@
             time_24hr: true
         });
         var i = 1;
-        $('#add').click(function () {
+        var j = 1;
+        $('#add1').click(function () {
             i++;
-            $('#dynamic_field').append('<tr id="row' + i + '"><td><input type="text" name="time[]" id="time" class="form-control time11 Timer' + i + '"></td><td><input type="number" step="0.01" name="amount[]" id="amount" class="form-control amount11"></td><td><button name="remove" class="btn btn-danger btn_remove" id="' + i + '">&times;</button></td></tr>')
+            $('#dynamic_field1').append('<tr id="row' + i + '"><td><input type="text" name="time[]" class="form-control time11 Timer' + i + '"></td><td><input type="number" step="0.01" name="amount[]" class="form-control amount11"></td><td><button name="remove" class="btn btn-danger btn_remove" id="' + i + '">&times;</button></td></tr>')
             document.getElementsByClassName('Timer' + i + '').flatpickr({
                 enableTime: true,
                 noCalendar: true,
                 dateFormat: "H:i",
                 time_24hr: true,
             });
-
+        });
+        $('#add2').click(function () {
+            j++;
+            $('#dynamic_field2').append('<tr id="row' + j + '"><td><input type="text" name="Name[]" class="form-control"></td><td><input type="number" step="0.01" name="kCal[]" class="form-control"></td><td><button name="remove" class="btn btn-danger btn_remove" id="' + j + '">&times;</button></td></tr>')
+        });
+        $(document).on('click', '.btn_remove', function () {
+            var button_id = $(this).attr("id");
+            $('#row' + button_id + '').remove();
         });
         $(document).on('click', '.btn_remove', function () {
             var button_id = $(this).attr("id");
             $('#row' + button_id + '').remove();
         });
 
-        $('#submit').click(function () {
+        $('#submit1').click(function () {
 
-            data = $("#form_test22").serializeObject();
+            data = $("#form1").serializeObject();
             console.log(data);
             $.ajax({
                 type: "POST",
-                url: "{% url 'schedule' %}",
+                url: "{% url 'add_Schedule' %}",
+                data: data,
+                success: function (response) {
+                    //console.log(response);
+                    //alert('sucess');
+                    // window.location.reload();
+                },
+                error: function () {
+                    alert("failure");
+                }
+            });
+
+        });
+        $('#submit2').click(function () {
+            data = $("#form2").serializeObject();
+            console.log(data);
+            $.ajax({
+                type: "POST",
+                url: "{% url 'add_FoodType' %}",
                 data: data,
                 success: function (response) {
                     //console.log(response);
@@ -300,6 +366,8 @@
                     ajax_user_data();
                     ajax_tag_Info();
                     ajax_tag_Info_TABLE();
+                    tab_Schedule();
+                    tab_FoodType();
                     setTimeout(refresh, 200);
                     //refresh();
                 },
@@ -328,6 +396,8 @@
                     //console.log(response);
                     ajax_user_data();
                     ajax_tag_Info();
+                    tab_Schedule();
+                    tab_FoodType();
                     ajax_tag_Info_TABLE();
                     setTimeout(refresh, 200);
                     //refresh();
@@ -463,7 +533,7 @@
             var User_water_drinking_setting_daily = $("#User_water_drinking_setting_daily").val();
 
             data = { 'Nickname': Nickname, 'Weight': Weight, 'Category': Category, 'Status': Status, 'User_feed_amount_setting_daily': User_feed_amount_setting_daily, 'User_water_drinking_setting_daily': User_water_drinking_setting_daily };
-            console.log(data);
+            //console.log(data);
             $.ajax({
                 type: "POST",
                 url: "{% url 'post_form' %}",
@@ -594,6 +664,75 @@
                 }
             });
         }
+    }
+
+    function tab_Schedule() {
+        $.ajax({
+            url: "{%url 'tab_Schedule'%} ",
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                //console.log(data);
+                $('#Schedule_table').html('');
+                if (data != "") {
+                    //console.log(data);
+                    $.each(data, function (i, item) {
+                        //alert(item.fields.schedule_time);
+                        data1 = search_foodName("pk", item.fields.food_Name);
+                        //console.log(item.fields.food_Name);
+                        data1 = $.parseJSON(data1);
+                        //console.log(data1);
+                        //console.log(data1[0].fields.kCal);
+                        $('<tr>').append(
+                            $('<td>').text(item.fields.schedule_time),
+                            $('<td>').text(data1[0].fields.Name),
+                            $('<td>').text(item.fields.food_amount)).appendTo('#Schedule_table');
+                    })
+                }
+            },
+            error: function () {
+            }
+        });
+    }
+    function tab_FoodType() {
+        $.ajax({
+            url: "{%url 'list_foodType'%} ",
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                //console.log(data);
+                $('#FoodType_table').html('');
+                if (data != "") {
+                    $.each(data, function (i, item) {
+                        $('<tr>').append(
+                            $('<td>').text(item.fields.Name),
+                            $('<td>').text(item.fields.kCal),
+                            $('<td>').text(item.fields.created_at)).appendTo('#FoodType_table');
+                    })
+                }
+            },
+            error: function () {
+            }
+        });
+    }
+    function search_foodName(x, y) {
+        data = { 'object': x, 'value': y };
+        var temp
+        //console.log(data);
+        $.ajax({
+            type: "POST",
+            url: "{% url 'search_foodName' %}",
+            data: data,
+            async: false,
+            success: function (response) {
+                temp = response;
+                //console.log(temp);
+            },
+            error: function () {
+            }
+        });
+        //console.log(temp);
+        return temp;
     }
 </script>
 {% endblock %}
