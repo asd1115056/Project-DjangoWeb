@@ -58,10 +58,10 @@
                     <div class="modal-body">
                         <ul class="nav nav-tabs">
                             <li class="active"><a href="#tab1" data-toggle="tab">PetInfo</a></li>
-                            <li class=""><a href="#tab2" data-toggle="tab" onclick="tab_Schedule()">Schedule</a></li>
+                            <li class=""><a href="#tab2" data-toggle="tab" onclick="list_Schedule()">Schedule</a></li>
                             <li class=""><a href="#tab3" data-toggle="tab" onclick="tab_FoodType()">FoodType</a></li>
                             <li class=""><a href="#tab4" data-toggle="tab">PetInfo-Setting</a></li>
-                            <li class=""><a href="#tab5" data-toggle="tab">Schedule-Setting</a></li>
+                            <li class=""><a href="#tab5" data-toggle="tab" onchange="select_FoodType()">Schedule-Setting</a></li>
                             <li class=""><a href="#tab6" data-toggle="tab">FoodType-Setting</a></li>
                         </ul>
                         <div class="tab-content">
@@ -207,8 +207,9 @@
                                     <form role="form" id="form1">
                                         <table class="table" id="dynamic_field1">
                                             <tr>
-                                                <td><input required type="text" name="time[]" class="form-control time11 Timer "></td>
+                                                <td><input required type="text" name="time[]" class="form-control time11 Timer0 "></td>
                                                 <td><input required type="number" step="0.01" name="amount[]" id="amount0" class="form-control amount11"></td>
+                                                <td><select id="select" class="form-control Select0" name="select[]"></select></td>
                                                 <td><button type="button" name="add" class="btn btn-success " id="add1">Add More</button></td>
                                             </tr>
                                         </table>
@@ -280,23 +281,13 @@
 
             return objectData;
         };
-        document.getElementsByClassName("Timer").flatpickr({
-            enableTime: true,
-            noCalendar: true,
-            dateFormat: "H:i",
-            time_24hr: true
-        });
         var i = 1;
         var j = 1;
         $('#add1').click(function () {
             i++;
-            $('#dynamic_field1').append('<tr id="row' + i + '"><td><input type="text" name="time[]" class="form-control time11 Timer' + i + '"></td><td><input type="number" step="0.01" name="amount[]" class="form-control amount11"></td><td><button name="remove" class="btn btn-danger btn_remove" id="' + i + '">&times;</button></td></tr>')
-            document.getElementsByClassName('Timer' + i + '').flatpickr({
-                enableTime: true,
-                noCalendar: true,
-                dateFormat: "H:i",
-                time_24hr: true,
-            });
+            $('#dynamic_field1').append('<tr id="row' + i + '"><td><input type="text" name="time[]" class="form-control time11 Timer' + i + '"></td><td><input type="number" step="0.01" name="amount[]" class="form-control amount11"></td><td><select id="select" name="select[]" class="form-control Select' + i + '"></select></td><td><button name="remove" class="btn btn-danger btn_remove" id="' + i + '">&times;</button></td></tr>')
+            Flatpickr(i);
+            select_FoodType(i);
         });
         $('#add2').click(function () {
             j++;
@@ -312,7 +303,6 @@
         });
 
         $('#submit1').click(function () {
-
             data = $("#form1").serializeObject();
             console.log(data);
             $.ajax({
@@ -320,8 +310,8 @@
                 url: "{% url 'add_Schedule' %}",
                 data: data,
                 success: function (response) {
-                    //console.log(response);
-                    //alert('sucess');
+                    console.log(response);
+                    alert('sucess');
                     // window.location.reload();
                 },
                 error: function () {
@@ -335,11 +325,11 @@
             console.log(data);
             $.ajax({
                 type: "POST",
-                url: "{% url 'add_FoodType' %}",
+                url: "{% url 'add_foodType' %}",
                 data: data,
                 success: function (response) {
                     //console.log(response);
-                    //alert('sucess');
+                    alert('sucess');
                     // window.location.reload();
                 },
                 error: function () {
@@ -366,8 +356,10 @@
                     ajax_user_data();
                     ajax_tag_Info();
                     ajax_tag_Info_TABLE();
-                    tab_Schedule();
+                    list_Schedule();
                     tab_FoodType();
+                    select_FoodType(0);
+                    Flatpickr(0);
                     setTimeout(refresh, 200);
                     //refresh();
                 },
@@ -379,6 +371,7 @@
         }
 
         window.onload = autoload();
+        window.onload = setTimeout(refresh, 100) //第一次刷新數據
 
         var i;
         $(".index").click(function () { //點擊事件
@@ -396,9 +389,11 @@
                     //console.log(response);
                     ajax_user_data();
                     ajax_tag_Info();
-                    tab_Schedule();
+                    list_Schedule();
                     tab_FoodType();
                     ajax_tag_Info_TABLE();
+                    select_FoodType(0);
+                    Flatpickr(0);
                     setTimeout(refresh, 200);
                     //refresh();
                 },
@@ -407,8 +402,44 @@
                 }
             });
         });
-    });
+        $('#form_test').submit(function (e) {
+            e.preventDefault();
+            var Nickname = $("#Nickname").val();
+            var Weight = $("#Weight").val();
+            var Category = $("#Category").val();
+            var Status = $("#Status").val();
+            var User_feed_amount_setting_daily = $("#User_feed_amount_setting_daily").val();
+            var User_water_drinking_setting_daily = $("#User_water_drinking_setting_daily").val();
 
+            data = { 'Nickname': Nickname, 'Weight': Weight, 'Category': Category, 'Status': Status, 'User_feed_amount_setting_daily': User_feed_amount_setting_daily, 'User_water_drinking_setting_daily': User_water_drinking_setting_daily };
+            //console.log(data);
+            $.ajax({
+                type: "POST",
+                url: "{% url 'post_form' %}",
+                data: data,
+                success: function (response) {
+                    //console.log(response);
+                    alert('Update sucess');
+                    window.location.reload();
+                },
+                error: function () {
+                    alert("failure");
+                }
+            });
+        });
+        $("#cat1").hide();
+        $("#cat2").hide();
+        $("#dog1").hide();
+        $("#dog2").hide();
+    });
+    function Flatpickr(i) {
+        document.getElementsByClassName("Timer" + i).flatpickr({
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",
+            time_24hr: true
+        });
+    }
     function ajax_tag_Info() {
         $.ajax({
             url: "{%url 'Tag_Info'%}",
@@ -442,7 +473,6 @@
             }
         });
     }
-
     var max_w;
     var max_f;
     function ajax_user_data() {
@@ -471,12 +501,10 @@
             }
         });
     }
-
     function clear() {
         max_f = 0;
         max_w = 0;
     }
-
     var gage1;
     var gage2;
     function refresh() {
@@ -519,37 +547,6 @@
             }
         });
     }
-
-    setTimeout(refresh, 100) //第一次刷新數據
-
-    $(function () {
-        $('#form_test').submit(function (e) {
-            e.preventDefault();
-            var Nickname = $("#Nickname").val();
-            var Weight = $("#Weight").val();
-            var Category = $("#Category").val();
-            var Status = $("#Status").val();
-            var User_feed_amount_setting_daily = $("#User_feed_amount_setting_daily").val();
-            var User_water_drinking_setting_daily = $("#User_water_drinking_setting_daily").val();
-
-            data = { 'Nickname': Nickname, 'Weight': Weight, 'Category': Category, 'Status': Status, 'User_feed_amount_setting_daily': User_feed_amount_setting_daily, 'User_water_drinking_setting_daily': User_water_drinking_setting_daily };
-            //console.log(data);
-            $.ajax({
-                type: "POST",
-                url: "{% url 'post_form' %}",
-                data: data,
-                success: function (response) {
-                    //console.log(response);
-                    alert('Update sucess');
-                    window.location.reload();
-                },
-                error: function () {
-                    alert("failure");
-                }
-            });
-        });
-    });
-
     function formcontroloption() {
         var Category = $("#Category").val();
         if (Category == "1") {
@@ -572,13 +569,6 @@
 
         }
     }
-    $(function () {
-        $("#cat1").hide();
-        $("#cat2").hide();
-        $("#dog1").hide();
-        $("#dog2").hide();
-    });
-
     function ajax_tag_Info_TABLE() {
         $.ajax({
             url: "{%url 'Tag_Info'%} ",
@@ -647,7 +637,6 @@
             }
         });
     }
-
     function delete_data_post() {
         data = { "Delete": "confrim" };
         if (confirm("Are You Sure?")) {
@@ -665,10 +654,9 @@
             });
         }
     }
-
-    function tab_Schedule() {
+    function list_Schedule() {
         $.ajax({
-            url: "{%url 'tab_Schedule'%} ",
+            url: "{%url 'list_Schedule'%} ",
             type: "GET",
             dataType: "json",
             success: function (data) {
@@ -708,6 +696,26 @@
                             $('<td>').text(item.fields.Name),
                             $('<td>').text(item.fields.kCal),
                             $('<td>').text(item.fields.created_at)).appendTo('#FoodType_table');
+                    })
+                }
+            },
+            error: function () {
+            }
+        });
+    }
+    function select_FoodType(j) {
+        //alert("active");
+        $.ajax({
+            url: "{%url 'list_foodType'%} ",
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                $('.select' + j).html('');
+                //console.log(data);
+                if (data != "") {
+                    $(".select" + j).append($("<option></option>").attr("value", "").text(""));
+                    $.each(data, function (i, item) {
+                        $(".select" + j).append($("<option></option>").attr("value", item.fields.Name).text(item.fields.Name));
                     })
                 }
             },

@@ -95,7 +95,7 @@ def pet_filter_user_setting(request):
     data = serializers.serialize('json',models.Tag_Info.objects.get(Tag=Tag).user_setting_set.all().order_by('updated_at'))
     return HttpResponse(data) 
 
-def tab_Schedule(request):
+def list_Schedule(request):
     from django.core import serializers
     Tag = request.session['Tag']
     data = serializers.serialize('json',models.Tag_Info.objects.get(Tag=Tag).user_setting_set.all().order_by('schedule_time'))
@@ -216,23 +216,28 @@ def add_Schedule(request):
     if request.method == 'POST':
         Data_POST1 = request.POST.getlist('time[]')
         Data_POST2 = request.POST.getlist('amount[]')
-        if len(Data_POST1) == len(Data_POST2):
+        Data_POST3 = request.POST.getlist('select[]')
+        if len(Data_POST1) == len(Data_POST2) and len(Data_POST2) == len(Data_POST3):
             for i in range(len(Data_POST2)):
-                if Data_POST1[i] != "" and Data_POST2[i] != "":
+                food_type_pk = list(models.food_type.objects.filter(Name=Data_POST3[i]).values_list('pk',flat=True)) #實際輸出['1','2',…] 用python List轉換成[1,2,...]
+                if Data_POST1[i] != "" and Data_POST2[i] != "" and Data_POST3[i] != "":
                     temp = models.user_setting.objects.filter(schedule_time=datetime.strptime(Data_POST1[i], '%H:%M').time())
                     if temp.exists():
-                        temp.update(amount=Data_POST2[i])
-                    else:
-                        info = models.user_setting.objects.create(Tag_id=pk[0])
-                        info.schedule_time = datetime.strptime(Data_POST1[i], '%H:%M').time()
-                        info.food_ammount = Data_POST2[i]
+                        info = models.user_setting.objects.get(schedule_time=datetime.strptime(Data_POST1[i], '%H:%M').time(),Tag_id=pk[0])               
+                        info.food_Name_id = food_type_pk[0]
+                        info.food_amount = Data_POST2[i]
                         info.save()
-                text = " Update Successfully"
-                return JsonResponse({"status": 200, "msg": text  })
+                    else:
+                        info = models.user_setting.objects.create(Tag_id=pk[0],food_Name_id=food_type_pk[0])
+                        info.schedule_time = datetime.strptime(Data_POST1[i],'%H:%M').time()
+                        info.food_amount = Data_POST2[i]
+                        info.save()
+            text = " Update Successfully"
+            return JsonResponse({"status": 200, "msg": text  })
     else:
         return JsonResponse({"status": 400, "msg": "It is GET" })
 @csrf_exempt
-def add_FoodType(request):
+def add_foodType(request):
     if request.method == 'POST':
         Data_POST1 = request.POST.getlist('Name[]')
         Data_POST2 = request.POST.getlist('kCal[]')
