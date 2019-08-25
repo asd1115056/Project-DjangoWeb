@@ -42,7 +42,7 @@ input[type="checkbox"].input-validation-error {
 }
 
 .row-margin-top {
-    margin-top: 5px;
+    margin-top: 15px;
 }
 
 .row-padding-right {
@@ -55,4 +55,9 @@ input[type="checkbox"].input-validation-error {
 
 .button-postion {
     margin-right: 50px;
+}
+
+.form-group1 {
+    margin-bottom: 15px;
+    margin-left: 15px;
 }
