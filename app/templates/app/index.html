@@ -66,7 +66,7 @@
                         </ul>
                         <div class="tab-content">
                             <div class="tab-pane active" id="tab1">
-                                <table class="table">
+                                <table class="table table-hover">
                                     <thead></thead>
                                     <tbody>
                                         <tr>
@@ -122,36 +122,38 @@
                             </div>
                             <div id="tab2" class="tab-pane">
                                 <form role="form" id="Schedule_form">
-                                    <table class="table">
+                                    <table class="table table-hover	">
                                         <thead>
                                             <tr>
+                                                <td>Del</td>
                                                 <td>Time</td>
                                                 <td>Food Type</td>
                                                 <td>Amount</td>
-                                                <td>test</td>
+                                                <td>kCal</td>
                                             </tr>
                                         </thead>
                                         <tbody id="Schedule_table">
                                         </tbody>
                                     </table>
-                                    <input type="button" id="submit10" value="Submit" />
+                                    <button type="button" id="submit10" class="btn btn-primary btn-xs">Submit</button>
+                                    <label style="position:absolute;right:60px;" id="total_kcal"></label>
                                 </form>
                             </div>
                             <div id="tab3" class="tab-pane">
                                 <form role="form" id="FoodType_form">
-                                    <table class="table">
+                                    <table class="table table-hover">
                                         <thead>
                                             <tr>
+                                                <td>Del</td>
                                                 <td>Name</td>
-                                                <td>kCal</td>
+                                                <td>kCal(per 100g)</td>
                                                 <td>Created at</td>
-                                                <td>test</td>
                                             </tr>
                                         </thead>
                                         <tbody id="FoodType_table">
                                         </tbody>
                                     </table>
-                                    <input type="button" id="submit12" value="Submit" />
+                                    <button type="button" id="submit12" class="btn btn-primary btn-xs">Submit</button>
                                 </form>
                             </div>
                             <div class="tab-pane" id="tab4">
@@ -207,13 +209,21 @@
                                         <label for="User_water_drinking_setting_daily"><strong>User Water Drinking Setting Daily</strong></label>
                                         <input type="number" step="0.01" class="form-control" id="User_water_drinking_setting_daily" placeholder="Set 0.0(mL) to default ">
                                     </div>
-                                    <button type="submit" id="submit21" class="btn btn-primary">Save</button>
+                                    <button type="button" id="submit211" class="btn btn-primary">Submit</button>
                                 </form>
                             </div>
                             <div id="tab5" class="tab-pane">
                                 <div class="form-group">
                                     <form role="form" id="form1">
                                         <table class="table" id="dynamic_field1">
+                                            <thead>
+                                                <tr>
+                                                    <td>Time</td>
+                                                    <td>Amount(g)</td>
+                                                    <td>FoodType</td>
+                                                    <td></td>
+                                                </tr>
+                                            </thead>
                                             <tr>
                                                 <td><input required type="text" name="time[]" class="form-control time11 Timer0 "></td>
                                                 <td><input required type="number" step="0.01" name="amount[]" id="amount0" class="form-control amount11"></td>
@@ -221,7 +231,7 @@
                                                 <td><button type="button" name="add" class="btn btn-success " id="add1">Add More</button></td>
                                             </tr>
                                         </table>
-                                        <input type="button" id="submit1" value="Submit" />
+                                        <button type="button" id="submit1" class="btn btn-primary">Submit</button>
                                     </form>
                                 </div>
                             </div>
@@ -229,13 +239,20 @@
                                 <div class="form-group">
                                     <form role="form" id="form2">
                                         <table class="table" id="dynamic_field2">
+                                            <thead>
+                                                <tr>
+                                                    <td>Name</td>
+                                                    <td>kCal(per 100g)</td>
+                                                    <td></td>
+                                                </tr>
+                                            </thead>
                                             <tr>
                                                 <td><input required type="text" name="Name[]" class="form-control"></td>
                                                 <td><input required type="number" step="0.01" name="kCal[]" id="amount0" class="form-control"></td>
                                                 <td><button type="button" name="add" class="btn btn-success " id="add2">Add More</button></td>
                                             </tr>
                                         </table>
-                                        <input type="button" id="submit2" value="Submit" />
+                                        <button type="button" id="submit2" class="btn btn-primary">Submit</button>
                                     </form>
                                 </div>
                             </div>
@@ -243,7 +260,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary btn-danger" onclick="delete_data_post()">Del</button>
-                        <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
+                        <button type="button" data-dismiss="modal" class="btn btn-default" onclick="window.location.reload()">Close</button>
                     </div>
                 </div>
             </div>
@@ -291,12 +308,20 @@
         };
         var i = 1;
         var j = 1;
+
         $('#add1').click(function () {
             i++;
             $('#dynamic_field1').append('<tr id="row' + i + '"><td><input type="text" name="time[]" class="form-control time11 Timer' + i + '"></td><td><input type="number" step="0.01" name="amount[]" class="form-control amount11"></td><td><select id="select" name="select[]" class="form-control Select' + i + '"></select></td><td><button name="remove" class="btn btn-danger btn_remove" id="' + i + '">&times;</button></td></tr>')
             Flatpickr(i);
             select_FoodType(i);
         });
+        function refresh_select_FoodType(i) {
+            for (var k = 0; k <= i; k++) {
+                select_FoodType(k);
+                //console.log(i);
+            }
+        }
+
         $('#add2').click(function () {
             j++;
             $('#dynamic_field2').append('<tr id="row' + j + '"><td><input type="text" name="Name[]" class="form-control"></td><td><input type="number" step="0.01" name="kCal[]" class="form-control"></td><td><button name="remove" class="btn btn-danger btn_remove" id="' + j + '">&times;</button></td></tr>')
@@ -319,7 +344,8 @@
                 data: data,
                 success: function (response) {
                     //console.log(response);
-                    alert('sucess');
+                    alert('Update sucess');
+                    $("#form1")[0].reset();
                     // window.location.reload();
                 },
                 error: function () {
@@ -336,53 +362,62 @@
                 url: "{% url 'add_foodType' %}",
                 data: data,
                 success: function (response) {
+                    refresh_select_FoodType(i);
                     //console.log(response);
-                    alert('sucess');
+                    alert('Update sucess');
+                    $("#form2")[0].reset();
                     // window.location.reload();
                 },
                 error: function () {
-                    alert("failure");
+                    //alert("failure");
                 }
             });
 
         });
         $('#submit10').click(function () {
             data = $("#Schedule_form").serializeObject();
-            console.log(data);
-            $.ajax({
-                type: "POST",
-                url: "{% url 'del_Schedule' %}",
-                data: data,
-                success: function (response) {
-                    //console.log(response);
-                    alert('sucess');
-                    list_Schedule();
-                    // window.location.reload();
-                },
-                error: function () {
-                    alert("failure");
-                }
-            });
+            //console.log(data);
+            if (confirm("Are You Sure?")) {
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'del_Schedule' %}",
+                    data: data,
+                    success: function (response) {
+                        //console.log(response);
+                        //alert('sucess');
+                        list_Schedule();
+                        $("#Schedule_form")[0].reset();
+                        // window.location.reload();
+                    },
+                    error: function () {
+                        //alert("failure");
+                    }
+                });
+            }
         });
         $('#submit12').click(function () {
             data = $("#FoodType_form").serializeObject();
-            console.log(data);
-            $.ajax({
-                type: "POST",
-                url: "{% url 'del_foodType' %}",
-                data: data,
-                success: function (response) {
-                    //console.log(response);
-                    alert('sucess');
-                    list_foodType();
-                    // window.location.reload();
-                },
-                error: function () {
-                    alert("failure");
-                }
-            });
+            //console.log(data);
+            if (confirm("Are You Sure?")) {
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'del_foodType' %}",
+                    data: data,
+                    success: function (response) {
+                        //console.log(response);
+                        //alert('sucess');
+                        list_foodType();
+                        refresh_select_FoodType(i);
+                        $("#FoodType_form")[0].reset();
+                        //console.log(i);
+                        // window.location.reload();
+                    },
+                    error: function () {
+                        //alert("failure");
+                    }
+                });
+            }
         });
-
     })
     $(function () {
         function autoload() {
@@ -446,8 +481,8 @@
                 }
             });
         });
-        $('#form_test').submit(function (e) {
-            e.preventDefault();
+        $('#submit211').click(function () {
+            //e.preventDefault();
             var Nickname = $("#Nickname").val();
             var Weight = $("#Weight").val();
             var Category = $("#Category").val();
@@ -464,7 +499,8 @@
                 success: function (response) {
                     //console.log(response);
                     alert('Update sucess');
-                    window.location.reload();
+                    refresh_tag_Info();
+                    //window.location.reload();
                 },
                 error: function () {
                     alert("failure");
@@ -483,6 +519,13 @@
             dateFormat: "H:i",
             time_24hr: true
         });
+    }
+    function refresh_tag_Info() {
+        ajax_tag_Info();
+        ajax_tag_Info_TABLE();
+        ajax_user_data();
+        refresh();
+        setTimeout(refresh, 200);
     }
     function ajax_tag_Info() {
         $.ajax({
@@ -706,22 +749,32 @@
             success: function (data) {
                 //console.log(data);
                 $('#Schedule_table').html('');
+                var total = 0;
+                var temp = 0;
                 if (data != "") {
                     //console.log(data);
                     $.each(data, function (i, item) {
+
                         //alert(item.fields.schedule_time);
                         data1 = search_foodName("pk", item.fields.food_Name);
                         //console.log(item.fields.food_Name);
                         data1 = $.parseJSON(data1);
                         //console.log(data1);
                         //console.log(data1[0].fields.kCal);
+                        total += (item.fields.food_amount * data1[0].fields.kCal) / 100;
+                        temp = (item.fields.food_amount * data1[0].fields.kCal) / 100;
+                        //console.log(total);
                         $('<tr>').append(
+                            $('<td>').append('<input type="checkbox" name="checkbax1[]" value=' + item.fields.schedule_time + '>'),
                             $('<td>').text(item.fields.schedule_time),
                             $('<td>').text(data1[0].fields.Name),
                             $('<td>').text(item.fields.food_amount),
-                            $('<td>').append('<input type="checkbox" name="checkbax1[]" value=' + item.fields.schedule_time + '>')).appendTo("#Schedule_table");
+                            $('<td>').text(temp)).appendTo("#Schedule_table");
                     })
+
                 }
+                $('#total_kcal').text("Total kCal:" + total);
+                //console.log(total)
             },
             error: function () {
             }
@@ -738,10 +791,10 @@
                 if (data != "") {
                     $.each(data, function (i, item) {
                         $('<tr>').append(
+                            $('<td>').append('<input type="checkbox" name="checkbax2[]" value=' + item.fields.Name + '>'),
                             $('<td>').text(item.fields.Name),
                             $('<td>').text(item.fields.kCal),
-                            $('<td>').text(item.fields.created_at),
-                            $('<td>').append('<input type="checkbox" name="checkbax2[]" value=' + item.fields.Name + '>')).appendTo('#FoodType_table');
+                            $('<td>').text(item.fields.created_at)).appendTo('#FoodType_table');
                     })
                 }
             },
