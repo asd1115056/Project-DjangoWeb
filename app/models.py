@@ -55,7 +55,7 @@ class food_type(models.Model):
     def __str__(self):
        return self.Name
 
-class user_setting(models.Model):
+class Schedule(models.Model):
     Tag = models.ForeignKey(Tag_Info,on_delete=models.CASCADE)
     food_Name = models.ForeignKey(food_type,on_delete=models.CASCADE)
     schedule_time = models.TimeField(null=True, blank=True)

@@ -59,9 +59,9 @@
                         <ul class="nav nav-tabs">
                             <li class="active"><a href="#tab1" data-toggle="tab">PetInfo</a></li>
                             <li class=""><a href="#tab2" data-toggle="tab" onclick="list_Schedule()">Schedule</a></li>
-                            <li class=""><a href="#tab3" data-toggle="tab" onclick="tab_FoodType()">FoodType</a></li>
+                            <li class=""><a href="#tab3" data-toggle="tab" onclick="list_foodType()">FoodType</a></li>
                             <li class=""><a href="#tab4" data-toggle="tab">PetInfo-Setting</a></li>
-                            <li class=""><a href="#tab5" data-toggle="tab" onchange="select_FoodType()">Schedule-Setting</a></li>
+                            <li class=""><a href="#tab5" data-toggle="tab">Schedule-Setting</a></li>
                             <li class=""><a href="#tab6" data-toggle="tab">FoodType-Setting</a></li>
                         </ul>
                         <div class="tab-content">
@@ -121,30 +121,38 @@
                                 </table>
                             </div>
                             <div id="tab2" class="tab-pane">
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <td>Time</td>
-                                            <td>Food Type</td>
-                                            <td>Amount</td>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="Schedule_table">
-                                    </tbody>
-                                </table>
+                                <form role="form" id="Schedule_form">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <td>Time</td>
+                                                <td>Food Type</td>
+                                                <td>Amount</td>
+                                                <td>test</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="Schedule_table">
+                                        </tbody>
+                                    </table>
+                                    <input type="button" id="submit10" value="Submit" />
+                                </form>
                             </div>
                             <div id="tab3" class="tab-pane">
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <td>Name</td>
-                                            <td>kCal</td>
-                                            <td>Created at</td>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="FoodType_table">
-                                    </tbody>
-                                </table>
+                                <form role="form" id="FoodType_form">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                <td>kCal</td>
+                                                <td>Created at</td>
+                                                <td>test</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="FoodType_table">
+                                        </tbody>
+                                    </table>
+                                    <input type="button" id="submit12" value="Submit" />
+                                </form>
                             </div>
                             <div class="tab-pane" id="tab4">
                                 <form role="form" id="form_test">
@@ -304,13 +312,13 @@
 
         $('#submit1').click(function () {
             data = $("#form1").serializeObject();
-            console.log(data);
+            //console.log(data);
             $.ajax({
                 type: "POST",
                 url: "{% url 'add_Schedule' %}",
                 data: data,
                 success: function (response) {
-                    console.log(response);
+                    //console.log(response);
                     alert('sucess');
                     // window.location.reload();
                 },
@@ -322,7 +330,7 @@
         });
         $('#submit2').click(function () {
             data = $("#form2").serializeObject();
-            console.log(data);
+            //console.log(data);
             $.ajax({
                 type: "POST",
                 url: "{% url 'add_foodType' %}",
@@ -337,6 +345,42 @@
                 }
             });
 
+        });
+        $('#submit10').click(function () {
+            data = $("#Schedule_form").serializeObject();
+            console.log(data);
+            $.ajax({
+                type: "POST",
+                url: "{% url 'del_Schedule' %}",
+                data: data,
+                success: function (response) {
+                    //console.log(response);
+                    alert('sucess');
+                    list_Schedule();
+                    // window.location.reload();
+                },
+                error: function () {
+                    alert("failure");
+                }
+            });
+        });
+        $('#submit12').click(function () {
+            data = $("#FoodType_form").serializeObject();
+            console.log(data);
+            $.ajax({
+                type: "POST",
+                url: "{% url 'del_foodType' %}",
+                data: data,
+                success: function (response) {
+                    //console.log(response);
+                    alert('sucess');
+                    list_foodType();
+                    // window.location.reload();
+                },
+                error: function () {
+                    alert("failure");
+                }
+            });
         });
 
     })
@@ -357,7 +401,7 @@
                     ajax_tag_Info();
                     ajax_tag_Info_TABLE();
                     list_Schedule();
-                    tab_FoodType();
+                    list_foodType();
                     select_FoodType(0);
                     Flatpickr(0);
                     setTimeout(refresh, 200);
@@ -390,7 +434,7 @@
                     ajax_user_data();
                     ajax_tag_Info();
                     list_Schedule();
-                    tab_FoodType();
+                    list_foodType();
                     ajax_tag_Info_TABLE();
                     select_FoodType(0);
                     Flatpickr(0);
@@ -674,7 +718,8 @@
                         $('<tr>').append(
                             $('<td>').text(item.fields.schedule_time),
                             $('<td>').text(data1[0].fields.Name),
-                            $('<td>').text(item.fields.food_amount)).appendTo('#Schedule_table');
+                            $('<td>').text(item.fields.food_amount),
+                            $('<td>').append('<input type="checkbox" name="checkbax1[]" value=' + item.fields.schedule_time + '>')).appendTo("#Schedule_table");
                     })
                 }
             },
@@ -682,7 +727,7 @@
             }
         });
     }
-    function tab_FoodType() {
+    function list_foodType() {
         $.ajax({
             url: "{%url 'list_foodType'%} ",
             type: "GET",
@@ -695,7 +740,8 @@
                         $('<tr>').append(
                             $('<td>').text(item.fields.Name),
                             $('<td>').text(item.fields.kCal),
-                            $('<td>').text(item.fields.created_at)).appendTo('#FoodType_table');
+                            $('<td>').text(item.fields.created_at),
+                            $('<td>').append('<input type="checkbox" name="checkbax2[]" value=' + item.fields.Name + '>')).appendTo('#FoodType_table');
                     })
                 }
             },

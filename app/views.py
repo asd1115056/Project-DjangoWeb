@@ -41,7 +41,7 @@ def json_test(request):
     #data=models.env_info.objects.values('name').distinct()
     #data=models.env_info.objects.filter(name__contains='home').values()
     #c=models.Tag_Info.objects.get(Tag='GG45FC')
-    #data= serializers.serialize('json',c.user_setting_set.all())
+    #data= serializers.serialize('json',c.Schedule_set.all())
     #test =
     #serializers.serialize('json',models.Tag_Info.objects.filter(Tag='GG45FC').values_list('id')).
     test = models.Tag_Info.objects.filter(Tag='GG45FC').values_list('pk',flat=True)
@@ -89,16 +89,18 @@ def pet_filter_info(request):
     data = serializers.serialize('json',models.Tag_Info.objects.get(Tag=Tag).pet_info_set.filter(updated_at__lte=today_end,updated_at__gte=today_start).order_by('updated_at'))
     return HttpResponse(data) 
 
-def pet_filter_user_setting(request):
+def pet_filter_Schedule(request):
     from django.core import serializers
     Tag = request.session['Tag']
-    data = serializers.serialize('json',models.Tag_Info.objects.get(Tag=Tag).user_setting_set.all().order_by('updated_at'))
+    data = serializers.serialize('json',models.Tag_Info.objects.get(Tag=Tag).Schedule_set.all().order_by('updated_at'))
     return HttpResponse(data) 
 
 def list_Schedule(request):
     from django.core import serializers
     Tag = request.session['Tag']
-    data = serializers.serialize('json',models.Tag_Info.objects.get(Tag=Tag).user_setting_set.all().order_by('schedule_time'))
+    temp = models.Tag_Info.objects.filter(Tag=Tag)
+    pk = list(temp.values_list('pk',flat=True)) #實際輸出['1','2',…] 用python List轉換成[1,2,...]
+    data = serializers.serialize('json',models.Schedule.objects.filter(Tag=pk[0]).order_by('schedule_time'))
     return HttpResponse(data) 
 
 @csrf_exempt
@@ -221,14 +223,14 @@ def add_Schedule(request):
             for i in range(len(Data_POST2)):
                 food_type_pk = list(models.food_type.objects.filter(Name=Data_POST3[i]).values_list('pk',flat=True)) #實際輸出['1','2',…] 用python List轉換成[1,2,...]
                 if Data_POST1[i] != "" and Data_POST2[i] != "" and Data_POST3[i] != "":
-                    temp = models.user_setting.objects.filter(schedule_time=datetime.strptime(Data_POST1[i], '%H:%M').time())
+                    temp = models.Schedule.objects.filter(schedule_time=datetime.strptime(Data_POST1[i], '%H:%M').time())
                     if temp.exists():
-                        info = models.user_setting.objects.get(schedule_time=datetime.strptime(Data_POST1[i], '%H:%M').time(),Tag_id=pk[0])               
+                        info = models.Schedule.objects.get(schedule_time=datetime.strptime(Data_POST1[i], '%H:%M').time(),Tag_id=pk[0])               
                         info.food_Name_id = food_type_pk[0]
                         info.food_amount = Data_POST2[i]
                         info.save()
                     else:
-                        info = models.user_setting.objects.create(Tag_id=pk[0],food_Name_id=food_type_pk[0])
+                        info = models.Schedule.objects.create(Tag_id=pk[0],food_Name_id=food_type_pk[0])
                         info.schedule_time = datetime.strptime(Data_POST1[i],'%H:%M').time()
                         info.food_amount = Data_POST2[i]
                         info.save()
@@ -255,3 +257,22 @@ def add_foodType(request):
         return JsonResponse({"status": 200, "msg": text  })
     else:
         return JsonResponse({"status": 400, "msg": "It is GET" })
+@csrf_exempt
+def del_Schedule(request):
+    Tag = request.session['Tag']
+    temp = models.Tag_Info.objects.filter(Tag=Tag)
+    pk = list(temp.values_list('pk',flat=True)) #實際輸出['1','2',…] 用python List轉換成[1,2,...]
+    if request.method == 'POST':
+        Data_POST = request.POST.getlist('checkbax1[]')
+        if Data_POST != "":
+            for i in range(len(Data_POST)):
+                models.Schedule.objects.get(schedule_time=Data_POST[i],Tag_id=pk[0]).delete()
+            return JsonResponse({"status": 200, "msg": "deleted!"  })
+@csrf_exempt
+def del_foodType(request):
+    if request.method == 'POST':
+        Data_POST = request.POST.getlist('checkbax2[]')
+        if Data_POST != "":
+            for i in range(len(Data_POST)):
+                models.food_type.objects.get(Name=Data_POST[i]).delete()
+            return JsonResponse({"status": 200, "msg": "deleted!"  })
