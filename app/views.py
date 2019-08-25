@@ -16,13 +16,19 @@ import math
 @login_required(login_url='/login/')
 def home(request):
     """Renders the home page."""
+    title = 'Home Page'
+    year = datetime.now().year
+    return render(request,'app/index.html',locals())
+
+def pet(request):
+    """Renders the home page."""
     #assert isinstance(request, HttpRequest)
     #apps=models.env_info.objects.values('name').distinct()
     #apps=models.env_info.objects.all()
     apps = models.Tag_Info.objects.all()
-    title = 'Home Page'
+    title = 'Pet Page'
     year = datetime.now().year
-    return render(request,'app/index.html',locals())
+    return render(request,'app/pet.html',locals())
 
 def temperature(request):
     apps = models.env_info.objects.values('name').distinct() 
