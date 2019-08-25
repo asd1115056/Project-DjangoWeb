@@ -13,6 +13,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
 <div class="row clearfix">
+    <div id="alert"></div>
     <div class="col-md-2 column">
         <div style="text-align: center;"><h3>Nickname</h3><br></div>
         <ul class="nav nav-pills nav-stacked">
@@ -441,6 +442,7 @@
                     list_foodType();
                     select_FoodType(0);
                     Flatpickr(0);
+                    alert();
                     setTimeout(refresh, 200);
                     //refresh();
                 },
@@ -475,6 +477,7 @@
                     ajax_tag_Info_TABLE();
                     select_FoodType(0);
                     Flatpickr(0);
+                    alert();
                     setTimeout(refresh, 200);
                     //refresh();
                 },
@@ -843,5 +846,23 @@
         //console.log(temp);
         return temp;
     }
+    function alert() {
+        $.ajax({
+            url: "{%url 'Tag_Info'%} ",
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                $("#myAlert").alert('close');
+                if (data[0].fields.weight == 0 || data[0].fields.category == 0) {
+                    $("#alert").before('<div id="myAlert" class="alert alert-warning"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>Warning！</strong>Please add more information!</div>');
+                }
+            },
+            error: function () {
+            }
+        });
+    }
+    $(".close").click(function () {
+        $("#myAlert").alert('close');
+    });
 </script>
 {% endblock %}
