@@ -40,6 +40,8 @@ class Tag_Info(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     def __str__(self):
        return self.Tag
+    def natural_key(self):
+        return (self.Tag)
 
 class pet_info(models.Model):
     Tag = models.ForeignKey(Tag_Info,on_delete=models.CASCADE)
@@ -54,9 +56,12 @@ class food_type(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     def __str__(self):
        return self.Name
+    def natural_key(self):
+       return (self.Name)
 
 class Schedule(models.Model):
     Tag = models.ForeignKey(Tag_Info,on_delete=models.CASCADE)
     food_Name = models.ForeignKey(food_type,on_delete=models.CASCADE)
     schedule_time = models.TimeField(null=True, blank=True)
     food_amount = models.DecimalField(max_digits=6,decimal_places=2,default=Decimal('0.00'),null=True, blank=True)
+ 

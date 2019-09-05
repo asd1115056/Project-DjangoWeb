@@ -25,6 +25,7 @@ urlpatterns = [path('', views.home, name='home'),
     path('ajax/list_foodType', views.list_foodType, name='list_foodType'),
     path('ajax/add_foodType', views.add_foodType, name='add_foodType'),
     path('ajax/del_foodType', views.del_foodType, name='del_foodType'),
+    path('ajax/all_list_Schedule', views.all_list_Schedule, name='all_list_Schedule'),
     path('pet', views.pet, name='pet'),
 
 

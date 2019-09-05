@@ -107,6 +107,10 @@ def list_Schedule(request):
     temp = models.Tag_Info.objects.filter(Tag=Tag)
     pk = list(temp.values_list('pk',flat=True)) #實際輸出['1','2',…] 用python List轉換成[1,2,...]
     data = serializers.serialize('json',models.Schedule.objects.filter(Tag=pk[0]).order_by('schedule_time'))
+    return HttpResponse(data)
+def all_list_Schedule(request):
+    from django.core import serializers
+    data = serializers.serialize('json',models.Schedule.objects.all().order_by('schedule_time','Tag'),use_natural_foreign_keys=True, use_natural_primary_keys=True)
     return HttpResponse(data) 
 
 @csrf_exempt
