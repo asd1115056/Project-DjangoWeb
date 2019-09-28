@@ -5,6 +5,8 @@
     <Name>Project-DjangoWeb</Name>
     <RootNamespace>Project-DjangoWeb</RootNamespace>
     <InterpreterId>MSBuild|env|$(MSBuildProjectFullPath)</InterpreterId>
+    <WebBrowserPort>8000</WebBrowserPort>
+    <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -16,7 +18,8 @@
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
-    <WebBrowserUrl>http://localhost:8000</WebBrowserUrl>
+    <WebBrowserUrl>
+    </WebBrowserUrl>
     <LaunchProvider>Django launcher</LaunchProvider>
     <DjangoSettingsModule>Project_DjangoWeb.settings</DjangoSettingsModule>
     <OutputPath>.</OutputPath>

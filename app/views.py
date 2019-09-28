@@ -133,9 +133,10 @@ def list_foodType(request):
 
 @csrf_exempt
 def json_upload(request):
-    Tag = request.session['Tag']
+    #Tag = request.session['Tag']
     if request.method == 'POST':
         Data_POST = json.loads(request.body.decode("utf-8"))
+        Tag = Data_POST.get('Tag')
         temp = models.Tag_Info.objects.filter(Tag=Tag)
         if temp.exists():
             text1 = "Tag Existing"
