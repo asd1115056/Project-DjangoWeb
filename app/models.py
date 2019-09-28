@@ -37,7 +37,6 @@ class Tag_Info(models.Model):
     suggest_feed_amount_daily = models.DecimalField(max_digits=6,decimal_places=2,default=Decimal('0.00'), null=True, blank=True)
     user_water_drinking_setting_daily = models.DecimalField(max_digits=6,decimal_places=2,default=Decimal('0.00'), null=True, blank=True)
     user_feed_amount_setting_daily = models.DecimalField(max_digits=6,decimal_places=2,default=Decimal('0.00'), null=True, blank=True)
-    time = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now = True)
     created_at = models.DateTimeField(auto_now_add=True)
     def __str__(self):
@@ -49,6 +48,7 @@ class pet_info(models.Model):
     Tag = models.ForeignKey(Tag_Info,on_delete=models.CASCADE)
     water_drink = models.DecimalField(max_digits=6,decimal_places=2,default=Decimal('0.00'),null=True, blank=True)
     food_eat = models.DecimalField(max_digits=6,decimal_places=2,default=Decimal('0.00'),null=True, blank=True)
+    active_time = models.DateTimeField(null=True, blank=True)
     updated_at = models.DateTimeField(auto_now = True)
 
 

@@ -150,6 +150,7 @@ def json_upload(request):
         info = models.pet_info.objects.create(Tag_id=pk[0])
         info.water_drink = Data_POST.get('water_drink')
         info.food_eat = Data_POST.get('food_eat')
+        info.active_time = datetime.strptime(Data_POST.get('active_time'),"%Y-%m-%d %H:%M:%S")
         info.save()
         text2 = " and Save Successfully"
         return JsonResponse({"status": 200, "msg": text1 + text2  })
