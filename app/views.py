@@ -155,6 +155,7 @@ def json_upload(request):
         return JsonResponse({"status": 200, "msg": text1 + text2  })
     else:
         return JsonResponse({"status": 400, "msg": "It is GET" })
+
 @csrf_exempt
 def post_form(request):
     Tag = request.session['Tag']
