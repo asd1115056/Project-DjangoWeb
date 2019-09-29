@@ -92,7 +92,7 @@ def pet_filter_info(request):
     today_end = timezone.make_aware(datetime.combine(tomorrow, time())) #轉換時區
     #date_filter = datetime.datetime.now(tz=timezone.utc)
                                                                            #-datetime.timedelta(days=10)#現在時間UTC+8轉成UTC+0
-    data = serializers.serialize('json',models.Tag_Info.objects.get(Tag=Tag).pet_info_set.filter(updated_at__lte=today_end,updated_at__gte=today_start).order_by('updated_at'))
+    data = serializers.serialize('json',models.Tag_Info.objects.get(Tag=Tag).pet_info_set.filter(active_time__lte=today_end,active_time__gte=today_start).order_by('active_time'))
     return HttpResponse(data) 
 
 def pet_filter_Schedule(request):
@@ -132,28 +132,13 @@ def list_foodType(request):
     return HttpResponse(data)
 
 @csrf_exempt
-def json_upload(request):
+def data_upload(request):
     #Tag = request.session['Tag']
-    if request.method == 'POST':
+    if request.method == 'POST': 
         Data_POST = json.loads(request.body.decode("utf-8"))
-        Tag = Data_POST.get('Tag')
-        temp = models.Tag_Info.objects.filter(Tag=Tag)
-        if temp.exists():
-            text1 = "Tag Existing"
-            #return JsonResponse({"status": 200, "msg": "Tag Existing" })
-        else:
-            TAG = models.Tag_Info.objects.create(Tag=Tag)
-            TAG.save()
-            text1 = "Create New Tag"
-            #return JsonResponse({"status": 200, "msg": "Create New Tag" })
-        pk = list(temp.values_list('pk',flat=True)) #實際輸出['1','2',…] 用python List轉換成[1,2,...]
-        info = models.pet_info.objects.create(Tag_id=pk[0])
-        info.water_drink = Data_POST.get('water_drink')
-        info.food_eat = Data_POST.get('food_eat')
-        info.active_time = datetime.strptime(Data_POST.get('active_time'),"%Y-%m-%d %H:%M:%S")
-        info.save()
-        text2 = " and Save Successfully"
-        return JsonResponse({"status": 200, "msg": text1 + text2  })
+        DATA = Data_POST.get('DATA')
+        return JsonResponse({"status": 200, "msg": DATA})
+        
     else:
         return JsonResponse({"status": 400, "msg": "It is GET" })
 
