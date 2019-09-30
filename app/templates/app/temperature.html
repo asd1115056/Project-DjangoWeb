@@ -12,8 +12,8 @@
         <div style="text-align:center;"><h3>Location</h3><br></div>
         <ul class="nav nav-pills nav-stacked">
             {% for app in apps %}
-            <li {% if forloop.first %} class="active" {% endif %} location_id="{{app.location_id}}">
-                <a data-toggle="tab" href="#{{app.location_id}}">{{app.location_id}}</a>
+            <li class="index {% if forloop.first %} autoload active {% endif %}" location_code="{{app.location_code}}">
+                <a data-toggle="tab" href="">{% if app.location_name %} {{app.location_name}} {% else %} {{app.location_code}} {% endif %}</a>
             </li>
             {% endfor %}
         </ul>
@@ -32,14 +32,13 @@
     </div>
 </div>
 <script>
-
     $(function () {
         var i;
         $("li").click(function () { //點擊事件
-            location_id = $(this).attr('location_id'),
-                i = location_id.localeCompare("undefined") //比較兩字串:相等=0
+            location_code = $(this).attr('location_code'),
+                i = location_code.localeCompare("undefined") //比較兩字串:相等=0
             if (i != 0) {//取不相等時的值
-                data = { 'location_id': location_id }
+                data = { 'location_code': location_code }
                 console.log(data);
             }
             $.ajax({
@@ -62,7 +61,7 @@
 
     var chart;
     $(document).ready(function () {
-        Highcharts.setOptions({ global: { useUTC: false } });
+        Highcharts.setOptions({ global: { useUTC: true } });
         chart = new Highcharts.Chart({
             chart: {
                 renderTo: 'container',
@@ -141,7 +140,7 @@
             success: function (data) {
                 var len = Object.keys(data).length;
                 var seriesData = [];
-                var chartName = data[0].fields.location_id;
+                var chartName = data[0].fields.location_code;
                 for (var j = 0; j < len; j++) {
                     var x = new Date(data[j].fields.updated_at).getTime();
                     var y = data[j].fields.temperature;
@@ -150,7 +149,7 @@
                     seriesData.push([x, y]);
                 }
                 chart.addSeries({
-                    location_id: chartName,
+                    location_code: chartName,
                     data: seriesData,
                     zones: [{
                         value: 0,

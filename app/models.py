@@ -2,14 +2,21 @@ from django.db import models
 from decimal import Decimal
 import django.utils.timezone as timezone
 
+
 class env_info(models.Model):
     location_name = models.CharField(max_length=100,null=True, blank=True) #LOCATION_NAME
-    location_id = models.CharField(max_length=100) #ID
+    location_code = models.CharField(max_length=100) #ID
+    updated_at = models.DateTimeField(auto_now = True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+       return self.location_code
+
+class env_location(models.Model):
+    location_code = models.ForeignKey(env_info,on_delete=models.CASCADE)
     temperature = models.DecimalField(max_digits=6,decimal_places=2,default=Decimal('0.00'))
     humidity = models.DecimalField(max_digits=6,decimal_places=2,default=Decimal('0.00'))
-    updated_at = models.DateTimeField(auto_now=True)
-    def __str__(self):
-       return self.name
+    updated_at = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now=True)
 
 class Tag_Info(models.Model):
     CHOICE = ((1, 'Cat'),
@@ -60,8 +67,7 @@ class food_type(models.Model):
     def __str__(self):
        return self.Name
     def natural_key(self):
-       return (self.Name)
-
+       return (self.Name) #外鍵顯示內容非PK
 class Schedule(models.Model):
     Tag = models.ForeignKey(Tag_Info,on_delete=models.CASCADE)
     food_Name = models.ForeignKey(food_type,on_delete=models.CASCADE)
