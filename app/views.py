@@ -23,7 +23,7 @@ def home(request):
 def pet(request):
     """Renders the home page."""
     #assert isinstance(request, HttpRequest)
-    #apps=models.env_info.objects.values('name').distinct()
+    #apps=models.env_info.objects.values('location_id').distinct()
     #apps=models.env_info.objects.all()
     apps = models.Tag_Info.objects.all()
     title = 'Pet Page'
@@ -31,20 +31,20 @@ def pet(request):
     return render(request,'app/pet.html',locals())
 
 def temperature(request):
-    apps = models.env_info.objects.values('name').distinct() 
+    apps = models.env_info.objects.values('location_id').distinct() 
     title = 'Env Page'
     year = datetime.now().year
     return render(request,'app/temperature.html',locals())
 
 def humidity(request):
-    apps = models.env_info.objects.values('name').distinct() 
+    apps = models.env_info.objects.values('location_id').distinct() 
     title = 'Env Page'
     year = datetime.now().year
     return render(request,'app/humidity.html',locals())
 
 def json_test(request):
     from django.core import serializers
-    #data=models.env_info.objects.values('name').distinct()
+    #data=models.env_info.objects.values('location_id').distinct()
     #data=models.env_info.objects.filter(name__contains='home').values()
     #c=models.Tag_Info.objects.get(Tag='GG45FC')
     #data= serializers.serialize('json',c.Schedule_set.all())
@@ -54,14 +54,14 @@ def json_test(request):
     return HttpResponse(test)
 
 def env_get(request):
-    loction_name = request.GET.get('loction_name')
-    request.session['loction_name'] = loction_name
-    return HttpResponse(loction_name)
+    location_id = request.GET.get('location_id')
+    request.session['location_id'] = location_id
+    return HttpResponse(location_id)
 
 def env_filter(request):
     from django.core import serializers
-    loction_name = request.session['loction_name']
-    data = serializers.serialize('json',models.env_info.objects.filter(name__contains=loction_name).order_by('updated_at'))
+    location_id = request.session['location_id']
+    data = serializers.serialize('json',models.env_info.objects.filter(location_id__contains=location_id).order_by('updated_at'))
     return HttpResponse(data) 
 
 def pet_get_id(request):
@@ -137,8 +137,19 @@ def data_upload(request):
     if request.method == 'POST': 
         Data_POST = json.loads(request.body.decode("utf-8"))
         DATA = Data_POST.get('DATA')
-        return JsonResponse({"status": 200, "msg": DATA})
-        
+        location_id = models.env_info.objects.filter(location_id=DATA[1])
+        if location_id.exists():
+            text1 = "Location_ID Existing"
+            #return JsonResponse({"status": 200, "msg": "Tag Existing" })
+        else:
+            location_id = models.env_info.objects.create(location_id=DATA[1])
+            location_id.save()
+            text1 = "Create New Location_ID"
+        if DATA[0] == "P":
+            pass
+        if DATA[0] == "E":
+            pass
+        return JsonResponse({"status": 200, "msg": text1})
     else:
         return JsonResponse({"status": 400, "msg": "It is GET" })
 

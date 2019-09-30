@@ -12,8 +12,8 @@
         <div style="text-align:center;"><h3>Location</h3><br></div>
         <ul class="nav nav-pills nav-stacked">
             {% for app in apps %}
-            <li {% if forloop.first %} class="active" {% endif %} loction_name="{{app.name}}">
-                <a data-toggle="tab" href="#{{app.name}}">{{app.name}}</a>
+            <li {% if forloop.first %} class="active" {% endif %} location_id="{{app.location_id}}">
+                <a data-toggle="tab" href="#{{app.location_id}}">{{app.location_id}}</a>
             </li>
             {% endfor %}
         </ul>
@@ -33,168 +33,168 @@
 </div>
 <script>
 
- $(function () {
+    $(function () {
         var i;
-    $("li").click(function () { //點擊事件
-        loction_name = $(this).attr('loction_name'),
-        i = loction_name.localeCompare("undefined") //比較兩字串:相等=0
-        if (i!=0){//取不相等時的值
-            data = {'loction_name': loction_name }
-            console.log(data);
-        }
-        $.ajax({
-                    url:"{% url 'env_get' %}",
-                    type:'GET',
-                    data: data,
-                    success:function(response){
-                        console.log(response);
-                        clearPlot()
-                        requestData()
-                        refresh()
-                    },
-                    error:function(){
-                        console.log('error');
-                    },
-                });
-
-  });
-});
-
-var chart;
-$(document).ready(function() {
-    Highcharts.setOptions({ global: {useUTC: false}});
-    chart = new Highcharts.Chart({
-        chart: {
-            renderTo: 'container',
-            type: 'spline',
-            events: {
-                load: requestData
+        $("li").click(function () { //點擊事件
+            location_id = $(this).attr('location_id'),
+                i = location_id.localeCompare("undefined") //比較兩字串:相等=0
+            if (i != 0) {//取不相等時的值
+                data = { 'location_id': location_id }
+                console.log(data);
             }
-        },
-        credits: {
-		    enabled: false // remove high chart logo hyper-link
-		},
-        title: {
-            text: ""
-        },
-        xAxis: {
-            title: {text:'datetime'},
-            type: 'datetime',
-            labels: {
-                format: '{value:%m-%d %H:%M}',
-            }
-        },
-        yAxis: {
-            title: {
-                text: 'Temperature (°C)'
-            },
-            labels: {
-            formatter: function () {
-                return this.value + '°';
-            }
-            },
-            plotLines: [{
-                value: 0,
-                width: 1,
-                color: '#808080'
-            }]
-        },
-    	exporting : {
-		    enabled : false
-		},
-        legend: {
-            layout: 'vertical',
-            align: 'center',
-            verticalAlign: 'top',
-
-            borderWidth: 0
-        },
-        tooltip: {
-            valueSuffix: '°C'
-        },
-        plotOptions: {
-            series: {
-                events: {
-                     legendItemClick: function(e) {
-                     return false; // 禁用點擊隱藏數據列
-                }
-         }
-     }
-}
-
-    });
-});
-
-function clearPlot() {
-		    	//console.log("clear plot data!!!");
-	            var series=chart.series;
-	            while(series.length > 0) {
-	                series[0].remove(false);
-	            }
-		    }
-
-function requestData() {
-    $.ajax({
-        url: "{% url 'env_filter' %}",
-        type: "GET",
-        dataType: "json",
-        success: function (data) {
-        var len = Object.keys(data).length;
-        var seriesData = [];
-        var chartName = data[0].fields.name;
-        for (var j = 0; j < len; j++) {
-            var x = new Date(data[j].fields.updated_at).getTime();
-            var y = data[j].fields.temperature;
-            x = parseFloat(x)
-            y = parseFloat(y)
-            seriesData.push([x, y]);
-            }
-        chart.addSeries({
-            name: chartName,
-            data: seriesData,
-            zones: [{
-                value: 0,
-                color: '#f7a35c',
-                dashStyle: 'dot'
-            }, {
-                value: 10,
-                color: '#7cb5ec'
-            }, {
-                color: '#90ed7d'
-            }]
+            $.ajax({
+                url: "{% url 'env_get' %}",
+                type: 'GET',
+                data: data,
+                success: function (response) {
+                    console.log(response);
+                    clearPlot()
+                    requestData()
+                    refresh()
+                },
+                error: function () {
+                    console.log('error');
+                },
             });
-        },
-        cache: false
+
+        });
     });
-}
 
-var gage;
-function refresh(){
-     $.ajax({
-         url: "{% url 'env_filter' %}",
-         type: "GET",
-         dataType: "json",
-            success: function(data) {
-            var len = Object.keys(data).length;
-            var x = new Date(data[len-1].fields.updated_at).getTime();
-            var y = data[len-1].fields.temperature;
-            var max = 300;
-            console.log([y,x]);
+    var chart;
+    $(document).ready(function () {
+        Highcharts.setOptions({ global: { useUTC: false } });
+        chart = new Highcharts.Chart({
+            chart: {
+                renderTo: 'container',
+                type: 'spline',
+                events: {
+                    load: requestData
+                }
+            },
+            credits: {
+                enabled: false // remove high chart logo hyper-link
+            },
+            title: {
+                text: ""
+            },
+            xAxis: {
+                title: { text: 'datetime' },
+                type: 'datetime',
+                labels: {
+                    format: '{value:%m-%d %H:%M}',
+                }
+            },
+            yAxis: {
+                title: {
+                    text: 'Temperature (°C)'
+                },
+                labels: {
+                    formatter: function () {
+                        return this.value + '°';
+                    }
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            exporting: {
+                enabled: false
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'center',
+                verticalAlign: 'top',
 
-            if (!gage) {
-                gage = new JustGage({
-                    id: "gauge1",
-                    value: y,
-                    min: 0,
-                    max: 100,
-                    label: "°C",
-                });
-            } else {
-                gage.refresh(y);
+                borderWidth: 0
+            },
+            tooltip: {
+                valueSuffix: '°C'
+            },
+            plotOptions: {
+                series: {
+                    events: {
+                        legendItemClick: function (e) {
+                            return false; // 禁用點擊隱藏數據列
+                        }
+                    }
+                }
             }
-        }
+
+        });
     });
-}
-    setTimeout(refresh,100) //第一次刷新數據
+
+    function clearPlot() {
+        //console.log("clear plot data!!!");
+        var series = chart.series;
+        while (series.length > 0) {
+            series[0].remove(false);
+        }
+    }
+
+    function requestData() {
+        $.ajax({
+            url: "{% url 'env_filter' %}",
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                var len = Object.keys(data).length;
+                var seriesData = [];
+                var chartName = data[0].fields.location_id;
+                for (var j = 0; j < len; j++) {
+                    var x = new Date(data[j].fields.updated_at).getTime();
+                    var y = data[j].fields.temperature;
+                    x = parseFloat(x)
+                    y = parseFloat(y)
+                    seriesData.push([x, y]);
+                }
+                chart.addSeries({
+                    location_id: chartName,
+                    data: seriesData,
+                    zones: [{
+                        value: 0,
+                        color: '#f7a35c',
+                        dashStyle: 'dot'
+                    }, {
+                        value: 10,
+                        color: '#7cb5ec'
+                    }, {
+                        color: '#90ed7d'
+                    }]
+                });
+            },
+            cache: false
+        });
+    }
+
+    var gage;
+    function refresh() {
+        $.ajax({
+            url: "{% url 'env_filter' %}",
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                var len = Object.keys(data).length;
+                var x = new Date(data[len - 1].fields.updated_at).getTime();
+                var y = data[len - 1].fields.temperature;
+                var max = 300;
+                console.log([y, x]);
+
+                if (!gage) {
+                    gage = new JustGage({
+                        id: "gauge1",
+                        value: y,
+                        min: 0,
+                        max: 100,
+                        label: "°C",
+                    });
+                } else {
+                    gage.refresh(y);
+                }
+            }
+        });
+    }
+    setTimeout(refresh, 100) //第一次刷新數據
 </script>
 {% endblock %}

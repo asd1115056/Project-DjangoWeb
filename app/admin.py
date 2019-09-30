@@ -4,7 +4,7 @@ from .models import env_info ,pet_info ,Schedule ,Tag_Info ,food_type
 
 
 class env_infoAdmin(admin.ModelAdmin):
-    list_display = ('name','temperature','humidity','updated_at')
+    list_display = ('location_name','location_id','temperature','humidity','updated_at')
     #後台要顯示的資料表格
 class pet_infoAdmin(admin.ModelAdmin):
     list_display = ('Tag','food_eat','water_drink','active_time','updated_at')

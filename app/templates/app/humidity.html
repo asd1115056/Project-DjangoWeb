@@ -12,8 +12,8 @@
             <div style="text-align:center;"><h3>Location</h3><br></div>
              <ul class="nav nav-pills nav-stacked">
                  {% for app in apps %}
-                    <li {% if forloop.first %} class="active" {% endif %} loction_name="{{app.name}}">
-<a data-toggle="tab" href="#{{app.name}}"  >{{app.name}}</a></li>
+                    <li {% if forloop.first %} class="active" {% endif %} location_id="{{app.location_id}}">
+<a data-toggle="tab" href="#{{app.location_id}}"  >{{app.location_id}}</a></li>
                  {% endfor %}
              </ul>
 		</div>
@@ -34,10 +34,10 @@
  $(function () {
         var i;
     $("li").click(function () { //點擊事件
-        loction_name = $(this).attr('loction_name'),  
-        i = loction_name.localeCompare("undefined") //比較兩字串:相等=0
+        location_id = $(this).attr('location_id'),  
+        i = location_id.localeCompare("undefined") //比較兩字串:相等=0
         if (i!=0){//取不相等時的值
-            data = {'loction_name': loction_name }
+            data = {'location_id': location_id }
             console.log(data);
         }
         $.ajax({
@@ -140,7 +140,7 @@ function requestData() {
         success: function (data) {
         var len = Object.keys(data).length;
         var seriesData = [];
-        var chartName = data[0].fields.name;
+        var chartName = data[0].fields.location_id;
         for (var j = 0; j < len; j++) {
             var x = new Date(data[j].fields.updated_at).getTime();
             var y = data[j].fields.humidity;  
@@ -149,7 +149,7 @@ function requestData() {
             seriesData.push([x, y]);
             }
         chart.addSeries({
-            name: chartName,
+            location_id: chartName,
             data: seriesData,
             zones: [{
                 value: 0,

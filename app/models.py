@@ -3,7 +3,8 @@ from decimal import Decimal
 import django.utils.timezone as timezone
 
 class env_info(models.Model):
-    name = models.CharField(max_length=100)
+    location_name = models.CharField(max_length=100,null=True, blank=True) #LOCATION_NAME
+    location_id = models.CharField(max_length=100) #ID
     temperature = models.DecimalField(max_digits=6,decimal_places=2,default=Decimal('0.00'))
     humidity = models.DecimalField(max_digits=6,decimal_places=2,default=Decimal('0.00'))
     updated_at = models.DateTimeField(auto_now=True)
