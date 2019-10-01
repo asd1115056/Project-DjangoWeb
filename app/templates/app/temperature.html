@@ -84,7 +84,7 @@
 
     var chart;
     $(document).ready(function () {
-        Highcharts.setOptions({ global: { useUTC: true } });
+        Highcharts.setOptions({ global: { useUTC: false } });
         chart = new Highcharts.Chart({
             chart: {
                 renderTo: 'container',
@@ -157,7 +157,7 @@
 
     function requestData() {
         $.ajax({
-            url: "{% url 'env_filter' %}",
+            url: "{% url 'env_filter_chart' %}",
             type: "GET",
             dataType: "json",
             success: function (data) {
@@ -193,16 +193,19 @@
     var gage;
     function refresh() {
         $.ajax({
-            url: "{% url 'env_filter' %}",
+            url: "{% url 'env_filter_gage' %}",
             type: "GET",
             dataType: "json",
             success: function (data) {
-                var len = Object.keys(data).length;
-                var x = new Date(data[len - 1].fields.updated_at).getTime();
-                var y = data[len - 1].fields.temperature;
-                var max = 300;
-                console.log([y, x]);
-
+                //console.log(data);
+                if (data.length != 0) {
+                    var x = new Date(data[0].fields.updated_at).getTime();
+                    var y = data[0].fields.temperature;
+                } else {
+                    x = 0;
+                    y = 0;
+                }
+                //console.log([y, x]);
                 if (!gage) {
                     gage = new JustGage({
                         id: "gauge1",

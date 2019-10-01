@@ -91,15 +91,30 @@ def Device_Info(request):
 
 def env_filter_gage(request):
     from django.core import serializers
-    from datetime import datetime, timedelta, time
-    from django.utils import timezone
     from django.db.models.base import ObjectDoesNotExist
     device_id = request.session['device_id']
     try:
         data = serializers.serialize('json',[models.device_info.objects.get(device_id=device_id).env_info_set.filter(updated_at__isnull=False).latest('updated_at')])
     except ObjectDoesNotExist:
-        data = ""
+        data = "[]"
     return HttpResponse(data) 
+
+def env_filter_chart(request):
+    from django.core import serializers
+    from datetime import datetime, timedelta, time
+    from django.utils import timezone
+    device_id = request.session['device_id']
+    if request.method == 'POST':
+        Data_POST = request.POST
+        Data_POST = json.dumps(Data_POST)
+        Data_POST = json.loads(Data_POST)
+        offset = Data_POST.get('offset') #{"offset":"day=1"}
+        current = datetime.now()
+        past = current - timedelta(1)
+        current = timezone.make_aware(current,timezone.get_current_timezone())
+        past = timezone.make_aware(past,timezone.get_current_timezone()) #轉換時區
+        data = serializers.serialize('json',models.device_info.objects.get(device_id=device_id).env_info_set.filter(updated_at__lte=current,updated_at__gte=past).order_by('updated_at'))
+        return HttpResponse(data) 
 
 def Tag_Info(request):
     from django.core import serializers
