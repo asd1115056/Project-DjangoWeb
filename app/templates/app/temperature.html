@@ -12,8 +12,8 @@
         <div style="text-align:center;"><h3>Location</h3><br></div>
         <ul class="nav nav-pills nav-stacked">
             {% for app in apps %}
-            <li class="index {% if forloop.first %} autoload active {% endif %}" location_code="{{app.location_code}}">
-                <a data-toggle="tab" href="">{% if app.location_name %} {{app.location_name}} {% else %} {{app.location_code}} {% endif %}</a>
+            <li class="index {% if forloop.first %} autoload active {% endif %}" device_id="{{app.device_id}}">
+                <a data-toggle="tab" href="">{% if app.device_name %} {{app.device_name}} {% else %} {{app.device_id}} {% endif %}</a>
             </li>
             {% endfor %}
         </ul>
@@ -33,29 +33,52 @@
 </div>
 <script>
     $(function () {
-        var i;
-        $("li").click(function () { //點擊事件
-            location_code = $(this).attr('location_code'),
-                i = location_code.localeCompare("undefined") //比較兩字串:相等=0
+        function autoload() {
+            device_id = $(".autoload").attr('device_id');
+            var i = device_id.localeCompare("undefined") //比較兩字串:相等=0
             if (i != 0) {//取不相等時的值
-                data = { 'location_code': location_code }
-                console.log(data);
+                data = { 'device_id': device_id }
             }
             $.ajax({
-                url: "{% url 'env_get' %}",
+                url: "{% url 'env_get_id' %}",
                 type: 'GET',
                 data: data,
                 success: function (response) {
                     console.log(response);
                     clearPlot()
                     requestData()
-                    refresh()
+                    setTimeout(refresh, 200);
                 },
                 error: function () {
-                    console.log('error');
+                    //console.log('error');
                 },
             });
-
+            //console.log(data);
+        }
+        window.onload = autoload();
+        window.onload = setTimeout(refresh, 100) //第一次刷新數據
+        var i;
+        $(".index").click(function () { //點擊事件
+            device_id = $(this).attr('device_id'),
+                i = device_id.localeCompare("undefined") //比較兩字串:相等=0
+            if (i != 0) {//取不相等時的值
+                data = { 'device_id': device_id }
+                //console.log(data);
+            }
+            $.ajax({
+                url: "{% url 'env_get_id' %}",
+                type: 'GET',
+                data: data,
+                success: function (response) {
+                    console.log(response);
+                    clearPlot()
+                    requestData()
+                    setTimeout(refresh, 200);
+                },
+                error: function () {
+                    //console.log('error');
+                },
+            });
         });
     });
 

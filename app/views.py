@@ -31,7 +31,7 @@ def pet(request):
     return render(request,'app/pet.html',locals())
 
 def temperature(request):
-    apps = models.env_info.objects.values('location_code').distinct() 
+    apps = models.device_info.objects.values('device_id').distinct() 
     title = 'Env Page'
     year = datetime.now().year
     return render(request,'app/temperature.html',locals())
@@ -64,6 +64,15 @@ def env_filter(request):
     data = serializers.serialize('json',models.env_info.objects.filter(location_id__contains=location_id).order_by('updated_at'))
     return HttpResponse(data) 
 
+def env_get_id(request):
+    try:
+        device_id = request.GET.get('device_id')
+    except device_id.DoesNotExist:
+        device_id = None
+    finally:
+        request.session['device_id'] = device_id
+    return HttpResponse(device_id)
+
 def pet_get_id(request):
     try:
         Tag = request.GET.get('Tag')
@@ -73,6 +82,22 @@ def pet_get_id(request):
         request.session['Tag'] = Tag
     return HttpResponse(Tag)
 
+def Device_Info(request):
+    from django.core import serializers
+    import datetime
+    device_id = request.session['device_id']
+    data = serializers.serialize('json',models.device_info.objects.filter(device_id=device_id))
+    return HttpResponse(data) 
+
+def env_filter_gage(request):
+    from django.core import serializers
+    from datetime import datetime, timedelta, time
+    from django.utils import timezone
+    device_id = request.session['device_id']
+    temp = models.device_info.objects.filter(device_id=device_id)
+    pk = list(temp.values_list('pk',flat=True)) #實際輸出['1','2',…] 用python List轉換成[1,2,...]
+    data = serializers.serialize('json',models.env_info.objects.filter(device_id=pk[0]).latest('updated_at'))
+    return HttpResponse(data) 
 
 def Tag_Info(request):
     from django.core import serializers
