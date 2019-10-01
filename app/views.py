@@ -93,10 +93,12 @@ def env_filter_gage(request):
     from django.core import serializers
     from datetime import datetime, timedelta, time
     from django.utils import timezone
+    from django.db.models.base import ObjectDoesNotExist
     device_id = request.session['device_id']
-    temp = models.device_info.objects.filter(device_id=device_id)
-    pk = list(temp.values_list('pk',flat=True)) #實際輸出['1','2',…] 用python List轉換成[1,2,...]
-    data = serializers.serialize('json',models.env_info.objects.filter(device_id=pk[0]).latest('updated_at'))
+    try:
+        data = serializers.serialize('json',[models.device_info.objects.get(device_id=device_id).env_info_set.filter(updated_at__isnull=False).latest('updated_at')])
+    except ObjectDoesNotExist:
+        data = ""
     return HttpResponse(data) 
 
 def Tag_Info(request):
