@@ -89,12 +89,21 @@ def Device_Info(request):
     data = serializers.serialize('json',models.device_info.objects.filter(device_id=device_id))
     return HttpResponse(data) 
 
-def env_filter_gage(request):
+def env_filter_latest(request):
     from django.core import serializers
     from django.db.models.base import ObjectDoesNotExist
     device_id = request.session['device_id']
     try:
         data = serializers.serialize('json',[models.device_info.objects.get(device_id=device_id).env_info_set.filter(updated_at__isnull=False).latest('updated_at')])
+    except ObjectDoesNotExist:
+        data = "[]"
+    return HttpResponse(data) 
+def env_filter_earliest(request):
+    from django.core import serializers
+    from django.db.models.base import ObjectDoesNotExist
+    device_id = request.session['device_id']
+    try:
+        data = serializers.serialize('json',[models.device_info.objects.get(device_id=device_id).env_info_set.filter(updated_at__isnull=False).earliest('updated_at')])
     except ObjectDoesNotExist:
         data = "[]"
     return HttpResponse(data) 
