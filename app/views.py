@@ -108,21 +108,44 @@ def env_filter_earliest(request):
         data = "[]"
     return HttpResponse(data) 
 
+@csrf_exempt
+def env_filter_chart_search(request):
+     if request.method == 'POST':
+        try:
+            Data_POST = request.POST
+            Data_POST = json.dumps(Data_POST)
+            Data_POST = json.loads(Data_POST)
+        except Data_POST.DoesNotExist:
+            Data_POST = None
+        finally:
+            if Data_POST.get('type') == "offset":
+                request.session['type'] = Data_POST.get('type')
+                request.session['offset'] = Data_POST.get('offset')
+            else:
+                request.session['type'] = Data_POST.get('type')
+                request.session['begintime'] = Data_POST.get('date1')
+                request.session['endtime'] = Data_POST.get('date2')
+        return HttpResponse(1)
+    
 def env_filter_chart(request):
     from django.core import serializers
     from datetime import datetime, timedelta, time
     from django.utils import timezone
     device_id = request.session['device_id']
-    if request.method == 'POST':
-        Data_POST = request.POST
-        Data_POST = json.dumps(Data_POST)
-        Data_POST = json.loads(Data_POST)
-        offset = Data_POST.get('offset') #{"offset":"day=1"}
+    type = request.session['type']
+    if type == 'offset':
+        offset = request.session['offset']
         current = datetime.now()
-        past = current - timedelta(1)
+        past = current - timedelta(hours=int(offset))
         current = timezone.make_aware(current,timezone.get_current_timezone())
         past = timezone.make_aware(past,timezone.get_current_timezone()) #轉換時區
         data = serializers.serialize('json',models.device_info.objects.get(device_id=device_id).env_info_set.filter(updated_at__lte=current,updated_at__gte=past).order_by('updated_at'))
+        #print(offset)
+        return HttpResponse(data)
+    else:
+        begintime = request.session['begintime']
+        endtime = request.session['endtime']
+        data = serializers.serialize('json',models.device_info.objects.get(device_id=device_id).env_info_set.filter(updated_at__lte=endtime,updated_at__gte=begintime).order_by('updated_at'))
         return HttpResponse(data) 
 
 def Tag_Info(request):
