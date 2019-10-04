@@ -28,6 +28,22 @@
             <div class="col-md-3 column">
                 <div style="text-align:center;"><h3>Temperature</h3><br></div>
                 <div id="gauge1" style=" height:150px;text-align:center"></div>
+                <div style="text-align: right;">
+                    <button class="btn btn-primary btn-sm " data-toggle="modal" href="#myModal121">More</button>
+                </div>
+                <div id="myModal121" class="modal fade" tabindex="-1" data-width="760" style="display: none;">
+                    <div class="modal-header" style="text-align: center;">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4><strong>Profile</strong></h4>
+                    </div>
+                    <div class="modal-body">
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary btn-danger" onclick="delete_data_post()">Del</button>
+                        <button type="button" data-dismiss="modal" class="btn btn-default" onclick="window.location.reload()">Close</button>
+                    </div>
+                </div>
             </div>
             <div class="col-md-9 column">
                 <br>
@@ -125,8 +141,8 @@
             var Date1 = new Date($("#Date1").val());
             var Date2 = new Date($("#Date2").val());
             var offset = $(this).attr('offset');
-            if (Date1 > Date2) {
-                alert("Time error : End time is earlier than begin time");
+            if (Date1 >= Date2) {
+                alert("Time error : End time is earlier or similar than begin time");
             } else {
                 Date1 = Date1.toJSON();
                 Date2 = Date2.toJSON();
@@ -165,14 +181,14 @@
         dateFormat: "Y-m-d",
         maxDate: "",
         minDate: "",
-        enable: [false]
+        enable: [true]
     });
     const fp2 = $("#Date2").flatpickr({
         enableTime: false,
         dateFormat: "Y-m-d",
         maxDate: "",
         minDate: "",
-        enable: [false]
+        enable: [true]
     });
     function Datesearch() {
         var mindate;
@@ -185,6 +201,8 @@
                 if (data != "") {
                     var mindate = new Date(data[0].fields.updated_at).toLocaleDateString('zh-TW', { timeZone: 'Asia/Taipei' });
                     //console.log(mindate)
+                    fp1.set('enable', [false]);
+                    fp2.set('enable', [false]);
                     fp1.set('minDate', mindate);
                     fp2.set('minDate', mindate);
                 } else {
@@ -201,6 +219,8 @@
                 if (data != "") {
                     var maxdate = new Date(data[0].fields.updated_at).toLocaleDateString('zh-TW', { timeZone: 'Asia/Taipei' });
                     //console.log(maxdate)
+                    fp1.set('enable', [false]);
+                    fp2.set('enable', [false]);
                     fp1.set('maxDate', maxdate);
                     fp2.set('maxDate', maxdate);
                 }
@@ -215,19 +235,11 @@
     }
     function fristloadchart() {
         data = { 'type': 'offset', 'offset': "1" }
-        console.log(data);
+        //console.log(data);
         $.ajax({
             type: "POST",
             url: "{% url 'env_filter_chart_search' %}",
             data: data,
-            success: function (response) {
-                //console.log(response);
-                //alert('Update sucess');
-                // window.location.reload();
-            },
-            error: function () {
-                //alert("failure");
-            }
         });
     }
     var chart;
@@ -370,5 +382,22 @@
         });
     }
     setTimeout(refresh, 100) //第一次刷新數據
+    function delete_data_post() {
+        data = { "Delete": "confrim" };
+        if (confirm("Are You Sure?")) {
+            $.ajax({
+                type: "POST",
+                url: "{% url 'del_device_data' %}",
+                data: data,
+                success: function (response) {
+                    //console.log(response);
+                    window.location.reload();
+                },
+                error: function () {
+                    alert("failure");
+                }
+            });
+        }
+    }
 </script>
 {% endblock %}

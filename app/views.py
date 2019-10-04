@@ -147,6 +147,16 @@ def env_filter_chart(request):
         endtime = request.session['endtime']
         data = serializers.serialize('json',models.device_info.objects.get(device_id=device_id).env_info_set.filter(updated_at__lte=endtime,updated_at__gte=begintime).order_by('updated_at'))
         return HttpResponse(data) 
+@csrf_exempt
+def del_device_data(request):
+    device_id = request.session['device_id']
+    if request.method == 'POST':
+        Data_POST = request.POST
+        Data_POST = json.dumps(Data_POST)
+        Data_POST = json.loads(Data_POST)
+        if Data_POST.get('Delete') == "confrim":
+            models.device_info.objects.get(device_id=device_id).delete()
+            return JsonResponse({"status": 200, "msg": "deleted!"  })
 
 def Tag_Info(request):
     from django.core import serializers
