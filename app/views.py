@@ -31,7 +31,8 @@ def pet(request):
     return render(request,'app/pet.html',locals())
 
 def temperature(request):
-    apps = models.device_info.objects.values('device_id').distinct() 
+    #apps = models.device_info.objects.values('device_id').distinct()
+    apps = models.device_info.objects.all()
     title = 'Env Page'
     year = datetime.now().year
     return render(request,'app/temperature.html',locals())
@@ -157,6 +158,19 @@ def del_device_data(request):
         if Data_POST.get('Delete') == "confrim":
             models.device_info.objects.get(device_id=device_id).delete()
             return JsonResponse({"status": 200, "msg": "deleted!"  })
+
+@csrf_exempt
+def post_device_form(request):
+    device_id = request.session['device_id']
+    if request.method == 'POST':
+        Data_POST = request.POST
+        Data_POST = json.dumps(Data_POST)
+        Data_POST = json.loads(Data_POST)
+        info = models.device_info.objects.get(device_id=device_id)
+        info.device_name = Data_POST.get('Locationname')
+        info.save()
+        text = " Update Successfully"
+        return JsonResponse({"status": 200, "msg": text  })
 
 def Tag_Info(request):
     from django.core import serializers

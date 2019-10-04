@@ -11,10 +11,10 @@
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
-
 <div class="row clearfix">
+
     <div class="col-md-2 column">
-        <div style="text-align:center;"><h3>Location</h3><br></div>
+        <div style="text-align: center;"><h3>Location</h3><br></div>
         <ul class="nav nav-pills nav-stacked">
             {% for app in apps %}
             <li class="index {% if forloop.first %} autoload active {% endif %}" device_id="{{app.device_id}}">
@@ -31,13 +31,52 @@
                 <div style="text-align: right;">
                     <button class="btn btn-primary btn-sm " data-toggle="modal" href="#myModal121">More</button>
                 </div>
-                <div id="myModal121" class="modal fade" tabindex="-1" data-width="760" style="display: none;">
+                <div id="myModal121" class="modal fade" tabindex="-1" data-width="550" style="top:35%;">
                     <div class="modal-header" style="text-align: center;">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                         <h4><strong>Profile</strong></h4>
                     </div>
                     <div class="modal-body">
-
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#tab1" data-toggle="tab">Device Info</a></li>
+                            <li class=""><a href="#tab2" data-toggle="tab">DeviceInfo-Setting</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tab1">
+                                <table class="table table-hover">
+                                    <thead></thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>Name</strong></td>
+                                            <td id="NAME"></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Device id</strong></td>
+                                            <td id="DEVICE_ID"></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Updated at</strong></td>
+                                            <td id="UPDATED_AT"></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Created at</strong></td>
+                                            <td id="CREATED_AT"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="tab-pane" id="tab2">
+                                <form role="form" id="form_test123">
+                                    <div class="form-group1 row-margin-top">
+                                        <label for="Locationname"><strong>Name</strong></label>
+                                        <input type="text" class="form-control" id="Locationname">
+                                    </div>
+                                    <div class="form-group1">
+                                        <button type="button" id="submit213621" class="btn btn-primary">Submit</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary btn-danger" onclick="delete_data_post()">Del</button>
@@ -92,6 +131,7 @@
                     clearPlot()
                     requestData()
                     Datesearch()
+                    ajax_device_Info()
                     setTimeout(refresh, 200);
 
                 },
@@ -120,6 +160,7 @@
                     clearPlot()
                     requestData()
                     Datesearch()
+                    ajax_device_Info()
                     setTimeout(refresh, 200);
                 },
                 error: function () {
@@ -134,6 +175,26 @@
         });
         $('.date_search').on('click', function (event) {
             $('#dropdownMenu1').parent().removeClass('open');
+        });
+        $('#submit213621').click(function () {
+            //e.preventDefault();
+            var Locationname = $("#Locationname").val();
+            data = { 'Locationname': Locationname };
+            //console.log(data);
+            $.ajax({
+                type: "POST",
+                url: "{% url 'post_device_form' %}",
+                data: data,
+                success: function (response) {
+                    //console.log(response);
+                    alert('Update sucess');
+                    refresh_tag_Info();
+                    //window.location.reload();
+                },
+                error: function () {
+                    alert("failure");
+                }
+            });
         });
         $('#submit5151,.date_search').click(function () {
             //2019-10-03T18:50:00Z
@@ -399,5 +460,29 @@
             });
         }
     }
+    function ajax_device_Info() {
+        $.ajax({
+            url: "{%url 'Device_Info'%}",
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                //console.log(data);
+                $("#NAME").text(data[0].fields.device_name);
+                $("#DEVICE_ID").text(data[0].fields.device_id);
+                var d1 = new Date(data[0].fields.created_at);
+                $("#CREATED_AT").text(d1.toString());
+            }
+        });
+        $.ajax({
+            url: "{%url 'env_filter_latest'%}",
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                var d1 = new Date(data[0].fields.updated_at);
+                $("#UPDATED_AT").text(d1.toString());
+            }
+        });
+    }
+
 </script>
 {% endblock %}
