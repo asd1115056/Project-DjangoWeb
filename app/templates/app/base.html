@@ -28,14 +28,8 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     {% if user.is_authenticated %}    
-					<li><a href="{% url 'pet' %}">Pet</a></li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> Env <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="{% url 'env_temperature' %}">Temperature</a></li>
-                            <li><a href="{% url 'env_humidity' %}">Humidity</a></li>
-                        </ul>
-                    </li>                    
+					<li><a href="{% url 'pet' %}">Pet</a></li>   
+                    <li><a href="{% url 'env_all' %}">Env</a></li>   
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">ToolBox <span class="caret"></span></a>
                         <ul class="dropdown-menu">

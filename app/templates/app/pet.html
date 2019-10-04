@@ -853,14 +853,14 @@
             success: function (data) {
                 $("#myAlert").alert('close');
                 if (data[0].fields.weight == 0 || data[0].fields.category == 0) {
-                    $("#alert").before('<div id="myAlert" class="alert alert-warning"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>Warning！</strong>Please add more information!</div>');
+                    $("#alert").before('<div id="myAlert" class="alert alert-warning"><a href="#" class="close close_alert" data-dismiss="alert">&times;</a><strong>Warning！</strong>Please add more information!</div>');
                 }
             },
             error: function () {
             }
         });
     }
-    $(".close").click(function () {
+    $(".close_alert").click(function () {
         $("#myAlert").alert('close');
     });
 </script>

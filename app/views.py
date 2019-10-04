@@ -31,6 +31,13 @@ def pet(request):
     year = datetime.now().year
     return render(request,'app/pet.html',locals())
 
+def env_all(request):
+    #apps = models.device_info.objects.values('device_id').distinct()
+    apps = models.device_info.objects.all()
+    title = 'Env Page'
+    year = datetime.now().year
+    return render(request,'app/env.html',locals())
+
 def temperature(request):
     #apps = models.device_info.objects.values('device_id').distinct()
     apps = models.device_info.objects.all()

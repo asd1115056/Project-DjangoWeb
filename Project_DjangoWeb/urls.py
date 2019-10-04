@@ -8,6 +8,7 @@ from app import forms, views
 urlpatterns = [path('', views.home, name='home'),
     path('env/temperature', views.temperature, name='env_temperature'),
     path('env/humidity', views.humidity, name='env_humidity'),
+    path('env/all', views.env_all, name='env_all'),
     path('json', views.json_test, name='json'),
     path('ajax/env_filter', views.env_filter, name='env_filter'),
     path('ajax/tag_Info', views.Tag_Info, name='Tag_Info'),
