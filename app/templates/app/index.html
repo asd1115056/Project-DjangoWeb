@@ -23,37 +23,110 @@
         </ul>
     </div>
     <div class="col-md-10 column">
-        <div class="tabbable" id="tabs-613039">
-            <ul class="nav nav-tabs">
-                <li class="active">
-                    <a href="#panel-924845" data-toggle="tab">Temperature</a>
-                </li>
-                <li>
-                    <a href="#panel-375536" data-toggle="tab">Humidity</a>
-                </li>
-            </ul>
-            <div class="tab-content">
-                <div class="tab-pane active" id="panel-924845">
-                    <div class="row clearfix">
-                        <div class="col-md-3 column">
-                            <div style="vertical-align:middle;text-align:center;"><h2>Temperature</h2><br></div>
-                            <div id="gauge1" style=" width:200px;height:100px;vertical-align:middle;text-align:center"></div>
-                        </div>
-                        <div class="col-md-9 column">
-                            <br>
-                            <div id="container1" style="min-width: 700px; height: 300px; margin: 0 auto"></div>
+        <div class="row clearfix">
+            <div class="col-md-3 column">
+                <br />
+                <div style="vertical-align:middle;text-align:center;"><h4>Temperature</h4></div>
+                <div id="gauge1" style=" width:200px;height:90px;vertical-align:middle;text-align:center"></div>
+                <br />
+                <div style="vertical-align:middle;text-align:center;"><h4>Humidity</h4></div>
+                <div id="gauge2" style=" width:200px;height:90px;vertical-align:middle;text-align:center"></div>
+                <p id="ago" class="pull-right"></p>
+                <br />
+                <br />
+                <div style="text-align: right;" class="pull-right">
+                    <button class="btn btn-primary btn-sm " data-toggle="modal" href="#myModal121">More</button>
+                </div>
+                <div id="myModal121" class="modal fade" tabindex="-1" data-width="550" style="top:35%;">
+                    <div class="modal-header" style="text-align: center;">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4>
+                            <strong>Profile</strong>
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <ul class="nav nav-tabs">
+                            <li class="active">
+                                <a href="#tab1" data-toggle="tab">Device Info</a>
+                            </li>
+                            <li class="">
+                                <a href="#tab2" data-toggle="tab">DeviceInfo-Setting</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tab1">
+                                <table class="table table-hover">
+                                    <thead></thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <strong>Name</strong>
+                                            </td>
+                                            <td id="NAME"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <strong>Device id</strong>
+                                            </td>
+                                            <td id="DEVICE_ID"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <strong>Updated at</strong>
+                                            </td>
+                                            <td id="UPDATED_AT"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <strong>Created at</strong>
+                                            </td>
+                                            <td id="CREATED_AT"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="tab-pane" id="tab2">
+                                <form role="form" id="form_test123">
+                                    <div class="form-group1 row-margin-top">
+                                        <label for="Locationname"><strong>Name</strong></label>
+                                        <input type="text" class="form-control" id="Locationname">
+                                    </div>
+                                    <div class="form-group1">
+                                        <button type="button" id="submit213621" class="btn btn-primary">Submit</button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary btn-danger" onclick="delete_data_post()">Del</button>
+                        <button type="button" data-dismiss="modal" class="btn btn-default" onclick="window.location.reload()">Close</button>
+                    </div>
                 </div>
-                <div class="tab-pane" id="panel-375536">
-                    <div class="row clearfix">
-                        <div class="col-md-3 column">
-                            <div style="vertical-align:middle;text-align:center;"><h2>Humidity</h2><br></div>
-                            <div id="gauge2" style=" width:200px;height:100px;vertical-align:middle;text-align:center"></div>
-                        </div>
-                        <div class="col-md-9 column">
-                            <br>
-                            <div id="container2" style="min-width: 700px; height: 300px; margin: 0 auto"></div>
+            </div>
+            <div class="col-md-9 column">
+                <br>
+                <div id="container1" style="min-width: 700px; height: 300px; margin: 0 auto"></div>
+                <div class="btn-group pull-right">
+                    <button type="button" class="btn btn-default date_search" offset="1">1 hours</button>
+                    <button type="button" class="btn btn-default date_search" offset="6">6 hours</button>
+                    <button type="button" class="btn btn-default date_search" offset="12">12 hours</button>
+                    <button type="button" class="btn btn-default date_search" offset="24">24 hours</button>
+                    <div class="btn-group" style="margin-left:-1px;">
+                        <div class="dropdown pull-right">
+                            <button type="button" style="border-radius:0;border-bottom-right-radius: 4px;border-top-right-radius: 4px;" class="btn btn-default dropdown-toggle" id="dropdownMenu1">More<span class="caret"></span></button>
+                            <div class="dropdown-menu" style="width:305px;padding-right: 5px;padding-left: 5px;" role="menu" aria-labelledby="dropdownMenu1">
+                                <form class="form-inline" role="form" style="margin-bottom: 0px;" id="form4122">
+                                    <div class="form-group" style="width:100px;">
+                                        <input type="text" class="form-control" id="Date1" placeholder="">
+                                    </div>
+                                    <h>~</h>
+                                    <div class="form-group" style="width:100px;">
+                                        <input type="text" class="form-control" id="Date2" placeholder="">
+                                    </div>
+                                    <button type="button" id="submit5151" class="btn btn-default">Search</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -62,9 +135,346 @@
     </div>
 </div>
 <script>
-    setTimeout(refresh, 100) //第一次刷新數據
+    $(function () {
+        window.onload = fristload();
+        $(function () {
+            $(".index").click(function () { //點擊事件
+                var i;
+                device_id = $(this).attr('device_id'),
+                    i = device_id.localeCompare("undefined") //比較兩字串:相等=0
+                if (i != 0) {//取不相等時的值
+                    data = { 'device_id': device_id }
+                    //console.log(data);
+                }
+                $.ajax({
+                    url: "{% url 'env_get_id' %}",
+                    type: 'GET',
+                    data: data,
+                    success: function (response) {
+                        Datesearch()
+                        device_Info()
+                        refresh()
+                        requestData()
+                    },
+                });
+            });
+        });
+        function fristload() {
+            device_id = $(".autoload").attr('device_id');
+            var i = device_id.localeCompare("undefined") //比較兩字串:相等=0
+            if (i != 0) {//取不相等時的值
+                data = { 'device_id': device_id }
+            }
+            $.ajax({
+                url: "{% url 'env_get_id' %}",
+                type: 'GET',
+                data: data,
+                success: function (response) {
+                    requestData()
+                    refresh()
+                    Datesearch()
+                    $.post("{% url 'env_filter_chart_search' %}", { 'type': 'offset', 'offset': "1" });
+                    device_Info();
+                },
+            });
+        }
+        $('#dropdownMenu1').on('click', function (event) {
+            $(this).parent().toggleClass('open');
+        });
+        $('.date_search').on('click', function (event) {
+            $('#dropdownMenu1').parent().removeClass('open');
+        });
+        function device_Info() {
+            $.ajax({
+                url: "{%url 'Device_Info'%}",
+                type: "GET",
+                dataType: "json",
+                success: function (data) {
+                    //console.log(data);
+                    $("#NAME").text(data[0].fields.device_name);
+                    $("#DEVICE_ID").text(data[0].fields.device_id);
+                    var d1 = new Date(data[0].fields.created_at);
+                    $("#CREATED_AT").text(d1.toString());
+                }
+            });
+            $.ajax({
+                url: "{%url 'env_filter_latest'%}",
+                type: "GET",
+                dataType: "json",
+                success: function (data) {
+                    var d1 = new Date(data[0].fields.updated_at);
+                    $("#UPDATED_AT").text(d1.toString());
+                }
+            });
+        }
+        function Datesearch() {
+            var mindate;
+            var maxdate;
+            $.ajax({
+                url: "{% url 'env_filter_earliest' %}",
+                type: "GET",
+                dataType: "json",
+                success: function (data) {
+                    if (data != "") {
+                        var mindate = new Date(data[0].fields.updated_at).toLocaleDateString('zh-TW', { timeZone: 'Asia/Taipei' });
+                        //console.log(mindate)
+                        fp1.set('enable', [false]);
+                        fp2.set('enable', [false]);
+                        fp1.set('minDate', mindate);
+                        fp2.set('minDate', mindate);
+                    } else {
+                        fp1.set('enable', [true]);
+                        fp2.set('enable', [true]);
+                    }
+                }
+            });
+            $.ajax({
+                url: "{% url 'env_filter_latest' %}",
+                type: "GET",
+                dataType: "json",
+                success: function (data) {
+                    if (data != "") {
+                        var maxdate = new Date(data[0].fields.updated_at).toLocaleDateString('zh-TW', { timeZone: 'Asia/Taipei' });
+                        var current = new Date();
+                        var past = new Date(data[0].fields.updated_at);
+                        var df = (current - past) / 1000 / 60 / 60 / 24;
+                        //console.log(df);
+                        var df1 = 0;
+                        if (df <= 0.00069) {
+                            //second
+                            df1 = df * 24 * 60 * 60;
+                            $("#ago").text("Last update: " + Math.round(df1) + " seconds ago!");
+                        }
+                        if (df > 0.00069 && df <= 0.0416) {
+                            //minute
+                            df1 = df * 24 * 60;
+                            $("#ago").text("Last update: " + Math.round(df1) + " minutes ago!");
+                        }
+                        if (df <= 1 && df > 0.0416) {
+                            //hour
+                            df1 = df * 24;
+                            $("#ago").text("Last update: " + Math.round(df1) + " hours ago!");
+                        }
+                        if (df >= 1) {
+                            //day
+                            df1 = df;
+                            $("#ago").text("Last update: " + Math.round(df1) + " days ago!");
+                        }
+                        //console.log(df1);
+                        //console.log(maxdate)
+                        fp1.set('enable', [false]);
+                        fp2.set('enable', [false]);
+                        fp1.set('maxDate', maxdate);
+                        fp2.set('maxDate', maxdate);
+                    }
+                    else {
+                        //console.log("blank")
+                        fp1.set('enable', [true]);
+                        fp2.set('enable', [true]);
+                        //console.log("blank")
+                    }
+                }
+            });
+        }
+        $('#submit213621').click(function () {
+            //e.preventDefault();
+            var Locationname = $("#Locationname").val();
+            data = { 'Locationname': Locationname };
+            //console.log(data);
+            $.ajax({
+                type: "POST",
+                url: "{% url 'post_device_form' %}",
+                data: data,
+                success: function (response) {
+                    //console.log(response);
+                    alert('Update sucess');
+                    window.location.reload();
+                },
+                error: function () {
+                    alert("failure");
+                }
+            });
+        });
+        $('#submit5151,.date_search').click(function () {
+            //2019-10-03T18:50:00Z
+            //var test = new Date("2019-10-04");
+            var Date1 = new Date($("#Date1").val());
+            var Date2 = new Date($("#Date2").val());
+            var offset = $(this).attr('offset');
+            if (Date1 >= Date2) {
+                alert("Time error : End time is earlier or similar than begin time");
+            } else {
+                Date1 = Date1.toJSON();
+                Date2 = Date2.toJSON();
+                //console.log(test.toJSON());
+                //console.log(offest);
+                //console.log(Date2.toTimeString());
+                //var i = offset.localeCompare("undefined") //比較兩字串:相等=0
+                if (offset) {//取不相等時的值
+                    data = { 'type': 'offset', 'offset': offset }
+                } else {
+                    data = { 'type': 'date', 'date1': Date1, 'date2': Date2 }
+                }
+                //console.log(data);
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'env_filter_chart_search' %}",
+                    data: data,
+                    success: function (response) {
+                        requestData()
+                        //console.log(response);
+                        //alert('Update sucess');
+                        // window.location.reload();
+                    },
+                    error: function () {
+                        //alert("failure");
+                    }
+                });
+            }
+
+        });
+        function delete_data_post() {
+            data = { "Delete": "confrim" };
+            if (confirm("Are You Sure?")) {
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'del_device_data' %}",
+                    data: data,
+                    success: function (response) {
+                        //console.log(response);
+                        window.location.reload();
+                    },
+                    error: function () {
+                        alert("failure");
+                    }
+                });
+            }
+        }
+        Highcharts.setOptions({
+            global: {
+                useUTC: false
+            }
+        });
+        var chart1 = Highcharts.chart('container1', {
+            chart: {
+                type: 'line',
+                zoomType: 'x',
+                panning: true,
+                panKey: 'shift'
+            },
+            subtitle: {
+                text: 'Click and drag to zoom in. Hold down shift key to pan.'
+            },
+            credits: {
+                enabled: false // remove high chart logo hyper-link
+            },
+            title: {
+                text: null
+            },
+            xAxis: {
+                title: { text: 'datetime' },
+                type: 'datetime',
+                labels: {
+                    format: '{value:%m-%d %H:%M}',
+                }
+            },
+            yAxis: {
+                title: {
+                    text: 'Value'
+                },
+                labels: {
+                    formatter: function () {
+                        return this.value;
+                    }
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            exporting: {
+                enabled: false
+            },
+            legend: {
+                layout: 'vertical',
+                floating: 'false',
+                align: 'right',
+                verticalAlign: 'top',
+                x: "",
+                y: "",
+                borderWidth: 0
+            },
+            plotOptions: {
+                series: {
+                    events: {
+                        legendItemClick: function (e) {
+                            return false; // 禁用點擊隱藏數據列
+                        }
+                    }
+                }
+            }, series: [{
+                name: "Temperature",
+                data: [],
+                showInLegend: true, tooltip: {
+                    valueSuffix: '°C'
+                }
+            }, {
+                name: "Humidity",
+                data: [],
+                showInLegend: true, tooltip: {
+                    valueSuffix: '%'
+                }
+
+            }
+            ]
+        });
+        function requestData() {
+            $.ajax({
+                url: "{% url 'env_filter_chart' %}",
+                type: "GET",
+                dataType: "json",
+                success: function (data) {
+                    var len = Object.keys(data).length;
+                    var seriesData1 = [];
+                    var seriesData2 = [];
+                    for (var j = 0; j < len; j++) {
+                        var time = new Date(data[j].fields.updated_at).getTime();
+                        var temperature = data[j].fields.temperature;
+                        var humidity = data[j].fields.humidity;
+                        time = parseFloat(time)
+                        temperature = parseFloat(temperature)
+                        humidity = parseFloat(humidity)
+                        seriesData1.push([time, temperature]);
+                        seriesData2.push([time, humidity]);
+                    }
+                    chart1.series[0].setData(seriesData1);
+                    chart1.series[1].setData(seriesData2);
+                },
+            });
+        }
+
+    });
+    function delete_data_post() {
+        data = { "Delete": "confrim" };
+        if (confirm("Are You Sure?")) {
+            $.ajax({
+                type: "POST",
+                url: "{% url 'del_device_data' %}",
+                data: data,
+                success: function (response) {
+                    //console.log(response);
+                    window.location.reload();
+                },
+                error: function () {
+                    alert("failure");
+                }
+            });
+        }
+    }
+    var gage1, gage2;
     function refresh() {
-        var gage1, gage2;
+
         $.ajax({
             url: "{% url 'env_filter_latest' %}",
             type: "GET",
@@ -92,7 +502,7 @@
                         value: y,
                         min: 0,
                         max: 100,
-                        label: "°%",
+                        label: "%",
                     });
                 } else {
                     gage1.refresh(x);
@@ -101,157 +511,19 @@
             }
         });
     }
-</script>
-
-<script>
-    $(function () {
-        setTimeout(requestData, 500)
-        var chart1 = Highcharts.chart('container1', {
-            chart: {
-                type: 'line',
-                zoomType: 'x',
-                panning: true,
-                panKey: 'shift'
-            },
-            subtitle: {
-                text: 'Click and drag to zoom in. Hold down shift key to pan.'
-            },
-            credits: {
-                enabled: false // remove high chart logo hyper-link
-            },
-            title: {
-                text: null
-            },
-            xAxis: {
-                title: { text: 'datetime' },
-                type: 'datetime',
-                labels: {
-                    format: '{value:%m-%d %H:%M}',
-                }
-            },
-            yAxis: {
-                title: {
-                    text: 'Temperature (°C)'
-                },
-                labels: {
-                    formatter: function () {
-                        return this.value + '°';
-                    }
-                },
-                plotLines: [{
-                    value: 0,
-                    width: 1,
-                    color: '#808080'
-                }]
-            },
-            exporting: {
-                enabled: false
-            },
-            legend: {
-                layout: 'vertical',
-                align: 'center',
-                verticalAlign: 'top',
-
-                borderWidth: 0
-            },
-            tooltip: {
-                valueSuffix: '°C'
-            },
-            plotOptions: {
-                series: {
-                    events: {
-                        legendItemClick: function (e) {
-                            return false; // 禁用點擊隱藏數據列
-                        }
-                    }
-                }
-            }, series: [{
-                name: null,
-                data: [],
-                showInLegend: false
-            }]
-        });
-        var chart2 = Highcharts.chart('container2', {
-            credits: {
-                enabled: false // remove high chart logo hyper-link
-            },
-            title: {
-                text: null
-            },
-            xAxis: {
-                title: { text: 'datetime' },
-                type: 'datetime',
-                labels: {
-                    format: '{value:%m-%d %H:%M}',
-                }
-            },
-            yAxis: {
-                title: {
-                    text: 'Humidity (%)'
-                },
-                labels: {
-                    formatter: function () {
-                        return this.value + '°';
-                    }
-                },
-                plotLines: [{
-                    value: 0,
-                    width: 1,
-                    color: '#808080'
-                }]
-            },
-            exporting: {
-                enabled: false
-            },
-            legend: {
-                layout: 'vertical',
-                align: 'center',
-                verticalAlign: 'top',
-
-                borderWidth: 0
-            },
-            tooltip: {
-                valueSuffix: '%'
-            },
-            plotOptions: {
-                series: {
-                    events: {
-                        legendItemClick: function (e) {
-                            return false; // 禁用點擊隱藏數據列
-                        }
-                    }
-                }
-            },
-            series: [{
-                name: null,
-                data: [],
-                showInLegend: false
-            }]
-        });
-        function requestData() {
-            $.ajax({
-                url: "https://raw.githubusercontent.com/asd1115056/Project-DjangoWeb/master/env.json",
-                type: "GET",
-                dataType: "json",
-                success: function (data) {
-                    var len = Object.keys(data).length;
-                    var seriesData1 = [];
-                    var seriesData2 = [];
-                    for (var j = 0; j < len; j++) {
-                        var time = new Date(data[j].fields.updated_at).getTime();
-                        var temperature = data[j].fields.temperature;
-                        var humidity = data[j].fields.humidity;
-                        time = parseFloat(time)
-                        temperature = parseFloat(temperature)
-                        humidity = parseFloat(humidity)
-                        seriesData1.push([time, temperature]);
-                        seriesData2.push([time, humidity]);
-                    }
-                    chart1.series[0].setData(seriesData1);
-                    chart2.series[0].setData(seriesData2);
-                },
-            });
-        }
+    const fp1 = $("#Date1").flatpickr({
+        enableTime: false,
+        dateFormat: "Y-m-d",
+        maxDate: "",
+        minDate: "",
+        enable: [true]
+    });
+    const fp2 = $("#Date2").flatpickr({
+        enableTime: false,
+        dateFormat: "Y-m-d",
+        maxDate: "",
+        minDate: "",
+        enable: [true]
     });
 </script>
 {% endblock %}
