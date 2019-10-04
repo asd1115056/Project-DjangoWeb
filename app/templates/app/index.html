@@ -107,11 +107,20 @@
     $(function () {
         setTimeout(requestData, 500)
         var chart1 = Highcharts.chart('container1', {
+            chart: {
+                type: 'line',
+                zoomType: 'x',
+                panning: true,
+                panKey: 'shift'
+            },
+            subtitle: {
+                text: 'Click and drag to zoom in. Hold down shift key to pan.'
+            },
             credits: {
                 enabled: false // remove high chart logo hyper-link
             },
             title: {
-                text: ""
+                text: null
             },
             xAxis: {
                 title: { text: 'datetime' },
@@ -157,6 +166,9 @@
                     }
                 }
             }, series: [{
+                name: null,
+                data: [],
+                showInLegend: false
             }]
         });
         var chart2 = Highcharts.chart('container2', {
@@ -164,7 +176,7 @@
                 enabled: false // remove high chart logo hyper-link
             },
             title: {
-                text: ""
+                text: null
             },
             xAxis: {
                 title: { text: 'datetime' },
@@ -211,6 +223,9 @@
                 }
             },
             series: [{
+                name: null,
+                data: [],
+                showInLegend: false
             }]
         });
         function requestData() {
@@ -222,8 +237,6 @@
                     var len = Object.keys(data).length;
                     var seriesData1 = [];
                     var seriesData2 = [];
-                    //console.log(data);
-                    //var chartName = data[0].fields.location_id;
                     for (var j = 0; j < len; j++) {
                         var time = new Date(data[j].fields.updated_at).getTime();
                         var temperature = data[j].fields.temperature;
@@ -234,14 +247,8 @@
                         seriesData1.push([time, temperature]);
                         seriesData2.push([time, humidity]);
                     }
-                    chart1.series[0].update({
-                        name: "Temperature",
-                        data: seriesData1
-                    });
-                    chart2.series[0].update({
-                        name: "Humidity",
-                        data: seriesData2
-                    });
+                    chart1.series[0].setData(seriesData1);
+                    chart2.series[0].setData(seriesData2);
                 },
             });
         }
