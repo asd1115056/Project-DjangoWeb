@@ -28,7 +28,10 @@
             <div class="col-md-3 column">
                 <div style="text-align:center;"><h3>Temperature</h3><br></div>
                 <div id="gauge1" style=" height:150px;text-align:center"></div>
-                <div style="text-align: right;">
+                <p id="ago" class="pull-right"></p>
+                <br />
+                <br />
+                <div style="text-align: right;" class="pull-right">
                     <button class="btn btn-primary btn-sm " data-toggle="modal" href="#myModal121">More</button>
                 </div>
                 <div id="myModal121" class="modal fade" tabindex="-1" data-width="550" style="top:35%;">
@@ -279,6 +282,32 @@
             success: function (data) {
                 if (data != "") {
                     var maxdate = new Date(data[0].fields.updated_at).toLocaleDateString('zh-TW', { timeZone: 'Asia/Taipei' });
+                    var current = new Date();
+                    var past = new Date(data[0].fields.updated_at);
+                    var df = (current - past) / 1000 / 60 / 60 / 24;
+                    console.log(df);
+                    var df1 = 0;
+                    if (df <= 0.00069) {
+                        //second
+                        df1 = df * 24 * 60 * 60;
+                        $("#ago").text("Last update: " + Math.round(df1) + " seconds ago!");
+                    }
+                    if (df > 0.00069 && df <= 0.0416) {
+                        //minute
+                        df1 = df * 24 * 60;
+                        $("#ago").text("Last update: " + Math.round(df1) + " minutes ago!");
+                    }
+                    if (df <= 1 && df > 0.0416) {
+                        //hour
+                        df1 = df * 24;
+                        $("#ago").text("Last update: " + Math.round(df1) + " hours ago!");
+                    }
+                    if (df >= 1) {
+                        //day
+                        df1 = df;
+                        $("#ago").text("Last update: " + Math.round(df1) + " days ago!");
+                    }
+                    console.log(df1);
                     //console.log(maxdate)
                     fp1.set('enable', [false]);
                     fp2.set('enable', [false]);
@@ -485,4 +514,4 @@
     }
 
 </script>
-{% endblock %}
+{% endblock %}   jjjjj    
