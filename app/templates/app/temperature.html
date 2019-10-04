@@ -417,15 +417,14 @@
 
         });
     });
-
     function clearPlot() {
         //console.log("clear plot data!!!");
         var series = chart.series;
         while (series.length > 0) {
             series[0].remove(false);
+            //series[1].remove(false);
         }
     }
-
     function requestData() {
         $.ajax({
             url: "{% url 'env_filter_chart' %}",
@@ -461,7 +460,6 @@
             cache: false
         });
     }
-
     var gage;
     function refresh_temp() {
         $.ajax({
@@ -487,12 +485,11 @@
                         label: "°C",
                     });
                 } else {
-                    gage.refresh_temp(y);
+                    gage.refresh(y);
                 }
             }
         });
     }
-    setTimeout(refresh_temp, 100) //第一次刷新數據
     function delete_data_post() {
         data = { "Delete": "confrim" };
         if (confirm("Are You Sure?")) {

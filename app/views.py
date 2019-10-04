@@ -17,6 +17,7 @@ import math
 def home(request):
     """Renders the home page."""
     title = 'Home Page'
+    apps = models.device_info.objects.all()
     year = datetime.now().year
     return render(request,'app/index.html',locals())
 
