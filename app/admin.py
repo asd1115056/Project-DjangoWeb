@@ -7,7 +7,7 @@ class device_infoAdmin(admin.ModelAdmin):
     list_display = ('device_name','device_id','updated_at','created_at')
     #後台要顯示的資料表格
 class pet_infoAdmin(admin.ModelAdmin):
-    list_display = ('Tag','food_eat','water_drink','active_time','updated_at')
+    list_display = ('Tag','food_eat','water_drink','updated_at')
     #後台要顯示的資料表格
 class ScheduleAdmin(admin.ModelAdmin):
     list_display = ('Tag','schedule_time','food_Name','food_amount')

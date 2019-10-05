@@ -266,15 +266,61 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4 column">
-                <div style="text-align: center;"><h3>Calorie</h3><br></div>
-                <div id="gauge1" style="height: 150px; text-align: center"></div><br>
+            <div class="col-md-9 colum">
+                <br />
+                <div class="tabbable" id="tabs-395808">
+                    <ul class="nav nav-tabs">
+                        <li class="active">
+                            <a href="#panel-849527" data-toggle="tab">Today</a>
+                        </li>
+                        <li>
+                            <a href="#panel-427201" data-toggle="tab">History</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="panel-849527">
+                            <div class="col-md-6 column">
+                                <div style="text-align: center;"><h3>Calorie</h3><br></div>
+                                <div id="gauge1" style="height: 150px; text-align: center"></div><br>
+                            </div>
+                            <div class="col-md-6 column">
+                                <div style="text-align: center;"><h3>Water</h3><br></div>
+                                <div id="gauge2" style="height: 150px;text-align: center"></div>
+                            </div>
+                            <br />
+                            <br />
+                            <p id="ago" class="pull-right" style="margin-right: 60px;margin-top: 10px;"></p>
+                        </div>
+                        <div class="tab-pane" id="panel-427201">
+                            <br>
+                            <div id="container1" style="min-width: 700px; height: 300px; margin: 0 auto"></div>
+                            <div class="btn-group pull-right">
+                                <button type="button" class="btn btn-default date_search" offset="1">1 hours</button>
+                                <button type="button" class="btn btn-default date_search" offset="6">6 hours</button>
+                                <button type="button" class="btn btn-default date_search" offset="12">12 hours</button>
+                                <button type="button" class="btn btn-default date_search" offset="24">24 hours</button>
+                                <div class="btn-group" style="margin-left:-1px;">
+                                    <div class="dropdown pull-right">
+                                        <button type="button" style="border-radius:0;border-bottom-right-radius: 4px;border-top-right-radius: 4px;" class="btn btn-default dropdown-toggle" id="dropdownMenu1">More<span class="caret"></span></button>
+                                        <div class="dropdown-menu" style="width:305px;padding-right: 5px;padding-left: 5px;" role="menu" aria-labelledby="dropdownMenu1">
+                                            <form class="form-inline" role="form" style="margin-bottom: 0px;" id="form4122">
+                                                <div class="form-group" style="width:100px;">
+                                                    <input type="text" class="form-control" id="Date1" placeholder="">
+                                                </div>
+                                                <h>~</h>
+                                                <div class="form-group" style="width:100px;">
+                                                    <input type="text" class="form-control" id="Date2" placeholder="">
+                                                </div>
+                                                <button type="button" id="submit5151" class="btn btn-default">Search</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-4 column">
-                <div style="text-align: center;"><h3>Water</h3><br></div>
-                <div id="gauge2" style="height: 150px;text-align: center"></div>
-            </div>
-            <div class="clearfix hidden-xs"></div>
         </div>
     </div>
 </div>
@@ -308,9 +354,7 @@
 
             return objectData;
         };
-        var i = 1;
-        var j = 1;
-
+        var i = 1, j = 1;
         $('#add1').click(function () {
             i++;
             $('#dynamic_field1').append('<tr id="row' + i + '"><td><input type="text" name="time[]" class="form-control time11 Timer' + i + '"></td><td><input type="number" step="0.01" name="amount[]" class="form-control amount11"></td><td><select id="select" name="select[]" class="form-control Select' + i + '"></select></td><td><button name="remove" class="btn btn-danger btn_remove" id="' + i + '">&times;</button></td></tr>')
@@ -323,7 +367,6 @@
                 //console.log(i);
             }
         }
-
         $('#add2').click(function () {
             j++;
             $('#dynamic_field2').append('<tr id="row' + j + '"><td><input type="text" name="Name[]" class="form-control"></td><td><input type="number" step="0.01" name="kCal[]" class="form-control"></td><td><button name="remove" class="btn btn-danger btn_remove" id="' + j + '">&times;</button></td></tr>')
@@ -336,7 +379,6 @@
             var button_id = $(this).attr("id");
             $('#row' + button_id + '').remove();
         });
-
         $('#submit1').click(function () {
             data = $("#form1").serializeObject();
             //console.log(data);
@@ -422,44 +464,10 @@
         });
     })
     $(function () {
-        function autoload() {
-            Tag = $(".autoload").attr('Tag');
-            var i = Tag.localeCompare("undefined") //比較兩字串:相等=0
-            if (i != 0) {//取不相等時的值
-                data = { 'Tag': Tag }
-            }
-            $.ajax({
-                url: "{%url 'pet_get_id'%}",
-                type: 'GET',
-                data: data,
-                success: function (response) {
-                    //console.log(response);
-                    ajax_user_data();
-                    ajax_tag_Info();
-                    ajax_tag_Info_TABLE();
-                    list_Schedule();
-                    list_foodType();
-                    select_FoodType(0);
-                    Flatpickr(0);
-                    alert();
-                    setTimeout(refresh, 200);
-                    //refresh();
-                },
-                error: function () {
-                    console.log('click:error!');
-                }
-            });
-            //console.log(data);
-        }
-
         window.onload = autoload();
-        window.onload = setTimeout(refresh, 100) //第一次刷新數據
-
-        var i;
         $(".index").click(function () { //點擊事件
-            Tag = $(this).attr('Tag'),
-                i = Tag.localeCompare("undefined") //比較兩字串:相等=0
-            if (i != 0) {//取不相等時的值
+            Tag = $(this).attr('Tag');
+            if (Tag) {//取不相等時的值
                 data = { 'Tag': Tag }
                 //console.log(data);
             }
@@ -475,8 +483,10 @@
                     list_foodType();
                     ajax_tag_Info_TABLE();
                     select_FoodType(0);
+                    requestData()
+                    Datesearch()
                     Flatpickr(0);
-                    alert();
+                    alert1();
                     setTimeout(refresh, 200);
                     //refresh();
                 },
@@ -484,6 +494,80 @@
                     console.log('click:error!');
                 }
             });
+        });
+        function autoload() {
+            Tag = $(".autoload").attr('Tag');
+            if (Tag) {//取不相等時的值
+                data = { 'Tag': Tag }
+            }
+            $.ajax({
+                url: "{%url 'pet_get_id'%}",
+                type: 'GET',
+                data: data,
+                success: function (response) {
+                    //console.log(response);
+                    ajax_user_data();
+                    ajax_tag_Info();
+                    ajax_tag_Info_TABLE();
+                    list_Schedule();
+                    list_foodType();
+                    select_FoodType(0);
+                    Flatpickr(0);
+                    alert1();
+                    $.post("{% url 'pet_filter_chart_search' %}", { 'type': 'offset', 'offset': "1" });
+                    requestData();
+                    Datesearch();
+                    refresh();
+                    setTimeout(refresh, 200);
+                    //refresh();
+                },
+                error: function () {
+                    console.log('click:error!');
+                }
+            });
+            //console.log(data);
+        }
+        $('#dropdownMenu1').on('click', function (event) {
+            $(this).parent().toggleClass('open');
+        });
+        $('.date_search').on('click', function (event) {
+            $('#dropdownMenu1').parent().removeClass('open');
+        });
+        $('#submit5151,.date_search').click(function () {
+            var Date1 = new Date($("#Date1").val());
+            var Date2 = new Date($("#Date2").val());
+            var offset = $(this).attr('offset');
+            if (Date1 > Date2) {
+                alert("Time error : End time is earlier than begin time");
+                //console.log("Time error : End time is earlier or similar than begin time");
+            } else {
+                if (Date1.getTime() === Date2.getTime()) {
+                    Date2.setDate(Date2.getDate() + 1);
+                }
+                Date1 = Date1.toJSON();
+                Date2 = Date2.toJSON();
+                if (offset) {//取不相等時的值
+                    data = { 'type': 'offset', 'offset': offset }
+                } else {
+                    data = { 'type': 'date', 'date1': Date1, 'date2': Date2 }
+                }
+                //console.log(data);
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'pet_filter_chart_search' %}",
+                    data: data,
+                    success: function (response) {
+                        requestData()
+                        //console.log(response);
+                        //alert('Update sucess');
+                        // window.location.reload();
+                    },
+                    error: function () {
+                        //alert("failure");
+                    }
+                });
+            }
+
         });
         $('#submit211').click(function () {
             //e.preventDefault();
@@ -515,6 +599,107 @@
         $("#cat2").hide();
         $("#dog1").hide();
         $("#dog2").hide();
+        $(".close_alert").click(function () {
+            $("#myAlert").alert('close');
+        });
+        var chart1 = Highcharts.chart('container1', {
+            chart: {
+                type: 'line',
+                zoomType: 'x',
+                panning: true,
+                panKey: 'shift'
+            },
+            subtitle: {
+                text: 'Click and drag to zoom in. Hold down shift key to pan.'
+            },
+            credits: {
+                enabled: false // remove high chart logo hyper-link
+            },
+            title: {
+                text: null
+            },
+            xAxis: {
+                title: { text: 'datetime' },
+                type: 'datetime',
+                labels: {
+                    format: '{value:%m-%d %H:%M}',
+                }
+            },
+            yAxis: {
+                title: {
+                    text: 'Value'
+                },
+                labels: {
+                    formatter: function () {
+                        return this.value;
+                    }
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            exporting: {
+                enabled: false
+            },
+            legend: {
+                layout: 'vertical',
+                floating: 'false',
+                align: 'right',
+                verticalAlign: 'top',
+                x: "",
+                y: "",
+                borderWidth: 0
+            },
+            plotOptions: {
+                series: {
+                    events: {
+                        legendItemClick: function (e) {
+                            return false; // 禁用點擊隱藏數據列
+                        }
+                    }
+                }
+            }, series: [{
+                name: "Water Drink",
+                data: [],
+                showInLegend: true, tooltip: {
+                    valueSuffix: 'ml'
+                }
+            }, {
+                name: "Food Eat",
+                data: [],
+                showInLegend: true, tooltip: {
+                    valueSuffix: 'g'
+                }
+
+            }
+            ]
+        });
+        function requestData() {
+            $.ajax({
+                url: "{% url 'pet_filter_chart' %}",
+                type: "GET",
+                dataType: "json",
+                success: function (data) {
+                    var len = Object.keys(data).length;
+                    var seriesData1 = [];
+                    var seriesData2 = [];
+                    for (var j = 0; j < len; j++) {
+                        var time = new Date(data[j].fields.updated_at).getTime();
+                        var water_drink = data[j].fields.water_drink;
+                        var food_eat = data[j].fields.food_eat;
+                        time = parseFloat(time)
+                        water_drink = parseFloat(water_drink)
+                        food_eat = parseFloat(food_eat)
+                        seriesData1.push([time, water_drink]);
+                        seriesData2.push([time, food_eat]);
+                    }
+                    chart1.series[0].setData(seriesData1);
+                    chart1.series[1].setData(seriesData2);
+                },
+            });
+        }
     });
     function Flatpickr(i) {
         document.getElementsByClassName("Timer" + i).flatpickr({
@@ -564,8 +749,7 @@
             }
         });
     }
-    var max_w;
-    var max_f;
+    var max_f, max_w;
     function ajax_user_data() {
         $.ajax({
             url: "{%url 'Tag_Info'%}",
@@ -596,8 +780,7 @@
         max_f = 0;
         max_w = 0;
     }
-    var gage1;
-    var gage2;
+    var gage1, gage2;
     function refresh() {
         $.ajax({
             url: "{%url 'pet_filter_info'%}",
@@ -613,7 +796,7 @@
                     //console.log([x, y]);
                 }
                 //console.log([x, y]);
-                if (!gage1) {
+                if (!gage1 && !gage2) {
                     gage1 = new JustGage({
                         id: "gauge1",
                         value: 0,
@@ -621,10 +804,6 @@
                         max: 0,
                         label: "kcal",
                     });
-                } else {
-                    gage1.refresh(x, max_f);
-                }
-                if (!gage2) {
                     gage2 = new JustGage({
                         id: "gauge2",
                         value: 0,
@@ -633,6 +812,7 @@
                         label: "mL",
                     });
                 } else {
+                    gage1.refresh(x, max_f);
                     gage2.refresh(y, max_w);
                 }
             }
@@ -845,7 +1025,7 @@
         //console.log(temp);
         return temp;
     }
-    function alert() {
+    function alert1() {
         $.ajax({
             url: "{%url 'Tag_Info'%} ",
             type: "GET",
@@ -860,8 +1040,89 @@
             }
         });
     }
-    $(".close_alert").click(function () {
-        $("#myAlert").alert('close');
+    const fp1 = $("#Date1").flatpickr({
+        enableTime: false,
+        dateFormat: "Y-m-d",
+        maxDate: "",
+        minDate: "",
+        enable: [true]
     });
+    const fp2 = $("#Date2").flatpickr({
+        enableTime: false,
+        dateFormat: "Y-m-d",
+        maxDate: "",
+        minDate: "",
+        enable: [true]
+    });
+    function Datesearch() {
+        var mindate;
+        var maxdate;
+        $.ajax({
+            url: "{% url 'pet_filter_earliest' %}",
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                if (data != "") {
+                    var mindate = new Date(data[0].fields.updated_at).toLocaleDateString('zh-TW', { timeZone: 'Asia/Taipei' });
+                    //console.log(mindate)
+                    fp1.set('enable', [false]);
+                    fp2.set('enable', [false]);
+                    fp1.set('minDate', mindate);
+                    fp2.set('minDate', mindate);
+                } else {
+                    fp1.set('enable', [true]);
+                    fp2.set('enable', [true]);
+                }
+            }
+        });
+        $.ajax({
+            url: "{% url 'pet_filter_latest' %}",
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                if (data != "") {
+                    var maxdate = new Date(data[0].fields.updated_at).toLocaleDateString('zh-TW', { timeZone: 'Asia/Taipei' });
+                    var current = new Date();
+                    var past = new Date(data[0].fields.updated_at);
+                    //console.log(past);
+                    var df = (current - past) / 1000 / 60 / 60 / 24;
+                    //console.log(df);
+                    var df1 = 0;
+                    if (df <= 0.00069) {
+                        //second
+                        df1 = df * 24 * 60 * 60;
+                        $("#ago").text("Last update: " + Math.round(df1) + " seconds ago!");
+                    }
+                    if (df > 0.00069 && df <= 0.0416) {
+                        //minute
+                        df1 = df * 24 * 60;
+                        $("#ago").text("Last update: " + Math.round(df1) + " minutes ago!");
+                    }
+                    if (df <= 1 && df > 0.0416) {
+                        //hour
+                        df1 = df * 24;
+                        $("#ago").text("Last update: " + Math.round(df1) + " hours ago!");
+                    }
+                    if (df >= 1) {
+                        //day
+                        df1 = df;
+                        $("#ago").text("Last update: " + Math.round(df1) + " days ago!");
+                    }
+                    //console.log(df1);
+                    //console.log(maxdate)
+                    fp1.set('enable', [false]);
+                    fp2.set('enable', [false]);
+                    fp1.set('maxDate', maxdate);
+                    fp2.set('maxDate', maxdate);
+                }
+                else {
+                    //console.log("blank")
+                    fp1.set('enable', [true]);
+                    fp2.set('enable', [true]);
+                    //console.log("blank")
+                }
+            }
+        });
+    }
 </script>
 {% endblock %}

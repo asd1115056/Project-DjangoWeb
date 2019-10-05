@@ -198,8 +198,66 @@ def pet_filter_info(request):
     today_end = timezone.make_aware(datetime.combine(tomorrow, time())) #轉換時區
     #date_filter = datetime.datetime.now(tz=timezone.utc)
                                                                            #-datetime.timedelta(days=10)#現在時間UTC+8轉成UTC+0
-    data = serializers.serialize('json',models.Tag_Info.objects.get(Tag=Tag).pet_info_set.filter(active_time__lte=today_end,active_time__gte=today_start).order_by('active_time'))
+    data = serializers.serialize('json',models.Tag_Info.objects.get(Tag=Tag).pet_info_set.filter(updated_at__lte=today_end,updated_at__gte=today_start).order_by('updated_at'))
     return HttpResponse(data) 
+def pet_filter_latest(request):
+    from django.core import serializers
+    from django.db.models.base import ObjectDoesNotExist
+    Tag = request.session['Tag']
+    try:
+        data = serializers.serialize('json',[models.Tag_Info.objects.get(Tag=Tag).pet_info_set.filter(updated_at__isnull=False).latest('updated_at')])
+    except ObjectDoesNotExist:
+        data = "[]"
+    return HttpResponse(data) 
+def pet_filter_earliest(request):
+    from django.core import serializers
+    from django.db.models.base import ObjectDoesNotExist
+    Tag = request.session['Tag']
+    try:
+        data = serializers.serialize('json',[models.Tag_Info.objects.get(Tag=Tag).pet_info_set.filter(updated_at__isnull=False).earliest('updated_at')])
+    except ObjectDoesNotExist:
+        data = "[]"
+    return HttpResponse(data) 
+@csrf_exempt
+def pet_filter_chart_search(request):
+     if request.method == 'POST':
+        try:
+            Data_POST = request.POST
+            Data_POST = json.dumps(Data_POST)
+            Data_POST = json.loads(Data_POST)
+        except Data_POST.DoesNotExist:
+            Data_POST = None
+        finally:
+            if Data_POST.get('type') == "offset":
+                request.session['type1'] = Data_POST.get('type')
+                request.session['offset1'] = Data_POST.get('offset')
+            else:
+                request.session['type1'] = Data_POST.get('type')
+                request.session['begintime1'] = Data_POST.get('date1')
+                request.session['endtime1'] = Data_POST.get('date2')
+        return HttpResponse(1)
+    
+def pet_filter_chart(request):
+    from django.core import serializers
+    from datetime import datetime, timedelta, time
+    from django.utils import timezone
+    Tag = request.session['Tag']
+    type = request.session['type1']
+    if type == 'offset':
+        offset = request.session['offset1']
+        current = datetime.now()
+        past = current - timedelta(hours=int(offset))
+        current = timezone.make_aware(current,timezone.get_current_timezone())
+        past = timezone.make_aware(past,timezone.get_current_timezone()) #轉換時區
+        data = serializers.serialize('json',models.Tag_Info.objects.get(Tag=Tag).pet_info_set.filter(updated_at__lte=current,updated_at__gte=past).order_by('updated_at'))
+        #print(data)
+        return HttpResponse(data)
+    else:
+        begintime = request.session['begintime1']
+        endtime = request.session['endtime1']
+        data = serializers.serialize('json',models.Tag_Info.objects.get(Tag=Tag).pet_info_set.filter(updated_at__lte=endtime,updated_at__gte=begintime).order_by('updated_at'))
+        #print(data)
+        return HttpResponse(data) 
 
 def pet_filter_Schedule(request):
     from django.core import serializers
@@ -265,7 +323,7 @@ def data_upload(request):
             info.water_drink = float(DATA[25:31])
             info.food_eat = float(DATA[19:25])
             datetime_temp = str(datetime(2000, 1, 1, 12, 0) + timedelta(seconds=int(DATA[10:19])) - timedelta(days=1)) + " +0800"
-            info.active_time = datetime.strptime(datetime_temp,"%Y-%m-%d %H:%M:%S %z")
+            info.updated_at = datetime.strptime(datetime_temp,"%Y-%m-%d %H:%M:%S %z")
             info.save()
             return JsonResponse({"status": 200, "msg": text2 + " and " + "Successful Save!"})
         if DATA[0] == "E":
