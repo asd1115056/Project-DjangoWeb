@@ -44,7 +44,9 @@
             $.ajax({
                 url: "{% url 'Tag_list' %}",
                 type: "GET",
+                cache: false,
                 dataType: "json",
+                async: false,
                 success: function (data) {
                     var len = Object.keys(data).length;
                     if (len) {
@@ -59,13 +61,14 @@
                                 feed_amount_daily = data[j].fields.suggest_feed_amount_daily;
                                 water_drinking_daily = data[j].fields.suggest_water_drinking_daily;
                             }
-                            //console.log(feed_amount_daily);
-                            //console.log(water_drinking_daily);
+                            console.log(feed_amount_daily);
+                            console.log(water_drinking_daily);
                             //user_water_drinking_setting_daily
                             //user_feed_amount_setting_daily
                             data = { 'TAG': tag };
                             $.ajax({
                                 type: "POST",
+                                cache: false,
                                 url: "{% url 'pet_pannel' %}",
                                 data: data,
                                 async: false,
