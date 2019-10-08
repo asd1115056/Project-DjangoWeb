@@ -201,8 +201,6 @@ def pet_filter_info(request):
     tomorrow = today + timedelta(1)
     today_start = timezone.make_aware(datetime.combine(today, time()))
     today_end = timezone.make_aware(datetime.combine(tomorrow, time())) #轉換時區
-    #date_filter = datetime.datetime.now(tz=timezone.utc)
-                                                                           #-datetime.timedelta(days=10)#現在時間UTC+8轉成UTC+0
     data = serializers.serialize('json',models.Tag_Info.objects.get(Tag=Tag).pet_info_set.filter(updated_at__lte=today_end,updated_at__gte=today_start).order_by('updated_at'))
     return HttpResponse(data) 
 def pet_filter_latest(request):
@@ -474,3 +472,20 @@ def del_foodType(request):
             for i in range(len(Data_POST)):
                 models.food_type.objects.get(Name=Data_POST[i]).delete()
             return JsonResponse({"status": 200, "msg": "deleted!"  })
+
+@csrf_exempt
+def pet_pannel(request):
+    from django.core import serializers
+    from datetime import datetime, timedelta, time
+    from django.utils import timezone
+    if request.method == 'POST':
+        Data_POST = request.POST
+        Data_POST = json.dumps(Data_POST)
+        Data_POST = json.loads(Data_POST)
+        TAG = Data_POST.get('TAG')
+        today = datetime.now().date()
+        tomorrow = today + timedelta(1)
+        today_start = timezone.make_aware(datetime.combine(today, time()))
+        today_end = timezone.make_aware(datetime.combine(tomorrow, time())) #轉換時區
+        data = serializers.serialize('json',models.Tag_Info.objects.get(Tag=TAG).pet_info_set.filter(updated_at__lte=today_end,updated_at__gte=today_start).order_by('updated_at'))
+        return HttpResponse(data) 

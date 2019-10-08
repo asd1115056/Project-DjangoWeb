@@ -10,7 +10,6 @@
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
-
 <div class="row clearfix">
     <div class="col-md-12 column">
         <br />
@@ -23,7 +22,10 @@
     </div>
     <div class="col-md-5 column">
         <div class="panel panel-default">
-            <div class="panel-heading">Pet</div>
+            <div class="panel-heading">
+                Pet<br />
+                Nickname&ensp;&emsp;Tag&ensp;&emsp;Food-Eat&ensp;&emsp;Water-Drink&ensp;&emsp;LastUpdate
+            </div>
             <div class="list-group" id="pet_panel">
             </div>
         </div>
@@ -31,11 +33,6 @@
         <div class="panel panel-default">
             <div class="panel-heading">面板标题</div>
             <div class="list-group">
-                <li class="list-group-item">免费域名注册</li>
-                <li class="list-group-item">免费 Window 空间托管</li>
-                <li class="list-group-item">图像的数量</li>
-                <li class="list-group-item">24*7 支持</li>
-                <li class="list-group-item">每年更新成本</li>
             </div>
         </div>
     </div>
@@ -54,12 +51,34 @@
                         for (var j = 0; j < len; j++) {
                             tag = data[j].fields.Tag;
                             $('#pet_panel').append('<a href="#" class="list-group-item"><h4 class="list-group-item-heading">' + tag + '</h4><p class="list-group-item-text">我们提供 24*7 支持。</p></a>');
+
+                            nickname = data[j].fields.nickname;
+                            feed_amount_daily = data[j].fields.user_feed_amount_setting_daily;
+                            water_drinking_daily = data[j].fields.user_water_drinking_setting_daily;
+                            if (feed_amount_daily && water_drinking_daily) {
+                                feed_amount_daily = data[j].fields.suggest_feed_amount_daily;
+                                water_drinking_daily = data[j].fields.suggest_water_drinking_daily;
+                            }
+                            //console.log(feed_amount_daily);
+                            //console.log(water_drinking_daily);
+                            //user_water_drinking_setting_daily
+                            //user_feed_amount_setting_daily
+                            data = { 'TAG': tag };
+                            $.ajax({
+                                type: "POST",
+                                url: "{% url 'pet_pannel' %}",
+                                data: data,
+                                async: false,
+                                success: function (response) {
+                                    //console.log(response);
+                                    $('#pet_panel').append('<a href="#" class="list-group-item"><h4 class="list-group-item-heading">' + tag + '</h4><p class="list-group-item-text">我们提供 24*7 支持。</p></a>');
+                                }
+                            });
                         }
                     }
                 }
             });
         }
     })
-
 </script>
     {% endblock %}
