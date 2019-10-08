@@ -82,15 +82,6 @@ def env_get_id(request):
         request.session['device_id'] = device_id
     return HttpResponse(device_id)
 
-def pet_get_id(request):
-    try:
-        Tag = request.GET.get('Tag')
-    except Tag.DoesNotExist:
-        Tag = None
-    finally:
-        request.session['Tag'] = Tag
-    return HttpResponse(Tag)
-
 def Device_Info(request):
     from django.core import serializers
     import datetime
@@ -179,6 +170,20 @@ def post_device_form(request):
         info.save()
         text = " Update Successfully"
         return JsonResponse({"status": 200, "msg": text  })
+
+def pet_get_id(request):
+    try:
+        Tag = request.GET.get('Tag')
+    except Tag.DoesNotExist:
+        Tag = None
+    finally:
+        request.session['Tag'] = Tag
+    return HttpResponse(Tag)
+
+def Tag_list(request):
+    from django.core import serializers
+    data = serializers.serialize('json',models.Tag_Info.objects.all())
+    return HttpResponse(data) 
 
 def Tag_Info(request):
     from django.core import serializers

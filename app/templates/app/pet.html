@@ -331,7 +331,6 @@
             var arrayData, objectData;
             arrayData = this.serializeArray();
             objectData = {};
-
             $.each(arrayData, function () {
                 var value;
 
@@ -518,7 +517,7 @@
                     requestData();
                     Datesearch();
                     refresh();
-                    setTimeout(refresh, 200);
+                    setTimeout(refresh, 10);
                     //refresh();
                 },
                 error: function () {
