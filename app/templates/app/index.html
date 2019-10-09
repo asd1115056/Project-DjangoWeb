@@ -28,6 +28,7 @@
             <table class="table" style="font-size: 15px;">
                 <thead>
                     <tr>
+                        <th style="text-align: center;">Satue</th>
                         <th style="text-align: center;">Nickname</th>
                         <th style="text-align: center;">Tag</th>
                         <th style="text-align: center;">Food-Eat</th>
@@ -42,15 +43,31 @@
         </div>
         <br />
         <div class="panel panel-default">
-            <div class="panel-heading">面板标题</div>
-            <div class="list-group">
+            <div class="panel-heading">
+                <h1 class="panel-title">Device</h1>
             </div>
+            <table class="table" style="font-size: 15px;">
+                <thead>
+                    <tr>
+                        <th style="text-align: center;">Satue</th>
+                        <th style="text-align: center;">Name</th>
+                        <th style="text-align: center;">ID</th>
+                        <th style="text-align: center;">Temperature</th>
+                        <th style="text-align: center;">Humidity</th>
+                        <th style="text-align: center;">LastUpdate</th>
+                    </tr>
+                </thead>
+                <tbody id="device_panel">
+                </tbody>
+            </table>
+
         </div>
     </div>
 </div>
 <script>
     $(function () {
         window.onload = pet();
+        window.onload = device();
         function pet() {
             $.ajax({
                 url: "{% url 'Tag_list' %}",
@@ -78,14 +95,92 @@
                             var data1 = search_taginfo(tag);
                             var t = search_taginfo_latest(tag);
                             //console.log(data1);
-
                             $('<tr>').append(
+                                $('<td style="text-align: center;color:green;">').append("Normal"),
                                 $('<td style="text-align: center;">').append(item.fields.nickname),
                                 $('<td style="text-align: center;">').text(item.fields.Tag),
                                 $('<td style="text-align: center;">').text('2000' + '/' + Math.round(feed_amount_daily) + 'kCal'),
                                 $('<td style="text-align: center;">').text('1000' + ' / ' + Math.round(water_drinking_daily) + 'ml'),
                                 $('<td style="text-align: center;">').text(t)
                             ).appendTo('#pet_panel');
+                        })
+                    }
+                }
+            });
+        }
+        function device() {
+            var temp = "";
+            var ststue = "";
+            var ststue_c = "";
+            $.ajax({
+                url: "{% url 'device_list' %}",
+                type: "GET",
+                dataType: "json",
+                async: false,
+                cache: false,
+                success: function (data) {
+                    //console.log(data);
+                    $('#device_panel').html('');
+                    if (data != '') {
+                        $.each(data, function (j, item) {
+                            //console.log(data);
+                            var id = data[j].fields.device_id;
+                            //console.log(feed_amount_daily);
+                            //console.log(water_drinking_daily);
+                            //var data1 = search_taginfo(tag);
+                            var response = search_deviceinfo_latest(id);
+                            response = JSON.parse(response);
+                            console.log(response);
+                            if (response != "") {
+                                var maxdate = new Date(response[0].fields.updated_at).toLocaleDateString('zh-TW', { timeZone: 'Asia/Taipei' });
+                                var current = new Date();
+                                var past = new Date(response[0].fields.updated_at);
+                                //console.log(past);
+                                var df = (current - past) / 1000 / 60 / 60 / 24;
+                                //console.log(df);
+                                var df1 = 0;
+                                if (df <= 0.00069) {
+                                    //second
+                                    df1 = df * 24 * 60 * 60;
+                                    df1 = Math.round(df1);
+                                    temp = df1 + " s ago!";
+                                    ststue = "Online";
+                                    ststue_c = "green";
+                                }
+                                if (df > 0.00069 && df <= 0.0416) {
+                                    //minute
+                                    df1 = df * 24 * 60;
+                                    df1 = Math.round(df1);
+                                    temp = df1 + " mins ago!";
+                                    ststue = "Online";
+                                    ststue_c = "green";
+                                }
+                                if (df <= 1 && df > 0.0416) {
+                                    //hour
+                                    df1 = df * 24;
+                                    df1 = Math.round(df1);
+                                    temp = df1 + " hours ago!";
+                                    ststue = "Offline";
+                                    ststue_c = "red";
+                                }
+                                if (df >= 1) {
+                                    //day
+                                    df1 = df;
+                                    df1 = Math.round(df1);
+                                    temp = df1 + " days ago!";
+                                    ststue = "Offline";
+                                    ststue_c = "red";
+                                }
+                            }
+
+                            $('<tr>').append(
+                                $('<td style="text-align: center;color:' + ststue_c + ';">').append(ststue),
+                                $('<td style="text-align: center;">').append(item.fields.device_name),
+                                $('<td style="text-align: center;">').text(item.fields.device_id),
+                                $('<td style="text-align: center;">').text(response[0].fields.temperature + '°C'),
+                                $('<td style="text-align: center;">').text(response[0].fields.humidity + '%'),
+                                $('<td style="text-align: center;">').text(temp),
+                            ).appendTo('#device_panel');
                         })
                     }
                 }
@@ -103,9 +198,63 @@
                 cache: false,
                 success: function (response) {
                     temp = response;
+                    //今天kcal ++
                     //console.log(temp);
                 },
                 error: function () {
+                }
+            });
+            //console.log(temp);
+            return temp;
+        }
+        function search_deviceinfo_latest(device_id) {
+            data = { 'device_id': device_id };
+            var temp;
+            //console.log(data);
+            $.ajax({
+                type: "POST",
+                url: "{% url 'device_filter_latest1' %}",
+                data: data,
+                async: false,
+                cache: false,
+                success: function (response) {
+                    temp = response;
+                    //response = JSON.parse(response);
+                    //console.log(response);
+                    //console.log(response[0].fields.updated_at);
+                    /*if (response != "") {
+                                            var maxdate = new Date(response[0].fields.updated_at).toLocaleDateString('zh-TW', { timeZone: 'Asia/Taipei' });
+                                            var current = new Date();
+                                            var past = new Date(response[0].fields.updated_at);
+                                            //console.log(past);
+                                            var df = (current - past) / 1000 / 60 / 60 / 24;
+                                            //console.log(df);
+                                            var df1 = 0;
+                                            if (df <= 0.00069) {
+                                                //second
+                                                df1 = df * 24 * 60 * 60;
+                                                df1 = Math.round(df1);
+                                                temp = df1 + " s ago!";
+                                            }
+                                            if (df > 0.00069 && df <= 0.0416) {
+                                                //minute
+                                                df1 = df * 24 * 60;
+                                                df1 = Math.round(df1);
+                                                temp = df1 + " mins ago!";
+                                            }
+                                            if (df <= 1 && df > 0.0416) {
+                                                //hour
+                                                df1 = df * 24;
+                                                df1 = Math.round(df1);
+                                                temp = df1 + " hours ago!";
+                                            }
+                                            if (df >= 1) {
+                                                //day
+                                                df1 = df;
+                                                df1 = Math.round(df1);
+                                                temp = df1 + " days ago!";
+                                            }
+                                        }*/
                 }
             });
             //console.log(temp);

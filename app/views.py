@@ -184,6 +184,10 @@ def Tag_list(request):
     from django.core import serializers
     data = serializers.serialize('json',models.Tag_Info.objects.all())
     return HttpResponse(data) 
+def device_list(request):
+    from django.core import serializers
+    data = serializers.serialize('json',models.device_info.objects.all())
+    return HttpResponse(data) 
 
 def Tag_Info(request):
     from django.core import serializers
@@ -501,6 +505,20 @@ def pet_filter_latest1(request):
         TAG = Data_POST.get('TAG')
         try:
             data = serializers.serialize('json',[models.Tag_Info.objects.get(Tag=TAG).pet_info_set.filter(updated_at__isnull=False).latest('updated_at')])
+        except ObjectDoesNotExist:
+            data = "[]"
+        return HttpResponse(data) 
+@csrf_exempt
+def device_filter_latest1(request):
+    from django.core import serializers
+    from django.db.models.base import ObjectDoesNotExist
+    if request.method == 'POST':
+        Data_POST = request.POST
+        Data_POST = json.dumps(Data_POST)
+        Data_POST = json.loads(Data_POST)
+        device_id = Data_POST.get('device_id')
+        try:
+            data = serializers.serialize('json',[models.device_info.objects.get(device_id=device_id).env_info_set.filter(updated_at__isnull=False).latest('updated_at')])
         except ObjectDoesNotExist:
             data = "[]"
         return HttpResponse(data) 
