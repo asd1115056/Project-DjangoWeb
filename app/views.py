@@ -489,3 +489,18 @@ def pet_pannel(request):
         today_end = timezone.make_aware(datetime.combine(tomorrow, time())) #轉換時區
         data = serializers.serialize('json',models.Tag_Info.objects.get(Tag=TAG).pet_info_set.filter(updated_at__lte=today_end,updated_at__gte=today_start).order_by('updated_at'))
         return HttpResponse(data) 
+
+@csrf_exempt
+def pet_filter_latest1(request):
+    from django.core import serializers
+    from django.db.models.base import ObjectDoesNotExist
+    if request.method == 'POST':
+        Data_POST = request.POST
+        Data_POST = json.dumps(Data_POST)
+        Data_POST = json.loads(Data_POST)
+        TAG = Data_POST.get('TAG')
+        try:
+            data = serializers.serialize('json',[models.Tag_Info.objects.get(Tag=TAG).pet_info_set.filter(updated_at__isnull=False).latest('updated_at')])
+        except ObjectDoesNotExist:
+            data = "[]"
+        return HttpResponse(data) 
