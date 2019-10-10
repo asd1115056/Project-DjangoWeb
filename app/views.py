@@ -399,9 +399,9 @@ def add_Schedule(request):
                         info.schedule_time = datetime.strptime(Data_POST1[i],'%H:%M').time()
                         info.food_amount = Data_POST2[i]
                         info.save()
-                    return HttpResponse()
                 else:
                     return HttpResponse("Time,Amount and FoodType is required")
+            return HttpResponse()
 
 
 
@@ -516,36 +516,37 @@ def data_upload(request):
     if request.method == 'POST': 
         Data_POST = json.loads(request.body.decode("utf-8"))
         DATA = Data_POST.get('DATA')
-        location_id = models.env_info.objects.filter(location_id=DATA[1])
-        if location_id.exists():
-            text1 = "Location_ID Existing"
+        MAC = '%s:%s:%s:%s:%s:%s' % (DATA[1:3], DATA[3:5], DATA[5:7], DATA[7:9], DATA[9:11], DATA[11:13])
+        mac = models.env_info.objects.filter(mac=MAC)
+        if mac.exists():
+            text1 = "mac Existing"
             #return JsonResponse({"status": 200, "msg": "Tag Existing" })
         else:
-            location_id = models.env_info.objects.create(location_id=DATA[1])
-            location_id.save()
-            text1 = "Create New Location_ID"
+            mac = models.env_info.objects.create(mac=MAC)
+            mac.save()
+            text1 = "Create New mac"
         if DATA[0] == "P":
-            Tag = models.Tag_Info.objects.filter(Tag=DATA[2:10])
+            Tag = models.Tag_Info.objects.filter(Tag=DATA[22:30])
             if Tag.exists():
                 text2 = "Tag Existing"
                 #return JsonResponse({"status": 200, "msg": "Tag Existing" })
             else:
-                TAG = models.Tag_Info.objects.create(Tag=DATA[2:10])
+                TAG = models.Tag_Info.objects.create(Tag=DATA[22:30])
                 TAG.save()
                 text2 = "Create New Tag"
             pk = list(Tag.values_list('pk',flat=True)) #實際輸出['1','2',…] 用python List轉換成[1,2,...]
             info = models.pet_info.objects.create(Tag_id=pk[0])
-            info.water_drink = float(DATA[25:31])
-            info.food_eat = float(DATA[19:25])
-            datetime_temp = str(datetime(2000, 1, 1, 12, 0) + timedelta(seconds=int(DATA[10:19])) - timedelta(days=1)) + " +0800"
+            info.food_eat = float('%s.%s' % (msg2[30:33], msg2[33:35]))
+            info.water_drink = float('%s.%s' % (msg2[35:38], msg2[38:41]))
+            datetime_temp = str(datetime(2000, 1, 1, 12, 0) + timedelta(seconds=int(DATA[13:22])) - timedelta(days=1)) + " +0800"
             info.updated_at = datetime.strptime(datetime_temp,"%Y-%m-%d %H:%M:%S %z")
             info.save()
             return JsonResponse({"status": 200, "msg": text2 + " and " + "Successful Save!"})
         if DATA[0] == "E":
-            info = models.env_info.objects.create(location_id=DATA[1])
-            info.temperature = float(DATA[11:16])
-            info.humidity = float(DATA[16:21])
-            datetime_temp = str(datetime(2000, 1, 1, 12, 0) + timedelta(seconds=int(DATA[2:11])) - timedelta(days=1)) + " +0800"
+            info = models.env_info.objects.create(mac=MAC)
+            info.temperature = float('%s.%s' % (msg1[22:25], msg1[25:27]))
+            info.humidity = float(msg1[27:30], msg1[30:32])
+            datetime_temp = str(datetime(2000, 1, 1, 12, 0) + timedelta(seconds=int(DATA[13:22])) - timedelta(days=1)) + " +0800"
             info.updated_at = datetime.strptime(datetime_temp,"%Y-%m-%d %H:%M:%S %z")
             info.save()
             return JsonResponse({"status": 200, "msg": text1 + " and " + "Successful Save!"})

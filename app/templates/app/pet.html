@@ -1057,7 +1057,7 @@
                             $('<td>').text(response[0].fields.device_name + '/' + response[0].fields.mac),
                             $('<td>').text(item.fields.Name),
                             $('<td>').text(item.fields.kCal),
-                            $('<td>').text(time.toString())).appendTo('#FoodType_table');
+                            $('<td>').text(time.toLocaleString())).appendTo('#FoodType_table');
                     })
                 }
             },
