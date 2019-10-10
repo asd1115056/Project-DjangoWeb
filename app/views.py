@@ -32,14 +32,14 @@ def pet(request):
     return render(request,'app/pet.html',locals())
 
 def env_all(request):
-    #apps = models.device_info.objects.values('device_id').distinct()
+    #apps = models.device_info.objects.values('mac').distinct()
     apps = models.device_info.objects.all()
     title = 'Env Page'
     year = datetime.now().year
     return render(request,'app/env.html',locals())
 
 def temperature(request):
-    #apps = models.device_info.objects.values('device_id').distinct()
+    #apps = models.device_info.objects.values('mac').distinct()
     apps = models.device_info.objects.all()
     title = 'Env Page'
     year = datetime.now().year
@@ -75,35 +75,35 @@ def env_filter(request):
 
 def env_get_id(request):
     try:
-        device_id = request.GET.get('device_id')
-    except device_id.DoesNotExist:
-        device_id = None
+        mac = request.GET.get('mac')
+    except mac.DoesNotExist:
+        mac = None
     finally:
-        request.session['device_id'] = device_id
-    return HttpResponse(device_id)
+        request.session['mac'] = mac
+    return HttpResponse(mac)
 
 def Device_Info(request):
     from django.core import serializers
     import datetime
-    device_id = request.session['device_id']
-    data = serializers.serialize('json',models.device_info.objects.filter(device_id=device_id))
+    mac = request.session['mac']
+    data = serializers.serialize('json',models.device_info.objects.filter(mac=mac))
     return HttpResponse(data) 
 
 def env_filter_latest(request):
     from django.core import serializers
     from django.db.models.base import ObjectDoesNotExist
-    device_id = request.session['device_id']
+    mac = request.session['mac']
     try:
-        data = serializers.serialize('json',[models.device_info.objects.get(device_id=device_id).env_info_set.filter(updated_at__isnull=False).latest('updated_at')])
+        data = serializers.serialize('json',[models.device_info.objects.get(mac=mac).env_info_set.filter(updated_at__isnull=False).latest('updated_at')])
     except ObjectDoesNotExist:
         data = "[]"
     return HttpResponse(data) 
 def env_filter_earliest(request):
     from django.core import serializers
     from django.db.models.base import ObjectDoesNotExist
-    device_id = request.session['device_id']
+    mac = request.session['mac']
     try:
-        data = serializers.serialize('json',[models.device_info.objects.get(device_id=device_id).env_info_set.filter(updated_at__isnull=False).earliest('updated_at')])
+        data = serializers.serialize('json',[models.device_info.objects.get(mac=mac).env_info_set.filter(updated_at__isnull=False).earliest('updated_at')])
     except ObjectDoesNotExist:
         data = "[]"
     return HttpResponse(data) 
@@ -131,7 +131,7 @@ def env_filter_chart(request):
     from django.core import serializers
     from datetime import datetime, timedelta, time
     from django.utils import timezone
-    device_id = request.session['device_id']
+    mac = request.session['mac']
     type = request.session['type']
     if type == 'offset':
         offset = request.session['offset']
@@ -139,33 +139,33 @@ def env_filter_chart(request):
         past = current - timedelta(hours=int(offset))
         current = timezone.make_aware(current,timezone.get_current_timezone())
         past = timezone.make_aware(past,timezone.get_current_timezone()) #轉換時區
-        data = serializers.serialize('json',models.device_info.objects.get(device_id=device_id).env_info_set.filter(updated_at__lte=current,updated_at__gte=past).order_by('updated_at'))
+        data = serializers.serialize('json',models.device_info.objects.get(mac=mac).env_info_set.filter(updated_at__lte=current,updated_at__gte=past).order_by('updated_at'))
         #print(offset)
         return HttpResponse(data)
     else:
         begintime = request.session['begintime']
         endtime = request.session['endtime']
-        data = serializers.serialize('json',models.device_info.objects.get(device_id=device_id).env_info_set.filter(updated_at__lte=endtime,updated_at__gte=begintime).order_by('updated_at'))
+        data = serializers.serialize('json',models.device_info.objects.get(mac=mac).env_info_set.filter(updated_at__lte=endtime,updated_at__gte=begintime).order_by('updated_at'))
         return HttpResponse(data) 
 @csrf_exempt
 def del_device_data(request):
-    device_id = request.session['device_id']
+    mac = request.session['mac']
     if request.method == 'POST':
         Data_POST = request.POST
         Data_POST = json.dumps(Data_POST)
         Data_POST = json.loads(Data_POST)
         if Data_POST.get('Delete') == "confrim":
-            models.device_info.objects.get(device_id=device_id).delete()
+            models.device_info.objects.get(mac=mac).delete()
             return JsonResponse({"status": 200, "msg": "deleted!"  })
 
 @csrf_exempt
 def post_device_form(request):
-    device_id = request.session['device_id']
+    mac = request.session['mac']
     if request.method == 'POST':
         Data_POST = request.POST
         Data_POST = json.dumps(Data_POST)
         Data_POST = json.loads(Data_POST)
-        info = models.device_info.objects.get(device_id=device_id)
+        info = models.device_info.objects.get(mac=mac)
         info.device_name = Data_POST.get('Locationname')
         info.save()
         text = " Update Successfully"
@@ -207,6 +207,7 @@ def pet_filter_info(request):
     today_end = timezone.make_aware(datetime.combine(tomorrow, time())) #轉換時區
     data = serializers.serialize('json',models.Tag_Info.objects.get(Tag=Tag).pet_info_set.filter(updated_at__lte=today_end,updated_at__gte=today_start).order_by('updated_at'))
     return HttpResponse(data) 
+
 def pet_filter_latest(request):
     from django.core import serializers
     from django.db.models.base import ObjectDoesNotExist
@@ -279,9 +280,10 @@ def list_Schedule(request):
     pk = list(temp.values_list('pk',flat=True)) #實際輸出['1','2',…] 用python List轉換成[1,2,...]
     data = serializers.serialize('json',models.Schedule.objects.filter(Tag=pk[0]).order_by('schedule_time'))
     return HttpResponse(data)
+
 def all_list_Schedule(request):
     from django.core import serializers
-    data = serializers.serialize('json',models.Schedule.objects.all().order_by('schedule_time','Tag'),use_natural_foreign_keys=True, use_natural_primary_keys=True)
+    data = serializers.serialize('json',models.Schedule.objects.all().order_by('mac','schedule_time','Tag'),use_natural_foreign_keys=True, use_natural_primary_keys=True)
     return HttpResponse(data) 
 
 @csrf_exempt
@@ -294,9 +296,12 @@ def search_foodName(request):
         Object = Data_POST.get('object')
         Value = Data_POST.get('value')
         if Object == "pk" :
-            data = models.food_type.objects.filter(pk=Value)
-        data = serializers.serialize('json',data)
-        return HttpResponse(data)
+            data = serializers.serialize('json',models.food_type.objects.filter(pk=Value))
+            return HttpResponse(data)
+        if Object == "mac" :
+            data = serializers.serialize('json',models.food_type.objects.filter(mac=Value))
+            return HttpResponse(data)
+
 def list_foodType(request):
     from django.core import serializers
     data = serializers.serialize('json',models.food_type.objects.all())
@@ -410,6 +415,7 @@ def del_data(request):
         if Data_POST.get('Delete') == "confrim":
             models.Tag_Info.objects.get(Tag=Tag).delete()
             return JsonResponse({"status": 200, "msg": "deleted!"  })
+
 @csrf_exempt
 def add_Schedule(request):
     Tag = request.session['Tag']
@@ -419,44 +425,58 @@ def add_Schedule(request):
         Data_POST1 = request.POST.getlist('time[]')
         Data_POST2 = request.POST.getlist('amount[]')
         Data_POST3 = request.POST.getlist('select[]')
-        if len(Data_POST1) == len(Data_POST2) and len(Data_POST2) == len(Data_POST3):
+        Data_POST4 = request.POST.getlist('select1[]')
+        if len(Data_POST1) == len(Data_POST2) and len(Data_POST2) == len(Data_POST3) and len(Data_POST1) == len(Data_POST4):
+            for i in range(len(Data_POST4)):
+                 if Data_POST4[i] == "":
+                     return HttpResponse("BindDevice(Name/MAC) is required")
             for i in range(len(Data_POST2)):
                 food_type_pk = list(models.food_type.objects.filter(Name=Data_POST3[i]).values_list('pk',flat=True)) #實際輸出['1','2',…] 用python List轉換成[1,2,...]
+                mac_pk = list(models.device_info.objects.filter(mac=Data_POST4[i]).values_list('pk',flat=True)) #實際輸出['1','2',…] 用python List轉換成[1,2,...]
                 if Data_POST1[i] != "" and Data_POST2[i] != "" and Data_POST3[i] != "":
-                    temp = models.Schedule.objects.filter(Tag_id=pk[0],schedule_time=datetime.strptime(Data_POST1[i], '%H:%M').time())
+                    temp = models.Schedule.objects.filter(Tag_id=pk[0],mac_id=mac_pk[0],schedule_time=datetime.strptime(Data_POST1[i], '%H:%M').time())
                     if temp.exists():
-                        info = models.Schedule.objects.get(Tag_id=pk[0],schedule_time=datetime.strptime(Data_POST1[i], '%H:%M').time())               
+                        info = models.Schedule.objects.get(Tag_id=pk[0],mac_id=mac_pk[0],schedule_time=datetime.strptime(Data_POST1[i], '%H:%M'))               
                         info.food_Name_id = food_type_pk[0]
                         info.food_amount = Data_POST2[i]
                         info.save()
                     else:
-                        info = models.Schedule.objects.create(Tag_id=pk[0],food_Name_id=food_type_pk[0])
+                        info = models.Schedule.objects.create(Tag_id=pk[0],food_Name_id=food_type_pk[0],mac_id=mac_pk[0])
                         info.schedule_time = datetime.strptime(Data_POST1[i],'%H:%M').time()
                         info.food_amount = Data_POST2[i]
                         info.save()
-            text = " Update Successfully"
-            return JsonResponse({"status": 200, "msg": text  })
-    else:
-        return JsonResponse({"status": 400, "msg": "It is GET" })
+                    return HttpResponse()
+                else:
+                    return HttpResponse("Time,Amount and FoodType is required")
+
+
+
 @csrf_exempt
 def add_foodType(request):
     if request.method == 'POST':
         Data_POST1 = request.POST.getlist('Name[]')
         Data_POST2 = request.POST.getlist('kCal[]')
-        if len(Data_POST1) == len(Data_POST2):
+        Data_POST3 = request.POST.getlist('select1[]')
+
+        if len(Data_POST1) == len(Data_POST2) == len(Data_POST3):
+            for i in range(len(Data_POST3)):
+                if  Data_POST3[i] == "":
+                    return HttpResponse("DeviceName is required") 
             for i in range(len(Data_POST2)):
                 if Data_POST1[i] != "" and Data_POST2[i] != "":
+                    pk = list(models.device_info.objects.filter(mac=Data_POST3[i]).values_list('pk',flat=True)) #實際輸出['1','2',…] 用python List轉換成[1,2,...]
                     temp = models.food_type.objects.filter(Name=Data_POST1[i])
                     if temp.exists():
                         None
                     else:
-                        Name = models.food_type.objects.create(Name=Data_POST1[i])
-                        Name.save()
+                        Name = models.food_type.objects.create(Name=Data_POST1[i],mac_id=pk[0])
+                        Name.save()     
                     temp.update(kCal=Data_POST2[i])
-        text = " Update Successfully"
-        return JsonResponse({"status": 200, "msg": text  })
-    else:
-        return JsonResponse({"status": 400, "msg": "It is GET" })
+                    return HttpResponse() 
+                else:
+                    return HttpResponse("Name and kCal(per 100g) is required") 
+            
+
 @csrf_exempt
 def del_Schedule(request):
     Tag = request.session['Tag']
@@ -516,9 +536,23 @@ def device_filter_latest1(request):
         Data_POST = request.POST
         Data_POST = json.dumps(Data_POST)
         Data_POST = json.loads(Data_POST)
-        device_id = Data_POST.get('device_id')
+        mac = Data_POST.get('mac')
         try:
-            data = serializers.serialize('json',[models.device_info.objects.get(device_id=device_id).env_info_set.filter(updated_at__isnull=False).latest('updated_at')])
+            data = serializers.serialize('json',[models.device_info.objects.get(mac=mac).env_info_set.filter(updated_at__isnull=False).latest('updated_at')])
+        except ObjectDoesNotExist:
+            data = "[]"
+        return HttpResponse(data) 
+@csrf_exempt
+def device_serach(request):
+    from django.core import serializers
+    from django.db.models.base import ObjectDoesNotExist
+    if request.method == 'POST':
+        Data_POST = request.POST
+        Data_POST = json.dumps(Data_POST)
+        Data_POST = json.loads(Data_POST)
+        mac = Data_POST.get('mac')
+        try:
+            data = serializers.serialize('json',[models.device_info.objects.get(pk=mac)])
         except ObjectDoesNotExist:
             data = "[]"
         return HttpResponse(data) 

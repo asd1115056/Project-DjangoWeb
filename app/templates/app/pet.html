@@ -50,7 +50,7 @@
                 <div style="text-align: right;">
                     <button class="btn btn-primary btn-sm " data-toggle="modal" href="#myModal">More</button>
                 </div>
-                <div id="myModal" class="modal fade" tabindex="-1" data-width="760" style="display: none;">
+                <div id="myModal" class="modal fade" tabindex="-1" data-width="800" style="display: none;">
                     <div class="modal-header" style="text-align: center;">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                         <h4><strong>Profile</strong></h4>
@@ -126,8 +126,9 @@
                                         <thead>
                                             <tr>
                                                 <td>Del</td>
+                                                <td>BindDevice<br/>(Name/MAC)</td>
                                                 <td>Time</td>
-                                                <td>Food Type</td>
+    <td>Food Type</td>
                                                 <td>Amount</td>
                                                 <td>kCal</td>
                                             </tr>
@@ -145,6 +146,7 @@
                                         <thead>
                                             <tr>
                                                 <td>Del</td>
+                                                <td>BindDevice<br/>(Name/MAC)</td>
                                                 <td>Name</td>
                                                 <td>kCal(per 100g)</td>
                                                 <td>Created at</td>
@@ -220,6 +222,7 @@
                                         <table class="table" id="dynamic_field1">
                                             <thead>
                                                 <tr>
+                                                    <td>BindDevice<br/>(Name/MAC)</td>
                                                     <td>Time</td>
                                                     <td>Amount(g)</td>
                                                     <td>FoodType</td>
@@ -227,6 +230,7 @@
                                                 </tr>
                                             </thead>
                                             <tr>
+                                                <td><select id="select1" class="form-control Select10" name="select1[]"></select></td>
                                                 <td><input required type="text" name="time[]" class="form-control time11 Timer0 "></td>
                                                 <td><input required type="number" step="0.01" name="amount[]" id="amount0" class="form-control amount11"></td>
                                                 <td><select id="select" class="form-control Select0" name="select[]"></select></td>
@@ -243,12 +247,14 @@
                                         <table class="table" id="dynamic_field2">
                                             <thead>
                                                 <tr>
+                                                    <td>BindDevice<br/>(Name/MAC)</td>
                                                     <td>Name</td>
                                                     <td>kCal(per 100g)</td>
                                                     <td></td>
                                                 </tr>
                                             </thead>
                                             <tr>
+                                                <td><select id="select1" class="form-control Select10" name="select1[]"></select></td>
                                                 <td><input required type="text" name="Name[]" class="form-control"></td>
                                                 <td><input required type="number" step="0.01" name="kCal[]" id="amount0" class="form-control"></td>
                                                 <td><button type="button" name="add" class="btn btn-success " id="add2">Add More</button></td>
@@ -356,8 +362,9 @@
         var i = 1, j = 1;
         $('#add1').click(function () {
             i++;
-            $('#dynamic_field1').append('<tr id="row' + i + '"><td><input type="text" name="time[]" class="form-control time11 Timer' + i + '"></td><td><input type="number" step="0.01" name="amount[]" class="form-control amount11"></td><td><select id="select" name="select[]" class="form-control Select' + i + '"></select></td><td><button name="remove" class="btn btn-danger btn_remove" id="' + i + '">&times;</button></td></tr>')
+            $('#dynamic_field1').append('<tr id="row' + i + '"><td><select id="select1" name="select1[]" class="form-control Select1' + i + '"></select></td><td><input type="text" name="time[]" class="form-control time11 Timer' + i + '"></td><td><input type="number" step="0.01" name="amount[]" class="form-control amount11"></td><td><select id="select" name="select[]" class="form-control Select' + i + '"></select></td><td><button name="remove" class="btn btn-danger btn_remove" id="' + i + '">&times;</button></td></tr>')
             Flatpickr(i);
+            select_device(i);
             select_FoodType(i);
         });
         function refresh_select_FoodType(i) {
@@ -368,8 +375,15 @@
         }
         $('#add2').click(function () {
             j++;
-            $('#dynamic_field2').append('<tr id="row' + j + '"><td><input type="text" name="Name[]" class="form-control"></td><td><input type="number" step="0.01" name="kCal[]" class="form-control"></td><td><button name="remove" class="btn btn-danger btn_remove" id="' + j + '">&times;</button></td></tr>')
+            $('#dynamic_field2').append('<tr id="row' + j + '"><td><select id="select1" name="select1[]" class="form-control Select1' + j + '"></select></td><td><input type="text" name="Name[]" class="form-control"></td><td><input type="number" step="0.01" name="kCal[]" class="form-control"></td><td><button name="remove" class="btn btn-danger btn_remove" id="' + j + '">&times;</button></td></tr>')
+            select_device(j);
         });
+        function refesh_select_device(i) {
+            for (var k = 0; k <= i; k++) {
+                select_device(k);
+                //console.log(i);
+            }
+        }
         $(document).on('click', '.btn_remove', function () {
             var button_id = $(this).attr("id");
             $('#row' + button_id + '').remove();
@@ -380,35 +394,45 @@
         });
         $('#submit1').click(function () {
             data = $("#form1").serializeObject();
-            //console.log(data);
+            console.log(data);
             $.ajax({
                 type: "POST",
                 url: "{% url 'add_Schedule' %}",
                 data: data,
                 success: function (response) {
-                    //console.log(response);
-                    alert('Update sucess');
-                    $("#form1")[0].reset();
-                    // window.location.reload();
+                    if (!response) {
+                        refresh_select_FoodType(i);
+                        refesh_select_device(j);
+                        //console.log(response);
+                        alert('Update sucess');
+                        $("#form1")[0].reset();
+                    } else {
+                        alert(response);
+                    }
                 },
                 error: function () {
-                    alert("failure");
+                    //alert("failure");
                 }
             });
 
         });
         $('#submit2').click(function () {
             data = $("#form2").serializeObject();
-            //console.log(data);
+            console.log(data);
             $.ajax({
                 type: "POST",
                 url: "{% url 'add_foodType' %}",
                 data: data,
                 success: function (response) {
-                    refresh_select_FoodType(i);
-                    //console.log(response);
-                    alert('Update sucess');
-                    $("#form2")[0].reset();
+                    if (!response) {
+                        refresh_select_FoodType(i);
+                        refesh_select_device(j);
+                        //console.log(response);
+                        alert('Update sucess');
+                        $("#form2")[0].reset();
+                    } else {
+                        alert(response);
+                    }
                     // window.location.reload();
                 },
                 error: function () {
@@ -451,6 +475,7 @@
                         //alert('sucess');
                         list_foodType();
                         refresh_select_FoodType(i);
+                        refesh_select_device(j);
                         $("#FoodType_form")[0].reset();
                         //console.log(i);
                         // window.location.reload();
@@ -482,6 +507,7 @@
                     list_foodType();
                     ajax_tag_Info_TABLE();
                     select_FoodType(0);
+                    select_device(0);
                     requestData()
                     Datesearch()
                     Flatpickr(0);
@@ -498,32 +524,34 @@
             Tag = $(".autoload").attr('Tag');
             if (Tag) {//取不相等時的值
                 data = { 'Tag': Tag }
+                $.ajax({
+                    url: "{%url 'pet_get_id'%}",
+                    type: 'GET',
+                    data: data,
+                    success: function (response) {
+                        //console.log(response);
+                        ajax_user_data();
+                        ajax_tag_Info();
+                        ajax_tag_Info_TABLE();
+                        list_Schedule();
+                        list_foodType();
+                        select_device(0);
+                        select_FoodType(0);
+                        Flatpickr(0);
+                        alert1();
+                        $.post("{% url 'pet_filter_chart_search' %}", { 'type': 'offset', 'offset': "1" });
+                        requestData();
+                        Datesearch();
+                        refresh();
+                        setTimeout(refresh, 10);
+                        //refresh();
+                    },
+                    error: function () {
+                        //console.log('click:error!');
+                    }
+                });
             }
-            $.ajax({
-                url: "{%url 'pet_get_id'%}",
-                type: 'GET',
-                data: data,
-                success: function (response) {
-                    //console.log(response);
-                    ajax_user_data();
-                    ajax_tag_Info();
-                    ajax_tag_Info_TABLE();
-                    list_Schedule();
-                    list_foodType();
-                    select_FoodType(0);
-                    Flatpickr(0);
-                    alert1();
-                    $.post("{% url 'pet_filter_chart_search' %}", { 'type': 'offset', 'offset': "1" });
-                    requestData();
-                    Datesearch();
-                    refresh();
-                    setTimeout(refresh, 10);
-                    //refresh();
-                },
-                error: function () {
-                    console.log('click:error!');
-                }
-            });
+
             //console.log(data);
         }
         $('#dropdownMenu1').on('click', function (event) {
@@ -787,10 +815,14 @@
             dataType: "json",
             success: function (data) {
                 var len = Object.keys(data).length;
+                console.log(len);
                 var x = 0;
                 var y = 0;
                 for (var i = 0; i < len; i++) {
-                    x += parseFloat(data[i].fields.food_eat);
+                    data1 = search_foodName("mac", data[i].fields.mac);
+                    data1 = $.parseJSON(data1);
+                    //console.log(data1);
+                    x += (parseFloat(data[i].fields.food_eat) * parseFloat(data1[0].fields.kCal)) / 100;
                     y += parseFloat(data[i].fields.water_drink);
                     //console.log([x, y]);
                 }
@@ -940,15 +972,18 @@
 
                         //alert(item.fields.schedule_time);
                         data1 = search_foodName("pk", item.fields.food_Name);
+                        mac = device_serach(item.fields.mac)
                         //console.log(item.fields.food_Name);
                         data1 = $.parseJSON(data1);
-                        //console.log(data1);
+                        data2 = $.parseJSON(mac);
+                        //console.log(data2);
                         //console.log(data1[0].fields.kCal);
                         total += (item.fields.food_amount * data1[0].fields.kCal) / 100;
                         temp = (item.fields.food_amount * data1[0].fields.kCal) / 100;
                         //console.log(total);
                         $('<tr>').append(
                             $('<td>').append('<input type="checkbox" name="checkbax1[]" value=' + item.fields.schedule_time + '>'),
+                            $('<td>').text(data2[0].fields.device_name + '/' + data2[0].fields.mac),
                             $('<td>').text(item.fields.schedule_time),
                             $('<td>').text(data1[0].fields.Name),
                             $('<td>').text(item.fields.food_amount),
@@ -973,15 +1008,57 @@
                 $('#FoodType_table').html('');
                 if (data != "") {
                     $.each(data, function (i, item) {
+                        var t = "";
+                        t = device_serach(item.fields.mac);
+                        //console.log(T);
+                        response = JSON.parse(t);
+                        var time = new Date(item.fields.created_at);
                         $('<tr>').append(
                             $('<td>').append('<input type="checkbox" name="checkbax2[]" value=' + item.fields.Name + '>'),
+                            $('<td>').text(response[0].fields.device_name + '/' + response[0].fields.mac),
                             $('<td>').text(item.fields.Name),
                             $('<td>').text(item.fields.kCal),
-                            $('<td>').text(item.fields.created_at)).appendTo('#FoodType_table');
+                            $('<td>').text(time.toString())).appendTo('#FoodType_table');
                     })
                 }
             },
             error: function () {
+            }
+        });
+    }
+    function select_device(j) {
+        //alert("active");
+        $.ajax({
+            url: "{%url 'device_list'%} ",
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                $('.select1' + j).html('');
+                //console.log(data);
+                if (data != "") {
+                    $(".select1" + j).append($("<option></option>").attr("value", "").text(""));
+                    $.each(data, function (i, item) {
+                        $(".select1" + j).append($("<option></option>").attr("value", item.fields.mac).text(item.fields.device_name + '/' + item.fields.mac));
+                    })
+                }
+            }
+        });
+    }
+    function select_device1(j) {
+        //alert("active");
+        $.ajax({
+            url: "{%url 'device_list'%} ",
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                $('.select1' + j).html('');
+                //console.log(data);
+                if (data != "") {
+                    $(".select1" + j).append($("<option></option>").attr("value", "").text(""));
+                    $.each(data, function (i, item) {
+                        $(".select1" + j).append($("<option></option>").attr("value", item.fields.mac).text(item.fields.device_name + '(' + item.fields.mac + ')'));
+                    })
+                }
             }
         });
     }
@@ -1012,6 +1089,25 @@
         $.ajax({
             type: "POST",
             url: "{% url 'search_foodName' %}",
+            data: data,
+            async: false,
+            success: function (response) {
+                temp = response;
+                //console.log(temp);
+            },
+            error: function () {
+            }
+        });
+        //console.log(temp);
+        return temp;
+    }
+    function device_serach(x) {
+        data = { 'mac': x };
+        var temp = "";
+        //console.log(data);
+        $.ajax({
+            type: "POST",
+            url: "{% url 'device_serach' %}",
             data: data,
             async: false,
             success: function (response) {
