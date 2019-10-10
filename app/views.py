@@ -516,15 +516,17 @@ def data_upload(request):
     if request.method == 'POST': 
         Data_POST = json.loads(request.body.decode("utf-8"))
         DATA = Data_POST.get('DATA')
-        MAC = '%s:%s:%s:%s:%s:%s' % (DATA[1:3], DATA[3:5], DATA[5:7], DATA[7:9], DATA[9:11], DATA[11:13])
-        mac = models.env_info.objects.filter(mac=MAC)
+        MAC = "%s:%s:%s:%s:%s:%s" % (DATA[1:3], DATA[3:5], DATA[5:7], DATA[7:9], DATA[9:11], DATA[11:13])
+        Mac = list(models.device_info.objects.filter(mac=MAC).values_list('pk',flat=True)) #實際輸出['1','2',…] 用python List轉換成[1,2,...]
+        #print(MAC)
+        mac = models.device_info.objects.filter(mac=MAC)
         if mac.exists():
-            text1 = "mac Existing"
+            text1 = "Mac Existing"
             #return JsonResponse({"status": 200, "msg": "Tag Existing" })
         else:
-            mac = models.env_info.objects.create(mac=MAC)
+            mac = models.device_info.objects.create(mac=MAC)
             mac.save()
-            text1 = "Create New mac"
+            text1 = "Create New Mac"
         if DATA[0] == "P":
             Tag = models.Tag_Info.objects.filter(Tag=DATA[22:30])
             if Tag.exists():
@@ -535,21 +537,22 @@ def data_upload(request):
                 TAG.save()
                 text2 = "Create New Tag"
             pk = list(Tag.values_list('pk',flat=True)) #實際輸出['1','2',…] 用python List轉換成[1,2,...]
-            info = models.pet_info.objects.create(Tag_id=pk[0])
-            info.food_eat = float('%s.%s' % (msg2[30:33], msg2[33:35]))
-            info.water_drink = float('%s.%s' % (msg2[35:38], msg2[38:41]))
+            info = models.pet_info.objects.create(Tag_id=pk[0],mac_id=Mac[0])
+            info.food_eat = float('%s.%s' % (DATA[30:33], DATA[33:35]))
+            info.water_drink = float('%s.%s' % (DATA[35:38], DATA[38:41]))
             datetime_temp = str(datetime(2000, 1, 1, 12, 0) + timedelta(seconds=int(DATA[13:22])) - timedelta(days=1)) + " +0800"
             info.updated_at = datetime.strptime(datetime_temp,"%Y-%m-%d %H:%M:%S %z")
             info.save()
             return JsonResponse({"status": 200, "msg": text2 + " and " + "Successful Save!"})
         if DATA[0] == "E":
-            info = models.env_info.objects.create(mac=MAC)
-            info.temperature = float('%s.%s' % (msg1[22:25], msg1[25:27]))
-            info.humidity = float(msg1[27:30], msg1[30:32])
+            info = models.env_info.objects.create(mac_id=Mac[0])
+            info.temperature = float('%s.%s' % (DATA[22:25], DATA[25:27]))
+            info.humidity = float('%s.%s' % (DATA[27:30], DATA[30:32]))
             datetime_temp = str(datetime(2000, 1, 1, 12, 0) + timedelta(seconds=int(DATA[13:22])) - timedelta(days=1)) + " +0800"
             info.updated_at = datetime.strptime(datetime_temp,"%Y-%m-%d %H:%M:%S %z")
             info.save()
             return JsonResponse({"status": 200, "msg": text1 + " and " + "Successful Save!"})
+        return JsonResponse({"status": 200, "msg": text1 })
     else:
         return JsonResponse({"status": 400, "msg": "It is GET" })
 
