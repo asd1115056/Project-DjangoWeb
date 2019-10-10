@@ -281,11 +281,6 @@ def list_Schedule(request):
     data = serializers.serialize('json',models.Schedule.objects.filter(Tag=pk[0]).order_by('schedule_time'))
     return HttpResponse(data)
 
-def all_list_Schedule(request):
-    from django.core import serializers
-    data = serializers.serialize('json',models.Schedule.objects.all().order_by('mac','schedule_time','Tag'),use_natural_foreign_keys=True, use_natural_primary_keys=True)
-    return HttpResponse(data) 
-
 @csrf_exempt
 def search_foodName(request):
     from django.core import serializers
@@ -307,47 +302,6 @@ def list_foodType(request):
     data = serializers.serialize('json',models.food_type.objects.all())
     return HttpResponse(data)
 
-@csrf_exempt
-def data_upload(request):
-    #Tag = request.session['Tag']
-    if request.method == 'POST': 
-        Data_POST = json.loads(request.body.decode("utf-8"))
-        DATA = Data_POST.get('DATA')
-        location_id = models.env_info.objects.filter(location_id=DATA[1])
-        if location_id.exists():
-            text1 = "Location_ID Existing"
-            #return JsonResponse({"status": 200, "msg": "Tag Existing" })
-        else:
-            location_id = models.env_info.objects.create(location_id=DATA[1])
-            location_id.save()
-            text1 = "Create New Location_ID"
-        if DATA[0] == "P":
-            Tag = models.Tag_Info.objects.filter(Tag=DATA[2:10])
-            if Tag.exists():
-                text2 = "Tag Existing"
-                #return JsonResponse({"status": 200, "msg": "Tag Existing" })
-            else:
-                TAG = models.Tag_Info.objects.create(Tag=DATA[2:10])
-                TAG.save()
-                text2 = "Create New Tag"
-            pk = list(Tag.values_list('pk',flat=True)) #實際輸出['1','2',…] 用python List轉換成[1,2,...]
-            info = models.pet_info.objects.create(Tag_id=pk[0])
-            info.water_drink = float(DATA[25:31])
-            info.food_eat = float(DATA[19:25])
-            datetime_temp = str(datetime(2000, 1, 1, 12, 0) + timedelta(seconds=int(DATA[10:19])) - timedelta(days=1)) + " +0800"
-            info.updated_at = datetime.strptime(datetime_temp,"%Y-%m-%d %H:%M:%S %z")
-            info.save()
-            return JsonResponse({"status": 200, "msg": text2 + " and " + "Successful Save!"})
-        if DATA[0] == "E":
-            info = models.env_info.objects.create(location_id=DATA[1])
-            info.temperature = float(DATA[11:16])
-            info.humidity = float(DATA[16:21])
-            datetime_temp = str(datetime(2000, 1, 1, 12, 0) + timedelta(seconds=int(DATA[2:11])) - timedelta(days=1)) + " +0800"
-            info.updated_at = datetime.strptime(datetime_temp,"%Y-%m-%d %H:%M:%S %z")
-            info.save()
-            return JsonResponse({"status": 200, "msg": text1 + " and " + "Successful Save!"})
-    else:
-        return JsonResponse({"status": 400, "msg": "It is GET" })
 
 @csrf_exempt
 def post_form(request):
@@ -556,3 +510,49 @@ def device_serach(request):
         except ObjectDoesNotExist:
             data = "[]"
         return HttpResponse(data) 
+
+@csrf_exempt
+def data_upload(request):
+    if request.method == 'POST': 
+        Data_POST = json.loads(request.body.decode("utf-8"))
+        DATA = Data_POST.get('DATA')
+        location_id = models.env_info.objects.filter(location_id=DATA[1])
+        if location_id.exists():
+            text1 = "Location_ID Existing"
+            #return JsonResponse({"status": 200, "msg": "Tag Existing" })
+        else:
+            location_id = models.env_info.objects.create(location_id=DATA[1])
+            location_id.save()
+            text1 = "Create New Location_ID"
+        if DATA[0] == "P":
+            Tag = models.Tag_Info.objects.filter(Tag=DATA[2:10])
+            if Tag.exists():
+                text2 = "Tag Existing"
+                #return JsonResponse({"status": 200, "msg": "Tag Existing" })
+            else:
+                TAG = models.Tag_Info.objects.create(Tag=DATA[2:10])
+                TAG.save()
+                text2 = "Create New Tag"
+            pk = list(Tag.values_list('pk',flat=True)) #實際輸出['1','2',…] 用python List轉換成[1,2,...]
+            info = models.pet_info.objects.create(Tag_id=pk[0])
+            info.water_drink = float(DATA[25:31])
+            info.food_eat = float(DATA[19:25])
+            datetime_temp = str(datetime(2000, 1, 1, 12, 0) + timedelta(seconds=int(DATA[10:19])) - timedelta(days=1)) + " +0800"
+            info.updated_at = datetime.strptime(datetime_temp,"%Y-%m-%d %H:%M:%S %z")
+            info.save()
+            return JsonResponse({"status": 200, "msg": text2 + " and " + "Successful Save!"})
+        if DATA[0] == "E":
+            info = models.env_info.objects.create(location_id=DATA[1])
+            info.temperature = float(DATA[11:16])
+            info.humidity = float(DATA[16:21])
+            datetime_temp = str(datetime(2000, 1, 1, 12, 0) + timedelta(seconds=int(DATA[2:11])) - timedelta(days=1)) + " +0800"
+            info.updated_at = datetime.strptime(datetime_temp,"%Y-%m-%d %H:%M:%S %z")
+            info.save()
+            return JsonResponse({"status": 200, "msg": text1 + " and " + "Successful Save!"})
+    else:
+        return JsonResponse({"status": 400, "msg": "It is GET" })
+
+def Schedule_list_download(request):
+    from django.core import serializers
+    data = serializers.serialize('json',models.Schedule.objects.all().order_by('mac','schedule_time','Tag'),use_natural_foreign_keys=True, use_natural_primary_keys=True)
+    return HttpResponse(data) 
