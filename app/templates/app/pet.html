@@ -13,8 +13,9 @@
 
 <div class="row clearfix">
     <div id="alert"></div>
+    <div id="alert11"></div>
     <div class="col-md-2 column">
-        <div style="text-align: center;"><h3>Nickname</h3><br></div>
+        <div style="        text-align: center;"><h3>Nickname</h3><br></div>
         <ul class="nav nav-pills nav-stacked">
             {% for app in apps %}
             <li class="index {% if forloop.first %} autoload active {% endif %}" Tag="{{app.Tag}}">
@@ -26,8 +27,8 @@
     <div class="col-md-10 column">
         <div class="row clearfix">
             <div class="col-md-3 column">
-                <div style="text-align: center;"><h3>Pet info</h3><br></div>
-                <div style="text-align: center;">
+                <div style="        text-align: center;"><h3>Pet info</h3><br></div>
+                <div style="        text-align: center;">
                     <table class="table">
                         <thead>
                         </thead>
@@ -47,11 +48,11 @@
                         </tbody>
                     </table>
                 </div>
-                <div style="text-align: right;">
+                <div style="        text-align: right;">
                     <button class="btn btn-primary btn-sm " data-toggle="modal" href="#myModal">More</button>
                 </div>
-                <div id="myModal" class="modal fade" tabindex="-1" data-width="800" style="display: none;">
-                    <div class="modal-header" style="text-align: center;">
+                <div id="myModal" class="modal fade" tabindex="-1" data-width="800" style="        display: none;">
+                    <div class="modal-header" style="        text-align: center;">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                         <h4><strong>Profile</strong></h4>
                     </div>
@@ -126,9 +127,9 @@
                                         <thead>
                                             <tr>
                                                 <td>Del</td>
-                                                <td>BindDevice<br/>(Name/MAC)</td>
+                                                <td>BindDevice<br />(Name/MAC)</td>
                                                 <td>Time</td>
-    <td>Food Type</td>
+                                                <td>Food Type</td>
                                                 <td>Amount</td>
                                                 <td>kCal</td>
                                             </tr>
@@ -136,8 +137,9 @@
                                         <tbody id="Schedule_table">
                                         </tbody>
                                     </table>
-                                    <button style="margin-left:8px" type="button" id="submit10" class="btn btn-primary btn-xs">Submit</button>
-                                    <label style="position:absolute;right:60px;" id="total_kcal"></label>
+                                    <button style="        margin-left: 8px" type="button" id="submit10" class="btn btn-primary btn-xs">Submit</button>
+                                    <label style="        position: absolute;
+        right: 60px;" id="total_kcal"></label>
                                 </form>
                             </div>
                             <div id="tab3" class="tab-pane">
@@ -146,7 +148,7 @@
                                         <thead>
                                             <tr>
                                                 <td>Del</td>
-                                                <td>BindDevice<br/>(Name/MAC)</td>
+                                                <td>BindDevice<br />(Name/MAC)</td>
                                                 <td>Name</td>
                                                 <td>kCal(per 100g)</td>
                                                 <td>Created at</td>
@@ -155,64 +157,70 @@
                                         <tbody id="FoodType_table">
                                         </tbody>
                                     </table>
-                                    <button style="margin-left:8px" type="button" id="submit12" class="btn btn-primary btn-xs">Submit</button>
+                                    <button style="margin-left: 8px" type="button" id="submit12" class="btn btn-primary btn-xs">Submit</button>
                                 </form>
                             </div>
                             <div class="tab-pane" id="tab4">
-                                <form role="form" id="form_test">
-                                    <div class="form-group1 row-margin-top">
-                                        <label for="Nickname"><strong>Nickname</strong></label>
-                                        <input type="text" class="form-control" id="Nickname" placeholder="Lucky">
-                                    </div>
-                                    <div class="form-group1">
-                                        <label><strong>Category</strong></label>
-                                        <select name="Category" id="Category" class="form-control" onChange="formcontroloption(this)">
-                                            <option value="0" selected></option>
-                                            <option value="1">Cat</option>
-                                            <option value="2">Dog</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group1">
-                                        <label><strong>Status</strong></label>
-                                        <select name="Status" id="Status" class="form-control">
-                                            <option value="0" selected></option>
-                                            <optgroup id="cat1" label="Kitten">
-                                                <option value="2.5">Kitten</option>
-                                            </optgroup>
-                                            <optgroup id="dog1" label="Puppy">
-                                                <option value="3">0-4 months</option>
-                                                <option value="2">4 months to adult</option>
-                                            </optgroup>
-                                            <optgroup id="cat2" label="Cat">
-                                                <option value="1.4">Neutered</option>
-                                                <option value="1.2">Intact</option>
-                                                <option value="1.0">Inactive/obese prone</option>
-                                                <option value="0.95">Weight loss</option>
-                                            </optgroup>
-                                            <optgroup id="dog2" label="Dog">
-                                                <option value="1.6">Neutered</option>
-                                                <option value="1.8">Intact</option>
-                                                <option value="1.3">Inactive/obese prone</option>
-                                                <option value="1.0">Weight loss</option>
-                                                <option value="1.5">Weight gain</option>
-                                                <option value="3.5">Active, working dogs</option>
-                                            </optgroup>
-                                        </select>
-                                    </div>
-                                    <div class="form-group1">
-                                        <label for="Weight"><strong>Weight</strong>(kg)</label>
-                                        <input type="number" step="0.01" class="form-control" id="Weight" placeholder="0.0(kg)">
-                                    </div>
-                                    <div class="form-group1">
-                                        <label for="User_feed_amount_setting_daily"><strong>User feed Amount Setting Daily</strong></label>
-                                        <input type="number" step="0.01" class="form-control" id="User_feed_amount_setting_daily" placeholder="Set 0.0(kCal) to default">
-                                    </div>
-                                    <div class="form-group1">
-                                        <label for="User_water_drinking_setting_daily"><strong>User Water Drinking Setting Daily</strong></label>
-                                        <input type="number" step="0.01" class="form-control" id="User_water_drinking_setting_daily" placeholder="Set 0.0(mL) to default ">
-                                    </div>
-                                    <div class="form-group1">
-                                        <button type="button" id="submit211" class="btn btn-primary">Submit</button>
+                                <form class="form" role="form" id="form_test">
+                                    <div class="row">
+                                        <div class="col-md-6" style="padding-left: 50px;padding-top: 20px">
+                                            <div class="form-group">
+                                                <label for="Nickname"><strong>Nickname</strong></label>
+                                                <input type="text" class="form-control" id="Nickname" placeholder="Lucky">
+                                            </div>
+                                            <div class="form-group">
+                                                <label><strong>Category</strong></label>
+                                                <select name="Category" id="Category" class="form-control" onChange="formcontroloption(this)">
+                                                    <option value="0" selected></option>
+                                                    <option value="1">Cat</option>
+                                                    <option value="2">Dog</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label><strong>Status</strong></label>
+                                                <select name="Status" id="Status" class="form-control">
+                                                    <option value="0" selected></option>
+                                                    <optgroup id="cat1" label="Kitten">
+                                                        <option value="2.5">Kitten</option>
+                                                    </optgroup>
+                                                    <optgroup id="dog1" label="Puppy">
+                                                        <option value="3">0-4 months</option>
+                                                        <option value="2">4 months to adult</option>
+                                                    </optgroup>
+                                                    <optgroup id="cat2" label="Cat">
+                                                        <option value="1.4">Neutered</option>
+                                                        <option value="1.2">Intact</option>
+                                                        <option value="1.0">Inactive/obese prone</option>
+                                                        <option value="0.95">Weight loss</option>
+                                                    </optgroup>
+                                                    <optgroup id="dog2" label="Dog">
+                                                        <option value="1.6">Neutered</option>
+                                                        <option value="1.8">Intact</option>
+                                                        <option value="1.3">Inactive/obese prone</option>
+                                                        <option value="1.0">Weight loss</option>
+                                                        <option value="1.5">Weight gain</option>
+                                                        <option value="3.5">Active, working dogs</option>
+                                                    </optgroup>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="Weight"><strong>Weight</strong>(kg)</label>
+                                                <input type="number" step="0.01" class="form-control" id="Weight" placeholder="0.0(kg)">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6" style="padding-left: 15px;padding-top: 20px">
+                                            <div class="form-group">
+                                                <label for="User_feed_amount_setting_daily"><strong>User feed Amount Setting Daily</strong></label>
+                                                <input type="number" step="0.01" class="form-control" id="User_feed_amount_setting_daily" placeholder="Set 0.0(kCal) to default">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="User_water_drinking_setting_daily"><strong>User Water Drinking Setting Daily</strong></label>
+                                                <input type="number" step="0.01" class="form-control" id="User_water_drinking_setting_daily" placeholder="Set 0.0(mL) to default ">
+                                            </div>
+                                            <div class="form-group">
+                                                <button type="button" id="submit211" class="btn btn-primary">Submit</button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </form>
                             </div>
@@ -222,7 +230,7 @@
                                         <table class="table" id="dynamic_field1">
                                             <thead>
                                                 <tr>
-                                                    <td>BindDevice<br/>(Name/MAC)</td>
+                                                    <td>BindDevice<br />(Name/MAC)</td>
                                                     <td>Time</td>
                                                     <td>Amount(g)</td>
                                                     <td>FoodType</td>
@@ -237,7 +245,7 @@
                                                 <td><button type="button" name="add" class="btn btn-success " id="add1">Add More</button></td>
                                             </tr>
                                         </table>
-                                        <button style="margin-left:8px" type="button" id="submit1" class="btn btn-primary">Submit</button>
+                                        <button style="        margin-left: 8px" type="button" id="submit1" class="btn btn-primary">Submit</button>
                                     </form>
                                 </div>
                             </div>
@@ -247,7 +255,7 @@
                                         <table class="table" id="dynamic_field2">
                                             <thead>
                                                 <tr>
-                                                    <td>BindDevice<br/>(Name/MAC)</td>
+                                                    <td>BindDevice<br />(Name/MAC)</td>
                                                     <td>Name</td>
                                                     <td>kCal(per 100g)</td>
                                                     <td></td>
@@ -260,7 +268,7 @@
                                                 <td><button type="button" name="add" class="btn btn-success " id="add2">Add More</button></td>
                                             </tr>
                                         </table>
-                                        <button style="margin-left:8px" type="button" id="submit2" class="btn btn-primary">Submit</button>
+                                        <button style="        margin-left: 8px" type="button" id="submit2" class="btn btn-primary">Submit</button>
                                     </form>
                                 </div>
                             </div>
@@ -286,35 +294,46 @@
                     <div class="tab-content">
                         <div class="tab-pane active" id="panel-849527">
                             <div class="col-md-6 column">
-                                <div style="text-align: center;"><h3>Calorie</h3><br></div>
-                                <div id="gauge1" style="height: 150px; text-align: center"></div><br>
+                                <div style="        text-align: center;"><h3>Calorie</h3><br></div>
+                                <div id="gauge1" style="        height: 150px;
+        text-align: center"></div><br>
                             </div>
                             <div class="col-md-6 column">
-                                <div style="text-align: center;"><h3>Water</h3><br></div>
-                                <div id="gauge2" style="height: 150px;text-align: center"></div>
+                                <div style="        text-align: center;"><h3>Water</h3><br></div>
+                                <div id="gauge2" style="        height: 150px;
+        text-align: center"></div>
                             </div>
                             <br />
                             <br />
-                            <p id="ago" class="pull-right" style="margin-right: 60px;margin-top: 10px;"></p>
+                            <p id="ago" class="pull-right" style="        margin-right: 60px;
+        margin-top: 10px;"></p>
                         </div>
                         <div class="tab-pane" id="panel-427201">
                             <br>
-                            <div id="container1" style="min-width: 700px; height: 300px; margin: 0 auto"></div>
+                            <div id="container1" style="        min-width: 700px;
+        height: 300px;
+        margin: 0 auto"></div>
                             <div class="btn-group pull-right">
                                 <button type="button" class="btn btn-default date_search" offset="1">1 hours</button>
                                 <button type="button" class="btn btn-default date_search" offset="6">6 hours</button>
                                 <button type="button" class="btn btn-default date_search" offset="12">12 hours</button>
                                 <button type="button" class="btn btn-default date_search" offset="24">24 hours</button>
-                                <div class="btn-group" style="margin-left:-1px;">
+                                <div class="btn-group" style="        margin-left: -1px;">
                                     <div class="dropdown pull-right">
-                                        <button type="button" style="border-radius:0;border-bottom-right-radius: 4px;border-top-right-radius: 4px;" class="btn btn-default dropdown-toggle" id="dropdownMenu1">More<span class="caret"></span></button>
-                                        <div class="dropdown-menu" style="width:305px;padding-right: 5px;padding-left: 5px;" role="menu" aria-labelledby="dropdownMenu1">
-                                            <form class="form-inline" role="form" style="margin-bottom: 0px;" id="form4122">
-                                                <div class="form-group" style="width:100px;">
+                                        <button type="button" style="        border-radius: 0;
+        border-bottom-right-radius: 4px;
+        border-top-right-radius: 4px;" class="btn btn-default dropdown-toggle" id="dropdownMenu1">
+                                            More<span class="caret"></span>
+                                        </button>
+                                        <div class="dropdown-menu" style="        width: 305px;
+        padding-right: 5px;
+        padding-left: 5px;" role="menu" aria-labelledby="dropdownMenu1">
+                                            <form class="form-inline" role="form" style="        margin-bottom: 0px;" id="form4122">
+                                                <div class="form-group" style="        width: 100px;">
                                                     <input type="text" class="form-control" id="Date1" placeholder="">
                                                 </div>
                                                 <h>~</h>
-                                                <div class="form-group" style="width:100px;">
+                                                <div class="form-group" style="        width: 100px;">
                                                     <input type="text" class="form-control" id="Date2" placeholder="">
                                                 </div>
                                                 <button type="button" id="submit5151" class="btn btn-default">Search</button>
@@ -362,7 +381,7 @@
         var i = 1, j = 1;
         $('#add1').click(function () {
             i++;
-            $('#dynamic_field1').append('<tr id="row' + i + '"><td><select id="select1" name="select1[]" class="form-control Select1' + i + '"></select></td><td><input type="text" name="time[]" class="form-control time11 Timer' + i + '"></td><td><input type="number" step="0.01" name="amount[]" class="form-control amount11"></td><td><select id="select" name="select[]" class="form-control Select' + i + '"></select></td><td><button name="remove" class="btn btn-danger btn_remove" id="' + i + '">&times;</button></td></tr>')
+            $('#dynamic_field1').append('<tr id="row1' + i + '"><td><select id="select1" name="select1[]" class="form-control Select1' + i + '"></select></td><td><input type="text" name="time[]" class="form-control time11 Timer' + i + '"></td><td><input type="number" step="0.01" name="amount[]" class="form-control amount11"></td><td><select id="select" name="select[]" class="form-control Select' + i + '"></select></td><td><button name="remove" class="btn btn-danger btn_remove" id="' + i + '">&times;</button></td></tr>')
             Flatpickr(i);
             select_device(i);
             select_FoodType(i);
@@ -375,7 +394,7 @@
         }
         $('#add2').click(function () {
             j++;
-            $('#dynamic_field2').append('<tr id="row' + j + '"><td><select id="select1" name="select1[]" class="form-control Select1' + j + '"></select></td><td><input type="text" name="Name[]" class="form-control"></td><td><input type="number" step="0.01" name="kCal[]" class="form-control"></td><td><button name="remove" class="btn btn-danger btn_remove" id="' + j + '">&times;</button></td></tr>')
+            $('#dynamic_field2').append('<tr id="row2' + j + '"><td><select id="select1" name="select1[]" class="form-control Select1' + j + '"></select></td><td><input type="text" name="Name[]" class="form-control"></td><td><input type="number" step="0.01" name="kCal[]" class="form-control"></td><td><button name="remove" class="btn btn-danger btn_remove" id="' + j + '">&times;</button></td></tr>')
             select_device(j);
         });
         function refesh_select_device(i) {
@@ -386,11 +405,11 @@
         }
         $(document).on('click', '.btn_remove', function () {
             var button_id = $(this).attr("id");
-            $('#row' + button_id + '').remove();
+            $('#row1' + button_id + '').remove();
         });
         $(document).on('click', '.btn_remove', function () {
             var button_id = $(this).attr("id");
-            $('#row' + button_id + '').remove();
+            $('#row2' + button_id + '').remove();
         });
         $('#submit1').click(function () {
             data = $("#form1").serializeObject();
@@ -418,7 +437,7 @@
         });
         $('#submit2').click(function () {
             data = $("#form2").serializeObject();
-            console.log(data);
+            //console.log(data);
             $.ajax({
                 type: "POST",
                 url: "{% url 'add_foodType' %}",
@@ -430,6 +449,7 @@
                         //console.log(response);
                         alert('Update sucess');
                         $("#form2")[0].reset();
+                        //console.log(j);
                     } else {
                         alert(response);
                     }
@@ -815,15 +835,26 @@
             dataType: "json",
             success: function (data) {
                 var len = Object.keys(data).length;
-                console.log(len);
+                //console.log(len);
                 var x = 0;
                 var y = 0;
+                var flag = 0;
                 for (var i = 0; i < len; i++) {
                     data1 = search_foodName("mac", data[i].fields.mac);
                     data1 = $.parseJSON(data1);
                     //console.log(data1);
-                    x += (parseFloat(data[i].fields.food_eat) * parseFloat(data1[0].fields.kCal)) / 100;
-                    y += parseFloat(data[i].fields.water_drink);
+                    if (data1 != "") {
+                        x += (parseFloat(data[i].fields.food_eat) * parseFloat(data1[0].fields.kCal)) / 100;
+                        y += parseFloat(data[i].fields.water_drink);
+                    } else {
+                        //$("#alert11").before('<div id="myAlert" class="alert alert-danger"><a href="#" class="close close_alert" data-dismiss="alert">&times;</a><strong>Erroring！</strong>Please add Foodtype!</div>');
+                        flag = 1;
+                        x += (parseFloat(data[i].fields.food_eat) * 0) / 100;
+                        y += parseFloat(data[i].fields.water_drink);
+                    }
+                    if (flag == 1) {
+                        $("#alert11").before('<div id="myAlert" class="alert alert-danger"><a href="#" class="close close_alert" data-dismiss="alert">&times;</a><strong>Erroring！</strong>Please add Foodtype!</div>');
+                    }
                     //console.log([x, y]);
                 }
                 //console.log([x, y]);
@@ -976,10 +1007,18 @@
                         //console.log(item.fields.food_Name);
                         data1 = $.parseJSON(data1);
                         data2 = $.parseJSON(mac);
-                        //console.log(data2);
+                        console.log(data1);
+                        console.log(data2);
                         //console.log(data1[0].fields.kCal);
-                        total += (item.fields.food_amount * data1[0].fields.kCal) / 100;
-                        temp = (item.fields.food_amount * data1[0].fields.kCal) / 100;
+                        if (data1 != "") {
+                            total += (item.fields.food_amount * data1[0].fields.kCal) / 100;
+                            temp = (item.fields.food_amount * data1[0].fields.kCal) / 100;
+                        } else {
+
+                            total += (item.fields.food_amount * 0) / 100;
+                            temp = (item.fields.food_amount * 0) / 100;
+                        }
+
                         //console.log(total);
                         $('<tr>').append(
                             $('<td>').append('<input type="checkbox" name="checkbax1[]" value=' + item.fields.schedule_time + '>'),

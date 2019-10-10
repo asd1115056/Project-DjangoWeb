@@ -10,9 +10,8 @@
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
-<div class="row clearfix">
+<div class="row clearfix" id="alert">
     <div class="col-md-12 column">
-        <br />
         <br />
         <br />
     </div>
@@ -95,7 +94,7 @@
                             var data1 = search_taginfo(tag);
                             if (data1) {
                                 // data1 = JSON.parse(data1);
-                                console.log(data1);
+                                //console.log(data1);
                             }
                             var t = search_taginfo_latest(tag);
                             //console.log(data1);
@@ -224,15 +223,24 @@
                 success: function (response) {
                     response = $.parseJSON(response);
                     var len = Object.keys(response).length;
-                    console.log(len);
+                    //console.log(len);
                     var x = 0;
                     var y = 0;
                     for (var i = 0; i < len; i++) {
                         data1 = search_foodName("mac", response[0].fields.mac);
                         data1 = $.parseJSON(data1);
                         //console.log(data1);
-                        x += (parseFloat(response[i].fields.food_eat) * parseFloat(data1[0].fields.kCal)) / 100;
-                        y += parseFloat(response[i].fields.water_drink);
+                        if (data1 != "") {
+                            //console.log("222");
+                            x += (parseFloat(response[i].fields.food_eat) * parseFloat(data1[0].fields.kCal)) / 100;
+                            y += parseFloat(response[i].fields.water_drink);
+                        } else {
+                            //console.log("22");
+                            $("#alert").before('<div id="myAlert" class="alert alert-danger"><a href="#" class="close close_alert" data-dismiss="alert">&times;</a><strong>Erroring！</strong>Please add Foodtype!</div>');
+                            x += (parseFloat(response[i].fields.food_eat) * 0) / 100;
+                            y += parseFloat(response[i].fields.water_drink);
+                        }
+
                         //console.log([x, y]);
                     }
                     temp = { 'f': x, 'w': y };
@@ -242,7 +250,7 @@
                 error: function () {
                 }
             });
-            console.log(temp);
+            //console.log(temp);
             return temp;
         }
         function search_deviceinfo_latest(mac) {
@@ -335,6 +343,9 @@
             //console.log(temp);
             return temp;
         }
+        $(".close_alert").click(function () {
+            $("#myAlert").alert('close');
+        });
     })
 </script>
     {% endblock %}
