@@ -184,10 +184,7 @@ def Tag_list(request):
     from django.core import serializers
     data = serializers.serialize('json',models.Tag_Info.objects.all())
     return HttpResponse(data) 
-def device_list(request):
-    from django.core import serializers
-    data = serializers.serialize('json',models.device_info.objects.all())
-    return HttpResponse(data) 
+
 
 def Tag_Info(request):
     from django.core import serializers
@@ -556,7 +553,12 @@ def data_upload(request):
     else:
         return JsonResponse({"status": 400, "msg": "It is GET" })
 
-def Schedule_list_download(request):
+def schedule_list(request):
     from django.core import serializers
     data = serializers.serialize('json',models.Schedule.objects.all().order_by('mac','schedule_time','Tag'),use_natural_foreign_keys=True, use_natural_primary_keys=True)
+    return HttpResponse(data) 
+
+def device_list(request):
+    from django.core import serializers
+    data = serializers.serialize('json',models.device_info.objects.all())
     return HttpResponse(data) 
