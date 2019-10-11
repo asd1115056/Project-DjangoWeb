@@ -555,10 +555,19 @@ def data_upload(request):
 
 def schedule_list(request):
     from django.core import serializers
+    temp = []
     data = serializers.serialize('json',models.Schedule.objects.all().order_by('mac','schedule_time','Tag'),use_natural_foreign_keys=True, use_natural_primary_keys=True)
-    return HttpResponse(data) 
+    data = json.loads(data)
+    for di in data:
+        del di['fields']['food_Name'] #移除food_Name
+        temp.append(di['fields'])
+    return HttpResponse(json.dumps(temp)) 
 
 def device_list(request):
     from django.core import serializers
-    data = serializers.serialize('json',models.device_info.objects.all())
-    return HttpResponse(data) 
+    data = list(models.device_info.objects.values('mac').distinct())
+    temp = []
+    for di in data:
+        temp.append(di['mac'])
+    #data = serializers.serialize('json',temp)
+    return HttpResponse(json.dumps(temp)) 
