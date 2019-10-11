@@ -19,8 +19,7 @@
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
-    <WebBrowserUrl>
-    </WebBrowserUrl>
+    <WebBrowserUrl>http://localhost</WebBrowserUrl>
     <LaunchProvider>Django launcher</LaunchProvider>
     <DjangoSettingsModule>Project_DjangoWeb.settings</DjangoSettingsModule>
     <OutputPath>.</OutputPath>
