@@ -89,6 +89,12 @@ def Device_Info(request):
     data = serializers.serialize('json',models.device_info.objects.filter(mac=mac))
     return HttpResponse(data) 
 
+def All_device(request):
+    from django.core import serializers
+    import datetime
+    data = serializers.serialize('json',models.device_info.objects.all())
+    return HttpResponse(data) 
+
 def env_filter_latest(request):
     from django.core import serializers
     from django.db.models.base import ObjectDoesNotExist

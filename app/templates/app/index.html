@@ -38,7 +38,6 @@
                 <tbody id="pet_panel">
                 </tbody>
             </table>
-
         </div>
         <br />
         <div class="panel panel-default">
@@ -59,7 +58,6 @@
                 <tbody id="device_panel">
                 </tbody>
             </table>
-
         </div>
     </div>
 </div>
@@ -129,7 +127,7 @@
             var ststue = "";
             var ststue_c = "";
             $.ajax({
-                url: "{% url 'device_list' %}",
+                url: "{% url 'All_device' %}",
                 type: "GET",
                 dataType: "json",
                 async: false,
