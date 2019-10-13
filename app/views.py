@@ -541,16 +541,20 @@ def data_upload(request):
                 text2 = "Create New Tag"
             pk = list(Tag.values_list('pk',flat=True)) #實際輸出['1','2',…] 用python List轉換成[1,2,...]
             info = models.pet_info.objects.create(Tag_id=pk[0],mac_id=Mac[0])
-            info.food_eat = float('%s.%s' % (DATA[30:33], DATA[33:35]))
-            info.water_drink = float('%s.%s' % (DATA[35:38], DATA[38:41]))
+            info.food_eat = float(DATA[30:35])
+            info.water_drink = float(DATA[35:41])
+            #info.food_eat = float('%s.%s' % (DATA[30:33], DATA[33:35]))
+            #info.water_drink = float('%s.%s' % (DATA[35:38], DATA[38:41]))
             datetime_temp = str(datetime(2000, 1, 1, 12, 0) + timedelta(seconds=int(DATA[13:22])) - timedelta(days=1)) + " +0800"
             info.updated_at = datetime.strptime(datetime_temp,"%Y-%m-%d %H:%M:%S %z")
             info.save()
             return JsonResponse({"status": 200, "msg": text2 + " and " + "Successful Save!"})
         if DATA[0] == "E":
             info = models.env_info.objects.create(mac_id=Mac[0])
-            info.temperature = float('%s.%s' % (DATA[22:25], DATA[25:27]))
-            info.humidity = float('%s.%s' % (DATA[27:30], DATA[30:32]))
+            info.temperature = float(DATA[22:27])
+            info.humidity = float(DATA[27:32])
+            #info.temperature = float('%s.%s' % (DATA[22:25], DATA[25:27]))
+            #info.humidity = float('%s.%s' % (DATA[27:30], DATA[30:32]))
             datetime_temp = str(datetime(2000, 1, 1, 12, 0) + timedelta(seconds=int(DATA[13:22])) - timedelta(days=1)) + " +0800"
             info.updated_at = datetime.strptime(datetime_temp,"%Y-%m-%d %H:%M:%S %z")
             info.save()
