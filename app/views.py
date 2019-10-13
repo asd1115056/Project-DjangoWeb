@@ -541,7 +541,7 @@ def data_upload(request):
                 text2 = "Create New Tag"
             pk = list(Tag.values_list('pk',flat=True)) #實際輸出['1','2',…] 用python List轉換成[1,2,...]
             info = models.pet_info.objects.create(Tag_id=pk[0],mac_id=Mac[0])
-            info.food_eat = float(DATA[30:36)
+            info.food_eat = float(DATA[30:36])
             info.water_drink = float(DATA[36:42])
             #info.food_eat = float('%s.%s' % (DATA[30:33], DATA[33:35]))
             #info.water_drink = float('%s.%s' % (DATA[35:38], DATA[38:41]))
