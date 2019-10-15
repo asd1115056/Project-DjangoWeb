@@ -545,7 +545,7 @@ def data_upload(request):
             info.water_drink = float(DATA[36:42])
             #info.food_eat = float('%s.%s' % (DATA[30:33], DATA[33:35]))
             #info.water_drink = float('%s.%s' % (DATA[35:38], DATA[38:41]))
-            datetime_temp = str(datetime(2000, 1, 1, 12, 0) + timedelta(seconds=int(DATA[13:22])) - timedelta(days=1)) + " +0800"
+            datetime_temp = str(datetime(2000, 1, 1, 0, 0) + timedelta(seconds=int(DATA[13:22])) - timedelta(days=1)) + " +0800"
             info.updated_at = datetime.strptime(datetime_temp,"%Y-%m-%d %H:%M:%S %z")
             info.save()
             return JsonResponse({"status": 200, "msg": text2 + " and " + "Successful Save!"})
@@ -555,7 +555,7 @@ def data_upload(request):
             info.humidity = float(DATA[28:33])
             #info.temperature = float('%s.%s' % (DATA[22:25], DATA[25:27]))
             #info.humidity = float('%s.%s' % (DATA[27:30], DATA[30:32]))
-            datetime_temp = str(datetime(2000, 1, 1, 12, 0) + timedelta(seconds=int(DATA[13:22])) - timedelta(days=1)) + " +0800"
+            datetime_temp = str(datetime(2000, 1, 1, 0, 0) + timedelta(seconds=int(DATA[13:22])) - timedelta(days=1)) + " +0800"
             info.updated_at = datetime.strptime(datetime_temp,"%Y-%m-%d %H:%M:%S %z")
             info.save()
             return JsonResponse({"status": 200, "msg": text1 + " and " + "Successful Save!"})
