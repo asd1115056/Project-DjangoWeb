@@ -272,12 +272,6 @@ def search_foodName(request):
             data = serializers.serialize('json',models.food_type.objects.filter(mac=Value))
             return HttpResponse(data)
 
-def list_foodType(request):
-    from django.core import serializers
-    data = serializers.serialize('json',models.food_type.objects.all(),use_natural_foreign_keys=True, use_natural_primary_keys=True)
-    return HttpResponse(data)
-
-
 @csrf_exempt
 def post_form(request):
     Tag = request.session['Tag']
@@ -348,29 +342,25 @@ def del_data(request):
 @csrf_exempt
 def add_Schedule(request):
     Tag = request.session['Tag']
-    temp = models.Tag_Info.objects.filter(Tag=Tag)
-    pk = list(temp.values_list('pk',flat=True)) #實際輸出['1','2',…] 用python List轉換成[1,2,...]
+    pk = list(models.Tag_Info.objects.filter(Tag=Tag).values_list('pk',flat=True)) #實際輸出['1','2',…] 用python List轉換成[1,2,...]
     if request.method == 'POST':
         Data_POST1 = request.POST.getlist('time[]')
         Data_POST2 = request.POST.getlist('amount[]')
-        Data_POST3 = request.POST.getlist('select[]')
-        Data_POST4 = request.POST.getlist('select1[]')
-        if len(Data_POST1) == len(Data_POST2) and len(Data_POST2) == len(Data_POST3) and len(Data_POST1) == len(Data_POST4):
-            for i in range(len(Data_POST4)):
-                 if Data_POST4[i] == "":
+        Data_POST3 = request.POST.getlist('select1[]')
+        if len(Data_POST1) == len(Data_POST2) and len(Data_POST2) == len(Data_POST3):
+            for i in range(len(Data_POST3)):
+                 if Data_POST3[i] == "":
                      return HttpResponse("BindDevice(Name/MAC) is required")
             for i in range(len(Data_POST2)):
-                food_type_pk = list(models.food_type.objects.filter(Name=Data_POST3[i]).values_list('pk',flat=True)) #實際輸出['1','2',…] 用python List轉換成[1,2,...]
-                mac_pk = list(models.device_info.objects.filter(mac=Data_POST4[i]).values_list('pk',flat=True)) #實際輸出['1','2',…] 用python List轉換成[1,2,...]
+                mac_pk = list(models.device_info.objects.filter(mac=Data_POST3[i]).values_list('pk',flat=True)) #實際輸出['1','2',…] 用python List轉換成[1,2,...]
                 if Data_POST1[i] != "" and Data_POST2[i] != "" and Data_POST3[i] != "":
                     temp = models.Schedule.objects.filter(Tag_id=pk[0],mac_id=mac_pk[0],schedule_time=datetime.strptime(Data_POST1[i], '%H:%M').time())
                     if temp.exists():
                         info = models.Schedule.objects.get(Tag_id=pk[0],mac_id=mac_pk[0],schedule_time=datetime.strptime(Data_POST1[i], '%H:%M'))               
-                        info.food_Name_id = food_type_pk[0]
                         info.food_amount = Data_POST2[i]
                         info.save()
                     else:
-                        info = models.Schedule.objects.create(Tag_id=pk[0],food_Name_id=food_type_pk[0],mac_id=mac_pk[0])
+                        info = models.Schedule.objects.create(Tag_id=pk[0],mac_id=mac_pk[0])
                         info.schedule_time = datetime.strptime(Data_POST1[i],'%H:%M').time()
                         info.food_amount = Data_POST2[i]
                         info.save()
@@ -425,23 +415,6 @@ def del_foodType(request):
             for i in range(len(Data_POST)):
                 models.food_type.objects.get(Name=Data_POST[i]).delete()
             return JsonResponse({"status": 200, "msg": "deleted!"  })
-
-
-
-@csrf_exempt
-def device_serach(request):
-    from django.core import serializers
-    from django.db.models.base import ObjectDoesNotExist
-    if request.method == 'POST':
-        Data_POST = request.POST
-        Data_POST = json.dumps(Data_POST)
-        Data_POST = json.loads(Data_POST)
-        mac = Data_POST.get('mac')
-        try:
-            data = serializers.serialize('json',[models.device_info.objects.get(pk=mac)])
-        except ObjectDoesNotExist:
-            data = "[]"
-        return HttpResponse(data) 
 
 @csrf_exempt
 def data_upload(request):
@@ -498,18 +471,9 @@ def schedule_list(request):
     data = serializers.serialize('json',models.Schedule.objects.all().order_by('mac','schedule_time','Tag'),use_natural_foreign_keys=True, use_natural_primary_keys=True)
     data = json.loads(data)
     for di in data:
-        del di['fields']['food_Name'] #移除food_Name
         temp.append(di['fields'])
     return HttpResponse(json.dumps(temp)) 
 
-def device_list(request):
-    from django.core import serializers
-    data = list(models.device_info.objects.values('mac').distinct())
-    temp = []
-    for di in data:
-        temp.append(di['mac'])
-    #data = serializers.serialize('json',temp)
-    return HttpResponse(json.dumps(temp)) 
 
 def All_device(request):
     from django.core import serializers
@@ -585,16 +549,20 @@ def list_Schedule(request):
             mac = list(models.device_info.objects.filter(mac=a['fields']['mac']).values_list('pk',flat=True)) #實際輸出['1','2',…] 用python List轉換成[1,2,...]
             device_name = list(models.device_info.objects.filter(mac=a['fields']['mac']).values_list('device_name',flat=True)) #實際輸出['1','2',…] 用python List轉換成[1,2,...]
             data3 = serializers.serialize('json',models.food_type.objects.filter(mac=mac[0]))
+            #print(data3)
             if len(data3) > 2:
                 data3 = json.loads(data3)
                 f+=float(a['fields']['food_amount']) * float(data3[0]['fields']['kCal']) / 100.0
+                Name = data3[0]['fields']['Name']
             else:
+                Name = None
                 f = None
         except ObjectDoesNotExist:
             pass
         finally:
             a['fields']['kCal'] = f
             a['fields']['device_name'] = device_name[0]
+            a['fields']['Name'] = Name
             temp.append(a['fields'])
     return HttpResponse(json.dumps(temp))
 
@@ -625,3 +593,49 @@ def pet_filter_info(request):
             a['fields']['kCal'] = f
             temp.append(a['fields'])
     return HttpResponse(json.dumps(temp))
+
+def device_list(request):
+    from django.core import serializers
+    data = list(models.device_info.objects.values('mac').distinct())
+    temp = []
+    for di in data:
+        temp.append(di['mac'])
+    #data = serializers.serialize('json',temp)
+    return HttpResponse(json.dumps(temp)) 
+
+def deviceAndmac(request):
+    from django.core import serializers
+    import datetime
+    from django.db.models.base import ObjectDoesNotExist
+    data = models.device_info.objects.all()
+    data = serializers.serialize('json',data,fields=['device_name', 'mac'],use_natural_foreign_keys=True, use_natural_primary_keys=True)
+    data = json.loads(data)
+    temp = []
+    for a in data:
+        mac = list(models.device_info.objects.filter(mac=a['fields']['mac']).values_list('pk',flat=True)) #實際輸出['1','2',…] 用python List轉換成[1,2,...]
+        data3 = serializers.serialize('json',models.food_type.objects.filter(mac=mac[0]))
+        if len(data3) > 2:
+            data3 = json.loads(data3)
+            name = data3[0]['fields']['Name']
+        else:
+            name = None
+        a['fields']['Name'] = name
+        temp.append(a['fields'])
+    return HttpResponse(json.dumps(temp)) 
+
+def list_foodType(request):
+    from django.core import serializers
+    data = serializers.serialize('json',models.food_type.objects.all(),use_natural_foreign_keys=True, use_natural_primary_keys=True)
+    data = json.loads(data)
+    temp = []
+    for a in data:
+        mac = list(models.device_info.objects.filter(mac=a['fields']['mac']).values_list('pk',flat=True)) #實際輸出['1','2',…] 用python List轉換成[1,2,...]
+        data1 = serializers.serialize('json',models.device_info.objects.filter(mac=mac[0]))
+        if len(data1) > 2:
+            data1 = json.loads(data1)
+            device_name = data1[0]['fields']['device_name']
+        else:
+            device_name = None
+        a['fields']['device_name'] = device_name
+        temp.append(a['fields'])
+    return HttpResponse(json.dumps(temp)) 

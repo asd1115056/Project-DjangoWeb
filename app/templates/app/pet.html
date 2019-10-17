@@ -230,10 +230,9 @@
                                         <table class="table" id="dynamic_field1">
                                             <thead>
                                                 <tr>
-                                                    <td>BindDevice<br />(Name/MAC)</td>
+                                                    <td>BindDevice<br />(FoodType(Name/MAC))</td>
                                                     <td>Time</td>
                                                     <td>Amount(g)</td>
-                                                    <td>FoodType</td>
                                                     <td></td>
                                                 </tr>
                                             </thead>
@@ -241,7 +240,6 @@
                                                 <td><select id="select1" class="form-control Select10" name="select1[]"></select></td>
                                                 <td><input required type="text" name="time[]" class="form-control time11 Timer0 "></td>
                                                 <td><input required type="number" step="0.01" name="amount[]" id="amount0" class="form-control amount11"></td>
-                                                <td><select id="select" class="form-control Select0" name="select[]"></select></td>
                                                 <td><button type="button" name="add" class="btn btn-success " id="add1">Add More</button></td>
                                             </tr>
                                         </table>
@@ -262,7 +260,7 @@
                                                 </tr>
                                             </thead>
                                             <tr>
-                                                <td><select id="select1" class="form-control Select10" name="select1[]"></select></td>
+                                                <td><select id="select1" class="form-control Select0" name="select1[]"></select></td>
                                                 <td><input required type="text" name="Name[]" class="form-control"></td>
                                                 <td><input required type="number" step="0.01" name="kCal[]" id="amount0" class="form-control"></td>
                                                 <td><button type="button" name="add" class="btn btn-success " id="add2">Add More</button></td>
@@ -381,20 +379,13 @@
         var i = 1, j = 1;
         $('#add1').click(function () {
             i++;
-            $('#dynamic_field1').append('<tr id="row1' + i + '"><td><select id="select1" name="select1[]" class="form-control Select1' + i + '"></select></td><td><input type="text" name="time[]" class="form-control time11 Timer' + i + '"></td><td><input type="number" step="0.01" name="amount[]" class="form-control amount11"></td><td><select id="select" name="select[]" class="form-control Select' + i + '"></select></td><td><button name="remove" class="btn btn-danger btn_remove" id="' + i + '">&times;</button></td></tr>')
+            $('#dynamic_field1').append('<tr id="row1' + i + '"><td><select id="select1" name="select1[]" class="form-control Select1' + i + '"></select></td><td><input type="text" name="time[]" class="form-control time11 Timer' + i + '"></td><td><input type="number" step="0.01" name="amount[]" class="form-control amount11"></td><td><button name="remove" class="btn btn-danger btn_remove" id="' + i + '">&times;</button></td></tr>')
             Flatpickr(i);
             select_device(i);
-            select_FoodType(i);
         });
-        function refresh_select_FoodType(i) {
-            for (var k = 0; k <= i; k++) {
-                select_FoodType(k);
-                //console.log(i);
-            }
-        }
         $('#add2').click(function () {
             j++;
-            $('#dynamic_field2').append('<tr id="row2' + j + '"><td><select id="select1" name="select1[]" class="form-control Select1' + j + '"></select></td><td><input type="text" name="Name[]" class="form-control"></td><td><input type="number" step="0.01" name="kCal[]" class="form-control"></td><td><button name="remove" class="btn btn-danger btn_remove" id="' + j + '">&times;</button></td></tr>')
+            $('#dynamic_field2').append('<tr id="row2' + j + '"><td><select id="select1" name="select1[]" class="form-control Select' + j + '"></select></td><td><input type="text" name="Name[]" class="form-control"></td><td><input type="number" step="0.01" name="kCal[]" class="form-control"></td><td><button name="remove" class="btn btn-danger btn_remove" id="' + j + '">&times;</button></td></tr>')
             select_device(j);
         });
         function refesh_select_device(i) {
@@ -420,7 +411,6 @@
                 data: data,
                 success: function (response) {
                     if (!response) {
-                        refresh_select_FoodType(i);
                         refesh_select_device(j);
                         //console.log(response);
                         alert('Update sucess');
@@ -444,7 +434,6 @@
                 data: data,
                 success: function (response) {
                     if (!response) {
-                        refresh_select_FoodType(i);
                         refesh_select_device(j);
                         //console.log(response);
                         alert('Update sucess');
@@ -494,7 +483,6 @@
                         //console.log(response);
                         //alert('sucess');
                         list_foodType();
-                        refresh_select_FoodType(i);
                         refesh_select_device(j);
                         $("#FoodType_form")[0].reset();
                         //console.log(i);
@@ -526,7 +514,6 @@
                     list_Schedule();
                     list_foodType();
                     ajax_tag_Info_TABLE();
-                    select_FoodType(0);
                     select_device(0);
                     requestData()
                     Datesearch()
@@ -556,7 +543,6 @@
                         list_Schedule();
                         list_foodType();
                         select_device(0);
-                        select_FoodType(0);
                         Flatpickr(0);
                         alert1();
                         $.post("{% url 'pet_filter_chart_search' %}", { 'type': 'offset', 'offset': "1" });
@@ -835,7 +821,7 @@
             dataType: "json",
             success: function (data) {
                 var len = Object.keys(data).length;
-                console.log(data);
+                //console.log(data);
                 var x = 0;
                 var y = 0;
                 var flag = 0;
@@ -1004,7 +990,7 @@
                             $('<td>').append('<input type="checkbox" name="checkbax1[]" value=' + item.schedule_time + '>'),
                             $('<td>').text(item.device_name + '/' + item.mac),
                             $('<td>').text(item.schedule_time),
-                            $('<td>').text(item.food_Name),
+                            $('<td>').text(item.Name),
                             $('<td>').text(item.food_amount),
                             $('<td>').text(item.kCal)).appendTo("#Schedule_table");
                     })
@@ -1026,12 +1012,12 @@
                 if (data != "") {
                     $.each(data, function (i, item) {
                         var t = "";
-                        var time = new Date(item.fields.created_at);
+                        var time = new Date(item.created_at);
                         $('<tr>').append(
-                            $('<td>').append('<input type="checkbox" name="checkbax2[]" value=' + item.fields.Name + '>'),
-                            $('<td>').text(item.fields.device_name + '/' + item.fields.mac),
-                            $('<td>').text(item.fields.Name),
-                            $('<td>').text(item.fields.kCal),
+                            $('<td>').append('<input type="checkbox" name="checkbax2[]" value=' + item.Name + '>'),
+                            $('<td>').text(item.device_name + '/' + item.mac),
+                            $('<td>').text(item.Name),
+                            $('<td>').text(item.kCal),
                             $('<td>').text(time.toLocaleString())).appendTo('#FoodType_table');
                     })
                 }
@@ -1043,56 +1029,25 @@
     function select_device(j) {
         //alert("active");
         $.ajax({
-            url: "{%url 'All_device'%} ",
-            type: "GET",
-            dataType: "json",
-            success: function (data) {
-                $('.select1' + j).html('');
-                //console.log(data);
-                if (data != "") {
-                    $(".select1" + j).append($("<option></option>").attr("value", "").text(""));
-                    $.each(data, function (i, item) {
-                        $(".select1" + j).append($("<option></option>").attr("value", item.mac).text(item.device_name + '/' + item.mac));
-                    })
-                }
-            }
-        });
-    }
-    function select_device1(j) {
-        //alert("active");
-        $.ajax({
-            url: "{%url 'device_list'%} ",
-            type: "GET",
-            dataType: "json",
-            success: function (data) {
-                $('.select1' + j).html('');
-                //console.log(data);
-                if (data != "") {
-                    $(".select1" + j).append($("<option></option>").attr("value", "").text(""));
-                    $.each(data, function (i, item) {
-                        $(".select1" + j).append($("<option></option>").attr("value", item.mac).text(item.device_name + '(' + item.mac + ')'));
-                    })
-                }
-            }
-        });
-    }
-    function select_FoodType(j) {
-        //alert("active");
-        $.ajax({
-            url: "{%url 'list_foodType'%} ",
+            url: "{%url 'deviceAndmac'%} ",
             type: "GET",
             dataType: "json",
             success: function (data) {
                 $('.select' + j).html('');
+                $('.select1' + j).html('');
                 //console.log(data);
                 if (data != "") {
                     $(".select" + j).append($("<option></option>").attr("value", "").text(""));
+                    $(".select1" + j).append($("<option></option>").attr("value", "").text(""));
                     $.each(data, function (i, item) {
-                        $(".select" + j).append($("<option></option>").attr("value", item.fields.Name).text(item.fields.Name));
+                        if (item.Name == null) {
+                            $(".select" + j).append($("<option></option>").attr("value", item.mac).text(item.device_name + '/' + item.mac));
+                        }
+                        if (item.Name != null) {
+                            $(".select1" + j).append($("<option></option>").attr("value", item.mac).text(item.Name + '(' + item.device_name + '/' + item.mac + ')'));
+                        }
                     })
                 }
-            },
-            error: function () {
             }
         });
     }
@@ -1193,6 +1148,9 @@
                     //console.log("blank")
                 }
             }
+        });
+        $("#theSelect").change(function () {
+            $("#someInput").val($(this).val());
         });
     }
 </script>

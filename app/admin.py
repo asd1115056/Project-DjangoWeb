@@ -10,7 +10,7 @@ class pet_infoAdmin(admin.ModelAdmin):
     list_display = ('Tag','food_eat','water_drink','updated_at')
     #後台要顯示的資料表格
 class ScheduleAdmin(admin.ModelAdmin):
-    list_display = ('Tag','mac','schedule_time','food_Name','food_amount')
+    list_display = ('Tag','mac','schedule_time','food_amount')
     #後台要顯示的資料表格
 class Tag_InfoAdmin(admin.ModelAdmin):
     list_display = ('Tag','nickname','category' ,'weight','per','cat_statue','dog_statue','suggest_feed_amount_daily','suggest_water_drinking_daily','updated_at','created_at')
