@@ -89,12 +89,6 @@ def Device_Info(request):
     data = serializers.serialize('json',models.device_info.objects.filter(mac=mac))
     return HttpResponse(data) 
 
-def All_device(request):
-    from django.core import serializers
-    import datetime
-    data = serializers.serialize('json',models.device_info.objects.all())
-    return HttpResponse(data) 
-
 def env_filter_latest(request):
     from django.core import serializers
     from django.db.models.base import ObjectDoesNotExist
@@ -186,10 +180,6 @@ def pet_get_id(request):
         request.session['Tag'] = Tag
     return HttpResponse(Tag)
 
-def Tag_list(request):
-    from django.core import serializers
-    data = serializers.serialize('json',models.Tag_Info.objects.all())
-    return HttpResponse(data) 
 
 
 def Tag_Info(request):
@@ -454,51 +444,8 @@ def del_foodType(request):
                 models.food_type.objects.get(Name=Data_POST[i]).delete()
             return JsonResponse({"status": 200, "msg": "deleted!"  })
 
-@csrf_exempt
-def pet_pannel(request):
-    from django.core import serializers
-    from datetime import datetime, timedelta, time
-    from django.utils import timezone
-    if request.method == 'POST':
-        Data_POST = request.POST
-        Data_POST = json.dumps(Data_POST)
-        Data_POST = json.loads(Data_POST)
-        TAG = Data_POST.get('TAG')
-        today = datetime.now().date()
-        tomorrow = today + timedelta(1)
-        today_start = timezone.make_aware(datetime.combine(today, time()))
-        today_end = timezone.make_aware(datetime.combine(tomorrow, time())) #轉換時區
-        data = serializers.serialize('json',models.Tag_Info.objects.get(Tag=TAG).pet_info_set.filter(updated_at__lte=today_end,updated_at__gte=today_start).order_by('updated_at'))
-        return HttpResponse(data) 
 
-@csrf_exempt
-def pet_filter_latest1(request):
-    from django.core import serializers
-    from django.db.models.base import ObjectDoesNotExist
-    if request.method == 'POST':
-        Data_POST = request.POST
-        Data_POST = json.dumps(Data_POST)
-        Data_POST = json.loads(Data_POST)
-        TAG = Data_POST.get('TAG')
-        try:
-            data = serializers.serialize('json',[models.Tag_Info.objects.get(Tag=TAG).pet_info_set.filter(updated_at__isnull=False).latest('updated_at')])
-        except ObjectDoesNotExist:
-            data = "[]"
-        return HttpResponse(data) 
-@csrf_exempt
-def device_filter_latest1(request):
-    from django.core import serializers
-    from django.db.models.base import ObjectDoesNotExist
-    if request.method == 'POST':
-        Data_POST = request.POST
-        Data_POST = json.dumps(Data_POST)
-        Data_POST = json.loads(Data_POST)
-        mac = Data_POST.get('mac')
-        try:
-            data = serializers.serialize('json',[models.device_info.objects.get(mac=mac).env_info_set.filter(updated_at__isnull=False).latest('updated_at')])
-        except ObjectDoesNotExist:
-            data = "[]"
-        return HttpResponse(data) 
+
 @csrf_exempt
 def device_serach(request):
     from django.core import serializers
@@ -545,7 +492,7 @@ def data_upload(request):
             info.water_drink = float(DATA[36:42])
             #info.food_eat = float('%s.%s' % (DATA[30:33], DATA[33:35]))
             #info.water_drink = float('%s.%s' % (DATA[35:38], DATA[38:41]))
-            datetime_temp = str(datetime(2000, 1, 1, 0, 0) + timedelta(seconds=int(DATA[13:22])) - timedelta(days=1)) + " +0800"
+            datetime_temp = str(datetime(2000, 1, 1, 0, 0) + timedelta(seconds=int(DATA[13:22]))) + " +0800"
             info.updated_at = datetime.strptime(datetime_temp,"%Y-%m-%d %H:%M:%S %z")
             info.save()
             return JsonResponse({"status": 200, "msg": text2 + " and " + "Successful Save!"})
@@ -555,7 +502,7 @@ def data_upload(request):
             info.humidity = float(DATA[28:33])
             #info.temperature = float('%s.%s' % (DATA[22:25], DATA[25:27]))
             #info.humidity = float('%s.%s' % (DATA[27:30], DATA[30:32]))
-            datetime_temp = str(datetime(2000, 1, 1, 0, 0) + timedelta(seconds=int(DATA[13:22])) - timedelta(days=1)) + " +0800"
+            datetime_temp = str(datetime(2000, 1, 1, 0, 0) + timedelta(seconds=int(DATA[13:22]))) + " +0800"
             info.updated_at = datetime.strptime(datetime_temp,"%Y-%m-%d %H:%M:%S %z")
             info.save()
             return JsonResponse({"status": 200, "msg": text1 + " and " + "Successful Save!"})
@@ -580,4 +527,61 @@ def device_list(request):
     for di in data:
         temp.append(di['mac'])
     #data = serializers.serialize('json',temp)
+    return HttpResponse(json.dumps(temp)) 
+
+def All_device(request):
+    from django.core import serializers
+    import datetime
+    from django.db.models.base import ObjectDoesNotExist
+    data = models.device_info.objects.all()
+    data = serializers.serialize('json',data,fields=['device_name', 'mac'])
+    data = json.loads(data)
+    temp = []
+    for a in data:
+        try:
+            data1 = serializers.serialize('json',[models.device_info.objects.get(mac=a['fields']['mac']).env_info_set.filter(updated_at__isnull=False).latest('updated_at')],use_natural_foreign_keys=True, use_natural_primary_keys=True)
+            data1 = json.loads(data1)
+        except ObjectDoesNotExist:
+            data1 = [{'model': None, 'pk': None, 'fields': {'mac': None, 'temperature': None, 'humidity': None, 'updated_at': None, 'created_at': None }}]
+        finally:
+            a['fields']['temperature'] = data1[0]['fields']['temperature']
+            a['fields']['humidity'] = data1[0]['fields']['humidity']
+            a['fields']['updated_at'] = data1[0]['fields']['updated_at']
+            temp.append(a['fields'])
+    return HttpResponse(json.dumps(temp)) 
+
+
+def Tag_list(request):
+    from django.core import serializers
+    from datetime import datetime, timedelta, time
+    from django.utils import timezone
+    from django.db.models.base import ObjectDoesNotExist
+    today = datetime.now().date()
+    tomorrow = today + timedelta(1)
+    today_start = timezone.make_aware(datetime.combine(today, time()))
+    today_end = timezone.make_aware(datetime.combine(tomorrow, time())) #轉換時區
+    data = models.Tag_Info.objects.all()
+    data = serializers.serialize('json',data,fields=['nickname', 'Tag','suggest_water_drinking_daily','suggest_feed_amount_daily','user_water_drinking_setting_daily','user_feed_amount_setting_daily'])
+    data = json.loads(data)
+    temp = []
+    for a in data:
+        tdf = 0.0
+        tdw = 0.0
+        try:
+            data1 = serializers.serialize('json',[models.Tag_Info.objects.get(Tag=a['fields']['Tag']).pet_info_set.filter(updated_at__isnull=False).latest('updated_at')],fields=['updated_at'])
+            data2 = serializers.serialize('json',models.Tag_Info.objects.get(Tag=a['fields']['Tag']).pet_info_set.filter(updated_at__lte=today_end,updated_at__gte=today_start).order_by('updated_at'))
+            data2 = json.loads(data2)
+            for z in data2:
+                data3 = serializers.serialize('json',models.food_type.objects.filter(mac=z['fields']['mac']))
+                data3 = json.loads(data3)
+                tdf+=float(z['fields']['food_eat']) * float(data3[0]['fields']['kCal']) / 100.0
+                tdw+=float(z['fields']['water_drink'])
+            data1 = json.loads(data1)
+        except ObjectDoesNotExist:
+            data1 = [{'model': None, 'pk': None, 'fields': {'updated_at': None}}]
+        finally:
+            a['fields']['tdf'] = tdf
+            a['fields']['tdw'] = tdw
+            a['fields']['updated_at'] = data1[0]['fields']['updated_at']
+            temp.append(a['fields'])
     return HttpResponse(json.dumps(temp)) 

@@ -37,7 +37,7 @@ class Tag_Info(models.Model):
         (1.5, 'Weight gain'),
         (3.5, 'Active, working dogs'),)
     Tag = models.CharField(max_length = 20)
-    nickname = models.CharField(max_length=20, null=True, blank=True)
+    nickname = models.CharField(max_length=20,null=True, blank=True)
     category = models.SmallIntegerField(choices = CHOICE, null = True, blank = True,default=0)
     cat_statue = models.DecimalField(choices = cat, null=True, blank=True,max_digits=6,decimal_places=2,default=Decimal('0.00'))
     dog_statue = models.DecimalField(choices = dog, null = True, blank = True,max_digits=6,decimal_places=2,default=Decimal('0.00'))
