@@ -9,6 +9,7 @@ from django.http import JsonResponse
 from app import models
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
+from django.db.models.base import ObjectDoesNotExist
 import json
 import math
 
@@ -189,17 +190,6 @@ def Tag_Info(request):
     data = serializers.serialize('json',models.Tag_Info.objects.filter(Tag=Tag))
     return HttpResponse(data) 
 
-def pet_filter_info(request):
-    from django.core import serializers
-    from datetime import datetime, timedelta, time
-    from django.utils import timezone
-    Tag = request.session['Tag']
-    today = datetime.now().date()
-    tomorrow = today + timedelta(1)
-    today_start = timezone.make_aware(datetime.combine(today, time()))
-    today_end = timezone.make_aware(datetime.combine(tomorrow, time())) #轉換時區
-    data = serializers.serialize('json',models.Tag_Info.objects.get(Tag=Tag).pet_info_set.filter(updated_at__lte=today_end,updated_at__gte=today_start).order_by('updated_at'))
-    return HttpResponse(data) 
 
 def pet_filter_latest(request):
     from django.core import serializers
@@ -562,13 +552,16 @@ def Tag_list(request):
         try:
             data1 = serializers.serialize('json',[models.Tag_Info.objects.get(Tag=a['fields']['Tag']).pet_info_set.filter(updated_at__isnull=False).latest('updated_at')],fields=['updated_at'])
             data2 = serializers.serialize('json',models.Tag_Info.objects.get(Tag=a['fields']['Tag']).pet_info_set.filter(updated_at__lte=today_end,updated_at__gte=today_start).order_by('updated_at'))
+            data1 = json.loads(data1)
             data2 = json.loads(data2)
             for z in data2:
-                data3 = serializers.serialize('json',models.food_type.objects.filter(mac=z['fields']['mac']))
-                data3 = json.loads(data3)
-                tdf+=float(z['fields']['food_eat']) * float(data3[0]['fields']['kCal']) / 100.0
+                data3 = serializers.serialize('json',models.food_type.objects.filter(mac=z['fields']['mac']))   
+                if len(data3) > 2:
+                    data3 = json.loads(data3)
+                    tdf+=float(z['fields']['food_eat']) * float(data3[0]['fields']['kCal']) / 100.0
+                else:
+                    tdf = None
                 tdw+=float(z['fields']['water_drink'])
-            data1 = json.loads(data1)
         except ObjectDoesNotExist:
             data1 = [{'model': None, 'pk': None, 'fields': {'updated_at': None}}]
         finally:
@@ -580,7 +573,6 @@ def Tag_list(request):
 
 def list_Schedule(request):
     from django.core import serializers
-    from django.db.models.base import ObjectDoesNotExist
     Tag = request.session['Tag']
     temp = models.Tag_Info.objects.filter(Tag=Tag)
     pk = list(temp.values_list('pk',flat=True)) #實際輸出['1','2',…] 用python List轉換成[1,2,...]
@@ -593,12 +585,43 @@ def list_Schedule(request):
             mac = list(models.device_info.objects.filter(mac=a['fields']['mac']).values_list('pk',flat=True)) #實際輸出['1','2',…] 用python List轉換成[1,2,...]
             device_name = list(models.device_info.objects.filter(mac=a['fields']['mac']).values_list('device_name',flat=True)) #實際輸出['1','2',…] 用python List轉換成[1,2,...]
             data3 = serializers.serialize('json',models.food_type.objects.filter(mac=mac[0]))
-            data3 = json.loads(data3)
-            f+=float(a['fields']['food_amount']) * float(data3[0]['fields']['kCal']) / 100.0
+            if len(data3) > 2:
+                data3 = json.loads(data3)
+                f+=float(a['fields']['food_amount']) * float(data3[0]['fields']['kCal']) / 100.0
+            else:
+                f = None
         except ObjectDoesNotExist:
             pass
         finally:
             a['fields']['kCal'] = f
             a['fields']['device_name'] = device_name[0]
+            temp.append(a['fields'])
+    return HttpResponse(json.dumps(temp))
+
+def pet_filter_info(request):
+    from django.core import serializers
+    from datetime import datetime, timedelta, time
+    from django.utils import timezone
+    Tag = request.session['Tag']
+    today = datetime.now().date()
+    tomorrow = today + timedelta(1)
+    today_start = timezone.make_aware(datetime.combine(today, time()))
+    today_end = timezone.make_aware(datetime.combine(tomorrow, time())) #轉換時區
+    data = serializers.serialize('json',models.Tag_Info.objects.get(Tag=Tag).pet_info_set.filter(updated_at__lte=today_end,updated_at__gte=today_start).order_by('updated_at'),fields=['mac','food_eat','water_drink'])
+    data = json.loads(data)
+    temp = []
+    for a in data:
+        f = 0.0
+        try:
+            data3 = serializers.serialize('json',models.food_type.objects.filter(mac=a['fields']['mac']))
+            if len(data3) > 2:
+                data3 = json.loads(data3)
+                f+=float(a['fields']['food_eat']) * float(data3[0]['fields']['kCal']) / 100.0
+            else:
+                f = None
+        except ObjectDoesNotExist:
+            pass
+        finally:
+            a['fields']['kCal'] = f
             temp.append(a['fields'])
     return HttpResponse(json.dumps(temp))
