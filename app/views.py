@@ -266,14 +266,6 @@ def pet_filter_Schedule(request):
     data = serializers.serialize('json',models.Tag_Info.objects.get(Tag=Tag).Schedule_set.all().order_by('updated_at'))
     return HttpResponse(data) 
 
-def list_Schedule(request):
-    from django.core import serializers
-    Tag = request.session['Tag']
-    temp = models.Tag_Info.objects.filter(Tag=Tag)
-    pk = list(temp.values_list('pk',flat=True)) #實際輸出['1','2',…] 用python List轉換成[1,2,...]
-    data = serializers.serialize('json',models.Schedule.objects.filter(Tag=pk[0]).order_by('schedule_time'))
-    return HttpResponse(data)
-
 @csrf_exempt
 def search_foodName(request):
     from django.core import serializers
@@ -292,7 +284,7 @@ def search_foodName(request):
 
 def list_foodType(request):
     from django.core import serializers
-    data = serializers.serialize('json',models.food_type.objects.all())
+    data = serializers.serialize('json',models.food_type.objects.all(),use_natural_foreign_keys=True, use_natural_primary_keys=True)
     return HttpResponse(data)
 
 
@@ -585,3 +577,28 @@ def Tag_list(request):
             a['fields']['updated_at'] = data1[0]['fields']['updated_at']
             temp.append(a['fields'])
     return HttpResponse(json.dumps(temp)) 
+
+def list_Schedule(request):
+    from django.core import serializers
+    from django.db.models.base import ObjectDoesNotExist
+    Tag = request.session['Tag']
+    temp = models.Tag_Info.objects.filter(Tag=Tag)
+    pk = list(temp.values_list('pk',flat=True)) #實際輸出['1','2',…] 用python List轉換成[1,2,...]
+    data = serializers.serialize('json',models.Schedule.objects.filter(Tag=pk[0]).order_by('schedule_time'),use_natural_foreign_keys=True, use_natural_primary_keys=True)
+    data = json.loads(data)
+    temp = []
+    for a in data:
+        f = 0.0
+        try:
+            mac = list(models.device_info.objects.filter(mac=a['fields']['mac']).values_list('pk',flat=True)) #實際輸出['1','2',…] 用python List轉換成[1,2,...]
+            device_name = list(models.device_info.objects.filter(mac=a['fields']['mac']).values_list('device_name',flat=True)) #實際輸出['1','2',…] 用python List轉換成[1,2,...]
+            data3 = serializers.serialize('json',models.food_type.objects.filter(mac=mac[0]))
+            data3 = json.loads(data3)
+            f+=float(a['fields']['food_amount']) * float(data3[0]['fields']['kCal']) / 100.0
+        except ObjectDoesNotExist:
+            pass
+        finally:
+            a['fields']['kCal'] = f
+            a['fields']['device_name'] = device_name[0]
+            temp.append(a['fields'])
+    return HttpResponse(json.dumps(temp))

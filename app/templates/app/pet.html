@@ -1002,33 +1002,16 @@
                 if (data != "") {
                     //console.log(data);
                     $.each(data, function (i, item) {
-
                         //alert(item.fields.schedule_time);
-                        data1 = search_foodName("pk", item.fields.food_Name);
-                        mac = device_serach(item.fields.mac)
-                        //console.log(item.fields.food_Name);
-                        data1 = $.parseJSON(data1);
-                        data2 = $.parseJSON(mac);
-                        console.log(data1);
-                        console.log(data2);
-                        //console.log(data1[0].fields.kCal);
-                        if (data1 != "") {
-                            total += (item.fields.food_amount * data1[0].fields.kCal) / 100;
-                            temp = (item.fields.food_amount * data1[0].fields.kCal) / 100;
-                        } else {
-
-                            total += (item.fields.food_amount * 0) / 100;
-                            temp = (item.fields.food_amount * 0) / 100;
-                        }
-
+                        total += item.kCal;
                         //console.log(total);
                         $('<tr>').append(
-                            $('<td>').append('<input type="checkbox" name="checkbax1[]" value=' + item.fields.schedule_time + '>'),
-                            $('<td>').text(data2[0].fields.device_name + '/' + data2[0].fields.mac),
-                            $('<td>').text(item.fields.schedule_time),
-                            $('<td>').text(data1[0].fields.Name),
-                            $('<td>').text(item.fields.food_amount),
-                            $('<td>').text(temp)).appendTo("#Schedule_table");
+                            $('<td>').append('<input type="checkbox" name="checkbax1[]" value=' + item.schedule_time + '>'),
+                            $('<td>').text(item.device_name + '/' + item.mac),
+                            $('<td>').text(item.schedule_time),
+                            $('<td>').text(item.food_Name),
+                            $('<td>').text(item.food_amount),
+                            $('<td>').text(item.kCal)).appendTo("#Schedule_table");
                     })
 
                 }
@@ -1050,13 +1033,10 @@
                 if (data != "") {
                     $.each(data, function (i, item) {
                         var t = "";
-                        t = device_serach(item.fields.mac);
-                        //console.log(T);
-                        response = JSON.parse(t);
                         var time = new Date(item.fields.created_at);
                         $('<tr>').append(
                             $('<td>').append('<input type="checkbox" name="checkbax2[]" value=' + item.fields.Name + '>'),
-                            $('<td>').text(response[0].fields.device_name + '/' + response[0].fields.mac),
+                            $('<td>').text(item.fields.device_name + '/' + item.fields.mac),
                             $('<td>').text(item.fields.Name),
                             $('<td>').text(item.fields.kCal),
                             $('<td>').text(time.toLocaleString())).appendTo('#FoodType_table');
@@ -1079,7 +1059,7 @@
                 if (data != "") {
                     $(".select1" + j).append($("<option></option>").attr("value", "").text(""));
                     $.each(data, function (i, item) {
-                        $(".select1" + j).append($("<option></option>").attr("value", item.fields.mac).text(item.fields.device_name + '/' + item.fields.mac));
+                        $(".select1" + j).append($("<option></option>").attr("value", item.mac).text(item.device_name + '/' + item.mac));
                     })
                 }
             }
@@ -1097,7 +1077,7 @@
                 if (data != "") {
                     $(".select1" + j).append($("<option></option>").attr("value", "").text(""));
                     $.each(data, function (i, item) {
-                        $(".select1" + j).append($("<option></option>").attr("value", item.fields.mac).text(item.fields.device_name + '(' + item.fields.mac + ')'));
+                        $(".select1" + j).append($("<option></option>").attr("value", item.mac).text(item.device_name + '(' + item.mac + ')'));
                     })
                 }
             }
@@ -1130,25 +1110,6 @@
         $.ajax({
             type: "POST",
             url: "{% url 'search_foodName' %}",
-            data: data,
-            async: false,
-            success: function (response) {
-                temp = response;
-                //console.log(temp);
-            },
-            error: function () {
-            }
-        });
-        //console.log(temp);
-        return temp;
-    }
-    function device_serach(x) {
-        data = { 'mac': x };
-        var temp = "";
-        //console.log(data);
-        $.ajax({
-            type: "POST",
-            url: "{% url 'device_serach' %}",
             data: data,
             async: false,
             success: function (response) {
