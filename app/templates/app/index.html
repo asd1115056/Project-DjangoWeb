@@ -18,6 +18,14 @@
 </div>
 <div class="row clearfix">
     <div class="col-md-6 column">
+        <img src="http://192.168.0.5:8080/?action=stream" width="512px" height="384px" /></br>
+        <button class="btn fa" value="L"><i class="fas fa-angle-left"></i></button>
+        <button class="btn fa" value="R"><i class="fas fa-angle-right"></i></button>
+        <button class="btn fa" value="U"><i class="fas fa-chevron-up"></i></button>
+        <button class="btn fa" value="D"><i class="fas fa-angle-down"></i></button>
+        <button class="btn fa" value="H"><i class="fa fa-home"></i></button>
+        <button class="btn fa" value="C"><i class="fas fa-camera"></i></button>
+        <button class="btn fa" value="F"><i class="fas fa-file-alt"></i></button>
     </div>
     <div class="col-md-6 column">
         <div class="panel panel-default">
@@ -70,11 +78,10 @@
                 url: "{% url 'Tag_list' %}",
                 type: "GET",
                 dataType: "json",
-                async: false,
                 cache: false,
                 success: function (data) {
                     $('#pet_panel').html('');
-                    console.log(data);
+                    //console.log(data);
                     if (data != '') {
                         $.each(data, function (j, item) {
                             var feed_amount_daily = item.user_feed_amount_setting_daily;
@@ -149,7 +156,6 @@
                 url: "{% url 'All_device' %}",
                 type: "GET",
                 dataType: "json",
-                async: false,
                 cache: false,
                 success: function (data) {
                     //console.log(data);
@@ -220,6 +226,19 @@
                 }
             });
         }
+        $('.fa').click(function () {
+            data = $(this).attr('value');
+            data = { 'command': data }
+            console.log(data);
+            $.ajax({
+                type: "POST",
+                url: "{% url 'control_input' %}",
+                data: data,
+                success: function (response) {
+                }
+            });
+
+        });
     })
 </script>
     {% endblock %}

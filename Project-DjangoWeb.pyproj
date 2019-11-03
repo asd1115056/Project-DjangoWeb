@@ -72,6 +72,7 @@
     <Content Include="app\templates\app\humidity.html" />
     <Content Include="app\templates\app\pet.html" />
     <Content Include="app\templates\app\env.html" />
+    <Content Include="app\templates\app\control.html" />
     <Content Include="requirements.txt" />
     <Content Include="db.sqlite3" />
     <Content Include="app\static\app\content\bootstrap.css" />
