@@ -13,36 +13,6 @@ from django.db.models.base import ObjectDoesNotExist
 import json
 import math
 
-from board import SCL, SDA
-import busio
-from adafruit_pca9685 import PCA9685
-from adafruit_motor import servo
-i2c = busio.I2C(SCL, SDA)
-pca = PCA9685(i2c)
-pca.frequency = 50
-
-
-def Servo_move(Direction):
-    servox = servo.Servo(pca.channels[0])
-    servoy = servo.Servo(pca.channels[1])
-    try:
-        if Direction == "L":
-            # 90度置中點
-            for i in range(0, 90):
-                servox.angle = 90 - i
-        if Direction == "R":
-            for i in range(90, 180):
-                servox.angle = i
-        if Direction == "D":
-            for i in range(0, 90):
-                servoy.angle = 90 - i
-        if Direction == "U":
-            for i in range(90, 180):
-                servoy.angle = i
-    except ValueError:
-        print("Angle out of range")
-    finally:
-        pca.deinit()
 
 @login_required(login_url='/login/')
 def home(request):
@@ -669,43 +639,16 @@ def list_foodType(request):
         a['fields']['device_name'] = device_name
         temp.append(a['fields'])
     return HttpResponse(json.dumps(temp)) 
-
 @csrf_exempt
 def control_input(request):
     from django.http import HttpResponseRedirect
-    from django.shortcuts import redirect
     if request.method == 'POST':
         try:
             command = request.POST['command']
             #print(command)
         except command.DoesNotExist:
             command = " "
-    #return redirect('control_output',abc=command)
-    #return control_output(request,command)
-    #return JsonResponse({command},safe=False)
-    return HttpResponse(command)
-
-@csrf_exempt
-def control_output(request):
-    abc = control_input(request)
-    print(abc)
-    #return JsonResponse(command)
-    #return render(None,'app/control.html',{'abc':command})
-    return HttpResponse(abc)
-@csrf_exempt
-def control(request):
-    if request.method == 'POST':
-        try:
-            command = request.POST['command']
-            if command == "L" or command == "R" or command == "U" or command == "D":
-                Servo_move(command)
-            else:
-                pass
-            #print(command)
-        except command.DoesNotExist:
-            pass
-    return HttpResponse(1)
-
+    return HttpResponseRedirect(reverse('control_output'))
 
     
     
