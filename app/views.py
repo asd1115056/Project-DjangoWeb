@@ -639,16 +639,30 @@ def list_foodType(request):
         a['fields']['device_name'] = device_name
         temp.append(a['fields'])
     return HttpResponse(json.dumps(temp)) 
+
 @csrf_exempt
 def control_input(request):
     from django.http import HttpResponseRedirect
+    from django.shortcuts import redirect
     if request.method == 'POST':
         try:
             command = request.POST['command']
             #print(command)
         except command.DoesNotExist:
             command = " "
-    return HttpResponseRedirect(reverse('control_output'))
+    #return redirect('control_output',abc=command)
+    #return control_output(request,command)
+    #return JsonResponse({command},safe=False)
+    return HttpResponse(command)
+
+@csrf_exempt
+def control_output(request):
+    abc = control_input(request)
+    print(abc)
+    #return JsonResponse(command)
+    #return render(None,'app/control.html',{'abc':command})
+    return HttpResponse(abc)
+
 
     
     
