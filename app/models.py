@@ -77,4 +77,8 @@ class Schedule(models.Model):
     mac = models.ForeignKey(device_info,on_delete=models.CASCADE)
     schedule_time = models.TimeField(null=True, blank=True)
     food_amount = models.DecimalField(max_digits=6,decimal_places=2,default=Decimal('0.00'),null=True, blank=True)
+class control(models.Model):
+    x_angle=models.DecimalField(max_digits=3,decimal_places=2,default=Decimal('0.00'),null=True, blank=True)
+    y_angle=models.DecimalField(max_digits=3,decimal_places=2,default=Decimal('0.00'),null=True, blank=True)
+    
  
