@@ -639,12 +639,26 @@ def list_foodType(request):
         a['fields']['device_name'] = device_name
         temp.append(a['fields'])
     return HttpResponse(json.dumps(temp)) 
+
 @csrf_exempt
 def control_input(request):
     from django.http import HttpResponseRedirect
     if request.method == 'POST':
+        command = request.POST['command']
+        temp = models.control.objects.filter(Servo=servo)
+        if temp.exists():
+            #0~180
+            info = models.control.objects.get(Servo=servo)
+            info
+            info.device_name = Data_POST.get('Locationname')
+            info.save()
+
+        else:
+
+
+
         try:
-            command = request.POST['command']
+            
             #print(command)
         except command.DoesNotExist:
             command = " "
