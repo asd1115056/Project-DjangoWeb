@@ -645,24 +645,49 @@ def control_input(request):
     from django.http import HttpResponseRedirect
     if request.method == 'POST':
         command = request.POST['command']
-        temp = models.control.objects.filter(Servo=servo)
-        if temp.exists():
-            #0~180
-            info = models.control.objects.get(Servo=servo)
-            info
-            info.device_name = Data_POST.get('Locationname')
+        temp = models.control.objects.filter(Servo="servo")
+        if not temp.exists():
+            info = models.control.objects.create(Servo="servo",x_angle=0,y_angle=0)
             info.save()
-
-        else:
-
-
-
-        try:
-            
-            #print(command)
-        except command.DoesNotExist:
-            command = " "
-    return HttpResponseRedirect(reverse('control_output'))
-
+        info = models.control.objects.get(Servo="servo")
+        if command[0] == "x":
+            if command[1] == "a":
+                temp1 = info.x_angle + int(command[2:4])
+                #print(temp1)
+                if temp1 > 180:
+                    temp1 = 180
+                info.x_angle = temp1
+                #print(info.x_angle)
+            if command[1] == "m":
+                temp2 = info.x_angle - int(command[2:4])
+                if temp2 < 0:
+                    temp2 = 0
+                info.x_angle = temp2
+        if command[0] == "y":
+            if command[1] == "a":
+                temp1 = info.y_angle + int(command[2:4])
+                if temp1 > 180:
+                    temp1 = 180
+                info.y_angle = temp1
+            if command[1] == "m":
+                temp2 = info.y_angle - int(command[2:4])
+                if temp2 < 0:
+                    temp2 = 0
+                info.y_angle = temp2
+        info.save()
+        #print(info.x_angle)
+    from django.core import serializers
+    temp = models.control.objects.filter(Servo="servo")
+    data = serializers.serialize('json',temp)
+    data = json.loads(data)
+    x = []
+    for a in data:
+        x.append(a['fields'])
+    return HttpResponse(json.dumps(x))
+def control_output(request):
+    from django.core import serializers
+    temp = models.control.objects.filter(Servo="servo")
+    data = serializers.serialize('json',temp)
+    return HttpResponse(data)
     
     

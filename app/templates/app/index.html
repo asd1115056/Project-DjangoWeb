@@ -17,15 +17,29 @@
     </div>
 </div>
 <div class="row clearfix">
-    <div class="col-md-6 column">
-        <img src="http://192.168.0.5:8080/?action=stream" width="512px" height="384px" /></br>
-        <button class="btn fa" value="L"><i class="fas fa-angle-left"></i></button>
-        <button class="btn fa" value="R"><i class="fas fa-angle-right"></i></button>
+    <div class="col-md-6 column" style="text-align:center;">
+        <img src="http://192.168.0.5:8080/?action=stream" width="512px" height="384px" /><br>
+        <button class="btn fa" value="xm30"><i class="fas fa-angle-left"></i>-30</button>
+        <button class="btn fa" value="xm15"><i class="fas fa-angle-left"></i>-15</button>
+        <button class="btn fa" value="xm5"><i class="fas fa-angle-left"></i>-5</button>
+        <input type="text" placeholder="0" id="input11" size="3" style="text-align:center;" disabled>
+        <button class="btn fa" value="xa5">+5<i class="fas fa-angle-right"></i></button>
+        <button class="btn fa" value="xa15">+15<i class="fas fa-angle-right"></i></button>
+        <button class="btn fa" value="xa30">+30<i class="fas fa-angle-right"></i></button>
+        <br>
+        <button class="btn fa" value="ym30"><i class="fas fa-angle-left"></i>-30</button>
+        <button class="btn fa" value="ym15"><i class="fas fa-angle-left"></i>-15</button>
+        <button class="btn fa" value="ym5"><i class="fas fa-angle-left"></i>-5</button>
+        <input type="text" placeholder="0" id="input22" size="3" style="text-align:center;" disabled>
+        <button class="btn fa" value="ya5">+5<i class="fas fa-angle-right"></i></button>
+        <button class="btn fa" value="ya15">+15<i class="fas fa-angle-right"></i></button>
+        <button class="btn fa " value="ya30">+30<i class="fas fa-angle-right"></i></button>
+        <!--
         <button class="btn fa" value="U"><i class="fas fa-chevron-up"></i></button>
         <button class="btn fa" value="D"><i class="fas fa-angle-down"></i></button>
         <button class="btn fa" value="H"><i class="fa fa-home"></i></button>
         <button class="btn fa" value="C"><i class="fas fa-camera"></i></button>
-        <button class="btn fa" value="F"><i class="fas fa-file-alt"></i></button>
+        <button class="btn fa" value="F"><i class="fas fa-file-alt"></i></button>-->
     </div>
     <div class="col-md-6 column">
         <div class="panel panel-default">
@@ -73,6 +87,23 @@
     $(function () {
         window.onload = pet();
         window.onload = device();
+        window.onload = frist();
+        function frist() {
+            $.ajax({
+                url: "{% url 'control_output' %}",
+                type: "GET",
+                dataType: "json",
+                success: function (response) {
+                    var x = parseInt(response[0].fields.x_angle);
+                    var y = parseInt(response[0].fields.y_angle);
+                    //console.log(response[0].fields.x_angle)
+                    $('#input11').attr("placeholder", "X:" + x);
+                    $('#input22').attr("placeholder", "Y:" + y);
+
+                }
+            });
+
+        }
         function pet() {
             $.ajax({
                 url: "{% url 'Tag_list' %}",
@@ -229,16 +260,23 @@
         $('.fa').click(function () {
             data = $(this).attr('value');
             data = { 'command': data }
-            console.log(data);
+            //console.log(data);
             $.ajax({
                 type: "POST",
-                url: "{% url 'control' %}",
+                url: "{% url 'control_input' %}",
                 data: data,
                 success: function (response) {
+                    response = JSON.parse(response);
+                    //console.log(response);
+                    var x = parseInt(response[0].x_angle);
+                    var y = parseInt(response[0].y_angle);
+                    //console.log(response[0].x_angle)
+                    $('#input11').attr("placeholder", "X:" + x);
+                    $('#input22').attr("placeholder", "Y:" + y);
                 }
             });
-
         });
+
     })
 </script>
     {% endblock %}

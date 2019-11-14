@@ -79,8 +79,8 @@ class Schedule(models.Model):
     food_amount = models.DecimalField(max_digits=6,decimal_places=2,default=Decimal('0.00'),null=True, blank=True)
 
 class control(models.Model):
-    Servo = models.CharField(max_length = 20,default=servo)
-    x_angle = models.DecimalField(max_digits=3,decimal_places=2,default=Decimal('0.0'))
-    y_angle = models.DecimalField(max_digits=3,decimal_places=2,default=Decimal('0.0'))
+    Servo = models.CharField(max_length = 20,default="servo")
+    x_angle = models.IntegerField()
+    y_angle = models.IntegerField()
     
  
