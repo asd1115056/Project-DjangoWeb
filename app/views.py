@@ -688,6 +688,10 @@ def control_output(request):
     from django.core import serializers
     temp = models.control.objects.filter(Servo="servo")
     data = serializers.serialize('json',temp)
-    return HttpResponse(data)
+    data = json.loads(data)
+    x = []
+    for a in data:
+        x.append(a['fields'])
+    return HttpResponse(json.dumps(x))
     
     

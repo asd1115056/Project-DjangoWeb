@@ -94,8 +94,8 @@
                 type: "GET",
                 dataType: "json",
                 success: function (response) {
-                    var x = parseInt(response[0].fields.x_angle);
-                    var y = parseInt(response[0].fields.y_angle);
+                    var x = parseInt(response[0].x_angle);
+                    var y = parseInt(response[0].y_angle);
                     //console.log(response[0].fields.x_angle)
                     $('#input11').attr("placeholder", "X:" + x);
                     $('#input22').attr("placeholder", "Y:" + y);
